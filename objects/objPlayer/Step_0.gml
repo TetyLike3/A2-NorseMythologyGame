@@ -1,1 +1,2 @@
-y = ystart
+y = ystart;
+HandlePlayerState();

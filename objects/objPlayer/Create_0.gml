@@ -1,2 +1,4 @@
-inAir = false
-currentState = PlayerStates.IDLE
+inAir = false;
+currentState = PlayerStates.IDLE;
+moveSpeed = 12;
+spriteDir = 1;
