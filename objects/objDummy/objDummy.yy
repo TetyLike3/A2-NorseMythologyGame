@@ -1,14 +1,12 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objPlayer",
-  "eventList": [
-    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,},
-    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,},
-    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,},
-  ],
+  "name": "objDummy",
+  "eventList": [],
   "managed": true,
-  "overriddenProperties": [],
+  "overriddenProperties": [
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"charHealth","path":"objects/objCharacter/objCharacter.yy",},"value":"20",},
+  ],
   "parent": {
     "name": "Objects",
     "path": "folders/Objects.yy",
@@ -33,8 +31,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprPlayerIdle",
-    "path": "sprites/sprPlayerIdle/sprPlayerIdle.yy",
+    "name": "sprDummy",
+    "path": "sprites/sprDummy/sprDummy.yy",
   },
   "spriteMaskId": null,
   "visible": true,

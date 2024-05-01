@@ -1,0 +1,1 @@
+damageTimer = max(0,damageTimer-1);

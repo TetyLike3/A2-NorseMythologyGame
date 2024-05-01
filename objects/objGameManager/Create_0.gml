@@ -4,7 +4,7 @@ cameraCurrentY = 0;
 cameraTargetX = cameraCurrentX;
 cameraTargetY = cameraCurrentY;
 
-cameraLerpTime = 10;
+cameraLerpTime = 5;
 
 cameraWidth = 1920;
 cameraHeight = 1080;

@@ -1,2 +1,2 @@
-y = ystart;
+event_inherited();
 HandlePlayerState();
