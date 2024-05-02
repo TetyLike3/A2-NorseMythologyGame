@@ -13,10 +13,17 @@ function getPlayerHorizontalInput() {
 	return input;
 }
 
+function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; }
+
 function HandlePlayerState() {
 	charToFace = instance_find(objCharacter,1);
 	switch currentState {
 		case CharacterStates.IDLE:
+			if (sprite_index != sprPlayerIdle) {
+				if sprite_index == sprPlayerJumpLand {
+					if END_OF_SPRITE changeSprite(sprPlayerIdle);
+				} else changeSprite(sprPlayerIdle);
+			}
 			xSpeed = 0;
 			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
 			if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
@@ -26,25 +33,45 @@ function HandlePlayerState() {
 			if (charToFace) spriteDir = (x > charToFace.x);
 		break;
 		case CharacterStates.MOVE:
+			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
 			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.IDLE; return; }
-			if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
 			if (charToFace) spriteDir = (x > charToFace.x);
+			
+			if (INPUT_JUMP and not inAir) {
+				currentState = CharacterStates.JUMP;
+				ySpeed += objGameManager.gameGravity;
+				executeGroundCollision(); executeWallCollision();
+				return;
+			}
 		break;
 		case CharacterStates.JUMP:
-			if (lastState != CharacterStates.JUMP) ySpeed -= jumpPower;
+			if (lastState != CharacterStates.JUMP) {
+				changeSprite(sprPlayerJump);
+				ySpeed -= jumpPower;
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				return;
+			}
+			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
+			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
+			
 			if (charToFace) spriteDir = (x > charToFace.x);
 			
-			if getGroundCollision() { currentState = CharacterStates.IDLE; return; }
+			if getGroundCollision() {
+				changeSprite(sprPlayerJumpLand);
+				if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
+				executeGroundCollision(); executeWallCollision();
+				return;
+			}
 		break;
 		case CharacterStates.LATTACK:
 			if (lastState != CharacterStates.LATTACK) {
-				sprite_index = sprPlayerPunch;
-				image_index = 0;
+				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -55,18 +82,17 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 			}
-			if (round(image_index) == image_number) { // Switch to Idle state
+			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprPlayerIdle;
+				changeSprite(sprPlayerIdle);
 				return;
 			}
 		break;
 		case CharacterStates.HATTACK:
 			if (lastState != CharacterStates.HATTACK) {
-				sprite_index = sprPlayerPunch;
-				image_index = 0;
+				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -77,11 +103,11 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 			}
-			if (round(image_index) == image_number) { // Switch to Idle state
+			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprPlayerIdle;
+				changeSprite(sprPlayerIdle);
 				return;
 			}
 		break;
@@ -111,16 +137,20 @@ function HandleAIState() {
 			
 			if (charToFace) spriteDir = (x > charToFace.x);
 			
+			if (distance_to_object(objPlayer) < 128) {
+				if (irandom(100) < (aiAgressiveness/4)) { currentState = CharacterStates.LATTACK; return; }
+			}
 			if (irandom(100) < aiAgressiveness) { currentState = CharacterStates.MOVE; return; }
 		break;
 		case CharacterStates.MOVE:
 			if (irandom(100) > aiAgressiveness) { currentState = CharacterStates.IDLE; return; }
+			if (distance_to_object(objPlayer) < 128) { currentState = CharacterStates.IDLE; return; }
 			//if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
 			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			
-			xSpeed = getHorizontalInput() * moveSpeed;
 			if (charToFace) spriteDir = (x > charToFace.x);
+			xSpeed = moveSpeed * image_xscale;
 		break;
 		case CharacterStates.JUMP:
 			if (lastState != CharacterStates.JUMP) ySpeed -= jumpPower;
@@ -131,7 +161,6 @@ function HandleAIState() {
 		break;
 		case CharacterStates.LATTACK:
 			if (lastState != CharacterStates.LATTACK) {
-				sprite_index = sprPlayerPunch;
 				image_index = 0;
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
@@ -143,17 +172,16 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 			}
-			if (round(image_index) == image_number) { // Switch to Idle state
+			if (END_OF_SPRITE) { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprPlayerIdle;
+				sprite_index = sprDummy;
 				return;
 			}
 		break;
 		case CharacterStates.HATTACK:
 			if (lastState != CharacterStates.HATTACK) {
-				sprite_index = sprPlayerPunch;
 				image_index = 0;
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
@@ -165,11 +193,11 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 			}
-			if (round(image_index) == image_number) { // Switch to Idle state
+			if (END_OF_SPRITE) { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprPlayerIdle;
+				sprite_index = sprDummy;
 				return;
 			}
 		break;

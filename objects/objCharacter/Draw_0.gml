@@ -11,6 +11,7 @@ if (spriteDir == 0) {
 	image_xscale = -1;
 }
 
+draw_text(x, (y-sprite_height)-80,string_concat("State: ",string(currentState)));
 draw_text(x, (y-sprite_height)-64,string_concat("Health: ",charHealth));
 draw_text(x, (y-sprite_height)-48,string_concat("Damage Timer: ",damageTimer));
 draw_text(x, (y-sprite_height)-32,string_concat("xSpeed: ",xSpeed));
