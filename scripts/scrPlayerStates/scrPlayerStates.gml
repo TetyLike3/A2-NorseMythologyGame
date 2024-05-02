@@ -10,6 +10,7 @@ function getHorizontalInput() {
 }
 
 function HandlePlayerState() {
+	charToFace = instance_find(objCharacter,1);
 	switch currentState {
 		case PlayerStates.IDLE:
 			xSpeed = 0;
@@ -17,19 +18,22 @@ function HandlePlayerState() {
 			if (INPUT_JUMP) { currentState = PlayerStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = PlayerStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = PlayerStates.HATTACK; return; }
+			
+			if (charToFace) spriteDir = (x > charToFace.x);
 		break;
 		case PlayerStates.MOVE:
 			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = PlayerStates.IDLE; return; }
 			if (INPUT_JUMP) { currentState = PlayerStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = PlayerStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = PlayerStates.HATTACK; return; }
+			
 			xSpeed = getHorizontalInput() * moveSpeed;
-			spriteDir = INPUT_LEFT;
+			if (charToFace) spriteDir = (x > charToFace.x);
 		break;
 		case PlayerStates.JUMP:
 			if (lastState != PlayerStates.JUMP) ySpeed -= jumpPower;
 			xSpeed = getHorizontalInput() * moveSpeed;
-			spriteDir = INPUT_LEFT;
+			if (charToFace) spriteDir = (x > charToFace.x);
 			
 			if getGroundCollision() { currentState = PlayerStates.IDLE; return; }
 		break;
@@ -76,6 +80,7 @@ function HandlePlayerState() {
 				sprite_index = sprPlayerIdle;
 				return;
 			}
+		break;
 	}
 	ySpeed += playerGravity;
 	executeGroundCollision();
