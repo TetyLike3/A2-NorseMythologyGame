@@ -19,11 +19,13 @@
   "ResourceOrderSettings": [
     {"name":"scrMacros","order":1,"path":"scripts/scrMacros/scrMacros.yy",},
     {"name":"scrCollisions","order":2,"path":"scripts/scrCollisions/scrCollisions.yy",},
+    {"name":"scrStateHandling","order":3,"path":"scripts/scrStateHandling/scrStateHandling.yy",},
     {"name":"sprPlayerPunch","order":4,"path":"sprites/sprPlayerPunch/sprPlayerPunch.yy",},
     {"name":"sprWall","order":2,"path":"sprites/sprWall/sprWall.yy",},
     {"name":"sprTestHitbox","order":3,"path":"sprites/sprTestHitbox/sprTestHitbox.yy",},
     {"name":"objHitbox","order":5,"path":"objects/objHitbox/objHitbox.yy",},
     {"name":"sprDummy","order":5,"path":"sprites/sprDummy/sprDummy.yy",},
+    {"name":"objEnemy","order":6,"path":"objects/objEnemy/objEnemy.yy",},
     {"name":"objGameManager","order":1,"path":"objects/objGameManager/objGameManager.yy",},
     {"name":"objWall","order":2,"path":"objects/objWall/objWall.yy",},
     {"name":"objCharacter","order":3,"path":"objects/objCharacter/objCharacter.yy",},

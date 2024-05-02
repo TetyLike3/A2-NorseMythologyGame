@@ -17,3 +17,7 @@ cameraLerpTime = 5;
 focusedCharacters = [];
 focusPadding = 256;
 floorPadding = 64;
+
+
+// Gameplay
+gameGravity = 0.6;
