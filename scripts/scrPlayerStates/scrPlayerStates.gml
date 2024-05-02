@@ -1,5 +1,5 @@
 enum PlayerStates {
-	IDLE, MOVE, JUMP, ATTACK, STUN, BLOCK
+	IDLE, MOVE, JUMP, LATTACK, HATTACK, STUN, BLOCK
 }
 
 function getHorizontalInput() {
@@ -13,32 +13,16 @@ function HandlePlayerState() {
 	switch currentState {
 		case PlayerStates.IDLE:
 			xSpeed = 0;
-			if (INPUT_LEFT or INPUT_RIGHT) { // Switch to Move state
-				currentState = PlayerStates.MOVE;
-				return;
-			}
-			if (INPUT_JUMP) { // Switch to Jump state
-				currentState = PlayerStates.JUMP;
-				return;
-			}
-			if (INPUT_LATTACK) { // Switch to Attack state
-				currentState = PlayerStates.ATTACK;
-				return;
-			}
+			if (INPUT_LEFT or INPUT_RIGHT) { currentState = PlayerStates.MOVE; return; }
+			if (INPUT_JUMP) { currentState = PlayerStates.JUMP; return; }
+			if (INPUT_LATTACK) { currentState = PlayerStates.LATTACK; return; }
+			if (INPUT_HATTACK) { currentState = PlayerStates.HATTACK; return; }
 		break;
 		case PlayerStates.MOVE:
-			if (not (INPUT_LEFT or INPUT_RIGHT)) { // Switch to Idle state
-				currentState = PlayerStates.IDLE;
-				return;
-			}
-			if (INPUT_JUMP) { // Switch to Jump state
-				currentState = PlayerStates.JUMP;
-				return;
-			}
-			if (INPUT_LATTACK) { // Switch to Attack state
-				currentState = PlayerStates.ATTACK;
-				return;
-			}
+			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = PlayerStates.IDLE; return; }
+			if (INPUT_JUMP) { currentState = PlayerStates.JUMP; return; }
+			if (INPUT_LATTACK) { currentState = PlayerStates.LATTACK; return; }
+			if (INPUT_HATTACK) { currentState = PlayerStates.HATTACK; return; }
 			xSpeed = getHorizontalInput() * moveSpeed;
 			spriteDir = INPUT_LEFT;
 		break;
@@ -47,18 +31,21 @@ function HandlePlayerState() {
 			xSpeed = getHorizontalInput() * moveSpeed;
 			spriteDir = INPUT_LEFT;
 			
-			if getGroundCollision() { // Switch to Idle state
-				currentState = PlayerStates.IDLE;
-				return;
-			}
+			if getGroundCollision() { currentState = PlayerStates.IDLE; return; }
 		break;
-		case PlayerStates.ATTACK:
-			if (lastState != PlayerStates.ATTACK) {
+		case PlayerStates.LATTACK:
+			if (lastState != PlayerStates.LATTACK) {
 				sprite_index = sprPlayerPunch;
 				image_index = 0;
 				xSpeed = 0;
-				attackHitbox = instance_create_layer( x + (sprite_width/2), y - (sprite_height/2),"Instances",objHitbox);
+				attackHitbox = instance_create_layer(
+					x + (sprite_width/2),
+					y - (sprite_height/2),
+					"Instances",
+					objHitbox
+				);
 				attackHitbox.image_xscale = image_xscale;
+				attackHitbox.collisionDamage = lightAttackDamage;
 			}
 			if (image_index == image_number) { // Switch to Idle state
 				currentState = PlayerStates.IDLE;
@@ -68,6 +55,27 @@ function HandlePlayerState() {
 				return;
 			}
 		break;
+		case PlayerStates.HATTACK:
+			if (lastState != PlayerStates.HATTACK) {
+				sprite_index = sprPlayerPunch;
+				image_index = 0;
+				xSpeed = 0;
+				attackHitbox = instance_create_layer(
+					x + (sprite_width/2),
+					y - (sprite_height/2),
+					"Instances",
+					objHitbox
+				);
+				attackHitbox.image_xscale = image_xscale;
+				attackHitbox.collisionDamage = heavyAttackDamage;
+			}
+			if (image_index == image_number) { // Switch to Idle state
+				currentState = PlayerStates.IDLE;
+				instance_destroy(attackHitbox);
+				attackHitbox = -1;
+				sprite_index = sprPlayerIdle;
+				return;
+			}
 	}
 	ySpeed += playerGravity;
 	executeGroundCollision();
