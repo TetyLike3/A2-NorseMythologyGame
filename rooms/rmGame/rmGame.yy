@@ -7,11 +7,11 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_FC88C6D","path":"rooms/rmGame/rmGame.yy",},
     {"name":"inst_6BBDA2F6","path":"rooms/rmGame/rmGame.yy",},
     {"name":"inst_74BF12B9","path":"rooms/rmGame/rmGame.yy",},
     {"name":"inst_5E874068","path":"rooms/rmGame/rmGame.yy",},
     {"name":"inst_6EE4ABB0","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_FC88C6D","path":"rooms/rmGame/rmGame.yy",},
     {"name":"inst_7C3C24F4","path":"rooms/rmGame/rmGame.yy",},
   ],
   "isDnd": false,

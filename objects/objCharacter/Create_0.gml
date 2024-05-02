@@ -9,3 +9,5 @@ function TakeDamage(dmg) {
 	charHealth -= dmg;
 	if (charHealth <= 0) instance_destroy();
 }
+
+array_push(objGameManager.focusedCharacters,self)
