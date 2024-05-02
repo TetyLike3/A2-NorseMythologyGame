@@ -33,7 +33,9 @@ function HandlePlayerState() {
 			if (charToFace) spriteDir = (x > charToFace.x);
 		break;
 		case CharacterStates.MOVE:
-			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+			if (sprite_index != sprPlayerWalk) {
+				changeSprite(sprPlayerWalk);
+			}
 			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.IDLE; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
@@ -50,7 +52,7 @@ function HandlePlayerState() {
 		break;
 		case CharacterStates.JUMP:
 			if (lastState != CharacterStates.JUMP) {
-				changeSprite(sprPlayerJump);
+				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
 				ySpeed -= jumpPower;
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -63,7 +65,7 @@ function HandlePlayerState() {
 			if (charToFace) spriteDir = (x > charToFace.x);
 			
 			if getGroundCollision() {
-				changeSprite(sprPlayerJumpLand);
+				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
 				if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
 				executeGroundCollision(); executeWallCollision();
 				return;
@@ -112,6 +114,9 @@ function HandlePlayerState() {
 			}
 		break;
 	}
+	if currentState == CharacterStates.MOVE { 
+		if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; 
+	} else image_speed = 1;
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
@@ -176,7 +181,7 @@ function HandleAIState() {
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprDummy;
+				changeSprite(sprEnemy);
 				return;
 			}
 		break;
@@ -197,7 +202,7 @@ function HandleAIState() {
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				sprite_index = sprDummy;
+				changeSprite(sprEnemy);
 				return;
 			}
 		break;

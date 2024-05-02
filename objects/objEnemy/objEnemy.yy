@@ -36,8 +36,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprDummy",
-    "path": "sprites/sprDummy/sprDummy.yy",
+    "name": "sprEnemy",
+    "path": "sprites/sprEnemy/sprEnemy.yy",
   },
   "spriteMaskId": null,
   "visible": true,
