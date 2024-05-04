@@ -13,13 +13,12 @@ function getPlayerHorizontalInput() {
 	return input;
 }
 
-function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; }
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
 
 function HandlePlayerState() {
 	charToFace = instance_find(objCharacter,1);
 	switch currentState {
-		case CharacterStates.IDLE:
+		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
 				if sprite_index == sprPlayerJumpLand {
 					if END_OF_SPRITE changeSprite(sprPlayerIdle);
@@ -32,11 +31,10 @@ function HandlePlayerState() {
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			
 			if (charToFace) spriteDir = (x > charToFace.x);
-		break;
-		case CharacterStates.MOVE:
-			if (sprite_index != sprPlayerWalk) {
-				changeSprite(sprPlayerWalk);
-			}
+		} break;
+		case CharacterStates.MOVE: {
+			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+			
 			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.IDLE; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
@@ -50,8 +48,8 @@ function HandlePlayerState() {
 				executeGroundCollision(); executeWallCollision();
 				return;
 			}
-		break;
-		case CharacterStates.JUMP:
+		} break;
+		case CharacterStates.JUMP: {
 			if (lastState != CharacterStates.JUMP) {
 				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
 				ySpeed -= jumpPower;
@@ -71,8 +69,8 @@ function HandlePlayerState() {
 				executeGroundCollision(); executeWallCollision();
 				return;
 			}
-		break;
-		case CharacterStates.LATTACK:
+		} break;
+		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
 				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
@@ -92,8 +90,8 @@ function HandlePlayerState() {
 				changeSprite(sprPlayerIdle);
 				return;
 			}
-		break;
-		case CharacterStates.HATTACK:
+		} break;
+		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
 				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
@@ -106,6 +104,8 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 			}
+			print(image_index);
+			print(image_number);
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
@@ -113,7 +113,7 @@ function HandlePlayerState() {
 				changeSprite(sprPlayerIdle);
 				return;
 			}
-		break;
+		} break;
 	}
 	
 	// Physics code
@@ -135,39 +135,72 @@ function HandleAIState() {
 	charToFace = instance_find(objPlayer,0);
 	ProcessAIValues();
 	switch currentState {
-		case CharacterStates.IDLE:
+		case CharacterStates.IDLE: {
+			if (sprite_index != sprPlayerIdle) {
+				// If current sprite is sprPlayerJumpLand then wait until it's done before changing
+				if sprite_index == sprPlayerJumpLand {
+					if END_OF_SPRITE changeSprite(sprPlayerIdle);
+				} else changeSprite(sprPlayerIdle);
+			}
+			// Reset speed
 			xSpeed = 0;
-			//if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
-			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
-			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			
-			if (charToFace) spriteDir = (x > charToFace.x);
+			FACE_TARGET;
 			
+			// AI decision-making
+			/*
 			if (distance_to_object(objPlayer) < 128) {
 				if (irandom(100) < (aiAgressiveness/4)) { currentState = CharacterStates.LATTACK; return; }
 			}
 			if (irandom(100) < aiAgressiveness) { currentState = CharacterStates.MOVE; return; }
-		break;
-		case CharacterStates.MOVE:
+			*/
+		} break;
+		case CharacterStates.MOVE: {
+			// Change sprite
+			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+			
+			FACE_TARGET;
+			// Update speed
+			xSpeed = moveSpeed * image_xscale;
+			
+			// AI decision-making
+			/*
 			if (irandom(100) > aiAgressiveness) { currentState = CharacterStates.IDLE; return; }
 			if (distance_to_object(objPlayer) < 128) { currentState = CharacterStates.IDLE; return; }
-			//if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
-			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
-			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			*/
+			if (aiShouldJump and not inAir) {
+				currentState = CharacterStates.JUMP;
+				ySpeed += objGameManager.gameGravity;
+				executeGroundCollision(); executeWallCollision();
+				return;
+			}
+		} break;
+		case CharacterStates.JUMP: {
+			// If just started jumping, change sprite, play sound, and end early
+			if (lastState != CharacterStates.JUMP) {
+				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
+				ySpeed -= jumpPower;
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				return;
+			}
+			// Switch to sprAirIdle if sprPlayerJump anim ended
+			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
 			
-			if (charToFace) spriteDir = (x > charToFace.x);
-			xSpeed = moveSpeed * image_xscale;
-		break;
-		case CharacterStates.JUMP:
-			if (lastState != CharacterStates.JUMP) ySpeed -= jumpPower;
 			xSpeed = getHorizontalInput() * moveSpeed;
-			if (charToFace) spriteDir = (x > charToFace.x);
+			FACE_TARGET;
 			
-			if getGroundCollision() { currentState = CharacterStates.IDLE; return; }
-		break;
-		case CharacterStates.LATTACK:
+			// If landed, switch to idle state
+			if getGroundCollision() {
+				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
+				if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
+				executeGroundCollision(); executeWallCollision();
+				return;
+			}
+		} break;
+		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
-				image_index = 0;
+				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -182,13 +215,13 @@ function HandleAIState() {
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				changeSprite(sprEnemy);
+				changeSprite(sprPlayerIdle);
 				return;
 			}
-		break;
-		case CharacterStates.HATTACK:
-			if (lastState != CharacterStates.HATTACK) {
-				image_index = 0;
+		} break;
+		case CharacterStates.HATTACK: {
+			if (lastState != CharacterStates.LATTACK) {
+				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -203,11 +236,38 @@ function HandleAIState() {
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
 				attackHitbox = -1;
-				changeSprite(sprEnemy);
+				changeSprite(sprPlayerIdle);
 				return;
 			}
-		break;
+		} break;
+		case CharacterStates.STUN: {
+			if (lastState != CharacterStates.STUN) {
+				changeSprite(sprPlayerStunned);
+				if spriteDir { xSpeed = 9; } else xSpeed = -9;
+				ySpeed = -abs(xSpeed*2);
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				return;
+			}
+			
+			// Every bounce, reduce speed until below 2, then freeze
+			if getGroundCollision() {
+				if (abs(xSpeed) > 2) {
+					xSpeed/=3; ySpeed = -abs(xSpeed*3);
+					executeGroundCollision(); executeWallCollision();
+					return;
+				} else xSpeed = 0; ySpeed = 0;
+				if (stunTimer < 1) {
+					currentState = CharacterStates.IDLE;
+				}
+			}
+		}
 	}
+	
+	// Physics code
+	if currentState == CharacterStates.MOVE { 
+		if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; 
+	} else image_speed = 1;
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();

@@ -5,4 +5,6 @@
 #macro INPUT_UP ((gamepad_axis_value(0, gp_axislv) > 0) or keyboard_check(ord("W")))
 #macro INPUT_DOWN ((gamepad_axis_value(0, gp_axislv) < 0) or keyboard_check(ord("S")))
 #macro INPUT_JUMP (gamepad_button_check_pressed(0,gp_face1) or keyboard_check_pressed(vk_space))
-#macro END_OF_SPRITE (round(image_index) == image_number)
+
+#macro END_OF_SPRITE (ceil(image_index) == image_number)
+#macro FACE_TARGET if (charToFace) spriteDir = (x > charToFace.x)

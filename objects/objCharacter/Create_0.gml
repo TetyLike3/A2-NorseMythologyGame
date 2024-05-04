@@ -4,14 +4,6 @@ damageTimerMax = 45;
 damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
-
-function TakeDamage(dmg) {
-	if (damageTimer >  0) return;
-	damageTimer = damageTimerMax;
-	charHealth -= dmg;
-	if (charHealth <= 0) instance_destroy();
-}
-
 // Physics
 moveSpeed = 12;
 jumpPower = 18;
@@ -31,5 +23,17 @@ charToFace = -1;
 
 // Other
 attackHitbox = -1;
+
+// Stunning
+stunTimer = 0;
+stunTimerMax = 60;
+
+function TakeDamage(dmg) {
+	if (damageTimer >  0) return;
+	damageTimer = damageTimerMax;
+	charHealth -= dmg;
+	if (charHealth <= 0) instance_destroy();
+	currentState = CharacterStates.STUN;
+}
 
 array_push(objGameManager.focusedCharacters,self);
