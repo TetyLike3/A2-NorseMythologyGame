@@ -14,6 +14,7 @@ function getPlayerHorizontalInput() {
 }
 
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; }
+function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
 
 function HandlePlayerState() {
 	charToFace = instance_find(objCharacter,1);
@@ -114,9 +115,9 @@ function HandlePlayerState() {
 			}
 		break;
 	}
-	if currentState == CharacterStates.MOVE { 
-		if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; 
-	} else image_speed = 1;
+	
+	// Physics code
+	if currentState == CharacterStates.MOVE {  if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; }
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
