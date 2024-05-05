@@ -40,7 +40,7 @@ function HandlePlayerState() {
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			if (charToFace) spriteDir = (x > charToFace.x);
+			if (charToFace) { spriteDir = (x > charToFace.x); } else { spriteDir = (xSpeed < 0); }
 			
 			if (INPUT_JUMP and not inAir) {
 				currentState = CharacterStates.JUMP;
@@ -104,8 +104,6 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 			}
-			print(image_index);
-			print(image_number);
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
