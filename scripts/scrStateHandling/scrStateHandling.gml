@@ -115,7 +115,7 @@ function HandlePlayerState() {
 	}
 	
 	// Physics code
-	if currentState == CharacterStates.MOVE {  if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; }
+	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();

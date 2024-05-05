@@ -40,7 +40,9 @@
   "resources": [
     {"id":{"name":"sprPlayerJump","path":"sprites/sprPlayerJump/sprPlayerJump.yy",},},
     {"id":{"name":"scrMacros","path":"scripts/scrMacros/scrMacros.yy",},},
+    {"id":{"name":"sndStepR","path":"sounds/sndStepR/sndStepR.yy",},},
     {"id":{"name":"objPlayer","path":"objects/objPlayer/objPlayer.yy",},},
+    {"id":{"name":"sndStepL","path":"sounds/sndStepL/sndStepL.yy",},},
     {"id":{"name":"sprPlayerAirIdle","path":"sprites/sprPlayerAirIdle/sprPlayerAirIdle.yy",},},
     {"id":{"name":"sprPlayerWalk","path":"sprites/sprPlayerWalk/sprPlayerWalk.yy",},},
     {"id":{"name":"scrCollisions","path":"scripts/scrCollisions/scrCollisions.yy",},},
