@@ -26,7 +26,7 @@ attackHitbox = -1;
 
 // Stunning
 stunTimer = 0;
-stunTimerMax = 60;
+stunTimerMax = 120;
 
 function TakeDamage(dmg) {
 	if (damageTimer >  0) return;

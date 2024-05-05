@@ -74,6 +74,8 @@ function HandlePlayerState() {
 			if (lastState != CharacterStates.LATTACK) {
 				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
+			}
+			if (image_index >= 8) and (not attackHitbox) {
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
 					y - (sprite_height/2),
@@ -83,6 +85,7 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 			}
+			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
@@ -95,6 +98,8 @@ function HandlePlayerState() {
 			if (lastState != CharacterStates.HATTACK) {
 				changeSprite(sprPlayerLightSide);
 				xSpeed = 0;
+			}
+			if (image_index >= 8) and (not attackHitbox) {
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
 					y - (sprite_height/2),
@@ -104,6 +109,7 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 			}
+			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
 				instance_destroy(attackHitbox);
@@ -115,7 +121,7 @@ function HandlePlayerState() {
 	}
 	
 	// Physics code
-	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
+	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = 1; } else image_speed = -1; }
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
@@ -135,10 +141,27 @@ function HandleAIState() {
 	switch currentState {
 		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
-				// If current sprite is sprPlayerJumpLand then wait until it's done before changing
-				if sprite_index == sprPlayerJumpLand {
-					if END_OF_SPRITE changeSprite(sprPlayerIdle);
-				} else changeSprite(sprPlayerIdle);
+				switch sprite_index {
+					case sprPlayerJumpLand: {
+						// If current sprite is sprPlayerJumpLand then wait until it's done before changing
+						if END_OF_SPRITE changeSprite(sprPlayerIdle);
+					} break;
+					case sprPlayerFloorImpact: {
+						if END_OF_SPRITE changeSprite(sprPlayerGetUp);
+						return;
+					} break;
+					case sprPlayerLying: {
+						changeSprite(sprPlayerGetUp);
+						return;
+					} break;
+					case sprPlayerGetUp: {
+						if END_OF_SPRITE changeSprite(sprPlayerIdle);
+						return;
+					} break;
+					default: {
+						changeSprite(sprPlayerIdle);
+					} break;
+				}
 			}
 			// Reset speed
 			xSpeed = 0;
@@ -240,23 +263,29 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
-				changeSprite(sprPlayerStunned);
+				changeSprite(sprPlayerInjured);
 				if spriteDir { xSpeed = 9; } else xSpeed = -9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
+				stunTimer = stunTimerMax;
 				return;
 			}
 			
 			// Every bounce, reduce speed until below 2, then freeze
 			if getGroundCollision() {
 				if (abs(xSpeed) > 2) {
+					changeSprite(sprPlayerFloorImpact);
 					xSpeed/=3; ySpeed = -abs(xSpeed*3);
 					executeGroundCollision(); executeWallCollision();
 					return;
-				} else xSpeed = 0; ySpeed = 0;
+				} else {
+					xSpeed = 0; ySpeed = 0;
+					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
+				}
 				if (stunTimer < 1) {
 					currentState = CharacterStates.IDLE;
+					print(sprite_index);
 				}
 			}
 		}
