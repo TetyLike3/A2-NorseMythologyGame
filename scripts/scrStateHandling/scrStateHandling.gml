@@ -25,11 +25,11 @@ function HandlePlayerState() {
 				} else changeSprite(sprPlayerIdle);
 			}
 			xSpeed = 0;
-			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
-			if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
-			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
-			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
-			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
+			//if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
+			//if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
+			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
+			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			//if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
 			FACE_TARGET;
 		} break;
@@ -143,7 +143,7 @@ function HandlePlayerState() {
 }
 
 function HandleAIState() {
-	charToFace = instance_find(objPlayer,0);
+	//charToFace = instance_find(objPlayer,0);
 	StepNeuralNetwork();
 	switch currentState {
 		case CharacterStates.IDLE: {

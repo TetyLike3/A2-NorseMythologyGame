@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "scrNeuralNetwork",
+  "name": "scrNNActivation",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "NeuralNetwork",
+    "path": "folders/Scripts/NeuralNetwork.yy",
   },
 }
