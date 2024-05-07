@@ -1,8 +1,5 @@
 event_inherited();
 
-aiAgressiveness = 100;
-aiShouldJump = false;
 moveSpeed = 8;
 
-defensiveMoveTriggerRange = 512;
-defensiveMoveTriggerRange = 512;
+neuralNetworks = GenerateDefaultNetworks(100, 4, 3);

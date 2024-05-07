@@ -35,6 +35,7 @@
     {"name":"sprPlayerHeavySide","order":1,"path":"sprites/sprPlayerHeavySide/sprPlayerHeavySide.yy",},
     {"name":"sndJump","order":1,"path":"sounds/sndJump/sndJump.yy",},
     {"name":"sprWall","order":1,"path":"sprites/sprWall/sprWall.yy",},
+    {"name":"scrNeuralNetwork","order":4,"path":"scripts/scrNeuralNetwork/scrNeuralNetwork.yy",},
     {"name":"sprPlayerGetUp","order":10,"path":"sprites/sprPlayerGetUp/sprPlayerGetUp.yy",},
     {"name":"sprPlayerBlock","order":11,"path":"sprites/sprPlayerBlock/sprPlayerBlock.yy",},
     {"name":"sprPlayerLying","order":9,"path":"sprites/sprPlayerLying/sprPlayerLying.yy",},
