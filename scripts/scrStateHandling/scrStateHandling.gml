@@ -29,6 +29,7 @@ function HandlePlayerState() {
 			if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
 			if (charToFace) spriteDir = (x > charToFace.x);
 		} break;
@@ -38,6 +39,7 @@ function HandlePlayerState() {
 			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.IDLE; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
 			if (charToFace) { spriteDir = (x > charToFace.x); } else { spriteDir = (xSpeed < 0); }
@@ -58,6 +60,7 @@ function HandlePlayerState() {
 				return;
 			}
 			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
+			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
 			
@@ -72,7 +75,7 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
-				changeSprite(sprPlayerLightSide);
+				changeSprite(sprPlayerHeavySide);
 				xSpeed = 0;
 			}
 			if (image_index >= 8) and (not attackHitbox) {
@@ -96,7 +99,7 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
-				changeSprite(sprPlayerLightSide);
+				changeSprite(sprPlayerHeavySide);
 				xSpeed = 0;
 			}
 			if (image_index >= 8) and (not attackHitbox) {
@@ -117,6 +120,16 @@ function HandlePlayerState() {
 				changeSprite(sprPlayerIdle);
 				return;
 			}
+		} break;
+		case CharacterStates.BLOCK: {
+			if (sprite_index != sprPlayerBlock) {
+				changeSprite(sprPlayerBlock);
+				xSpeed = 0;
+			}
+			if (not INPUT_BLOCK) {
+				currentState = CharacterStates.IDLE;
+			}
+			if END_OF_SPRITE image_index = 3;
 		} break;
 	}
 	
@@ -168,6 +181,8 @@ function HandleAIState() {
 			
 			FACE_TARGET;
 			
+			currentState = CharacterStates.BLOCK;
+			return;
 			// AI decision-making
 			/*
 			if (distance_to_object(objPlayer) < 128) {
@@ -221,7 +236,7 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
-				changeSprite(sprPlayerLightSide);
+				changeSprite(sprPlayerHeavySide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -242,7 +257,7 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
-				changeSprite(sprPlayerLightSide);
+				changeSprite(sprPlayerHeavySide);
 				xSpeed = 0;
 				attackHitbox = instance_create_layer(
 					x + (sprite_width/2),
@@ -288,7 +303,19 @@ function HandleAIState() {
 					print(sprite_index);
 				}
 			}
-		}
+		} break;
+		case CharacterStates.BLOCK: {
+			if (sprite_index != sprPlayerBlock) {
+				changeSprite(sprPlayerBlock);
+				xSpeed = 0;
+			}
+			/*
+			if (not INPUT_BLOCK) {
+				currentState = CharacterStates.IDLE;
+			}
+			*/
+			if END_OF_SPRITE image_index = 3;
+		} break;
 	}
 	
 	// Physics code
