@@ -2,4 +2,6 @@ event_inherited();
 
 moveSpeed = 8;
 
-neuralNetworks = GenerateDefaultNetworks(100, 4, 3);
+neuralNetworks = GenerateDefaultNetworks(10, 4, 3);
+
+aiXInput = 0; aiJumpInput = 0;

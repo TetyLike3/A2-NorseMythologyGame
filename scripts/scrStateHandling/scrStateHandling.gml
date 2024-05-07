@@ -31,7 +31,7 @@ function HandlePlayerState() {
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
-			if (charToFace) spriteDir = (x > charToFace.x);
+			FACE_TARGET;
 		} break;
 		case CharacterStates.MOVE: {
 			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
@@ -144,13 +144,22 @@ function HandlePlayerState() {
 
 
 
-function ProcessAIValues() {
-	aiAgressiveness = charHealth;
+function StepNeuralNetwork() {
+	var input = [];
+	input[0] = min((distance_to_object(objPlayer)/room_width)*4,1);
+	input[1] = currentState;
+	input[2] = objPlayer.currentState;
+	input[3] = damageTimer;
+	
+	neuralNetworks[0].Input(input);
+	result = neuralNetworks[0].Forward();
+	aiXInput = (result[0] > 0.1 and result[0]) or 0;
+	aiJumpInput = result[1] > 0.8;
 }
 
 function HandleAIState() {
 	charToFace = instance_find(objPlayer,0);
-	ProcessAIValues();
+	StepNeuralNetwork();
 	switch currentState {
 		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
@@ -181,13 +190,11 @@ function HandleAIState() {
 			
 			FACE_TARGET;
 			
-			// AI decision-making
-			/*
-			if (distance_to_object(objPlayer) < 128) {
-				if (irandom(100) < (aiAgressiveness/4)) { currentState = CharacterStates.LATTACK; return; }
-			}
-			if (irandom(100) < aiAgressiveness) { currentState = CharacterStates.MOVE; return; }
-			*/
+			if (aiXInput != 0) { currentState = CharacterStates.MOVE; return; }
+			//if (INPUT_JUMP and not inAir) { currentState = CharacterStates.JUMP; return; }
+			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
+			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			//if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 		} break;
 		case CharacterStates.MOVE: {
 			// Change sprite
@@ -195,19 +202,16 @@ function HandleAIState() {
 			
 			FACE_TARGET;
 			// Update speed
-			xSpeed = moveSpeed * image_xscale;
+			xSpeed = aiXInput * moveSpeed;
 			
-			// AI decision-making
 			/*
-			if (irandom(100) > aiAgressiveness) { currentState = CharacterStates.IDLE; return; }
-			if (distance_to_object(objPlayer) < 128) { currentState = CharacterStates.IDLE; return; }
-			*/
 			if (aiShouldJump and not inAir) {
 				currentState = CharacterStates.JUMP;
 				ySpeed += objGameManager.gameGravity;
 				executeGroundCollision(); executeWallCollision();
 				return;
 			}
+			*/
 		} break;
 		case CharacterStates.JUMP: {
 			// If just started jumping, change sprite, play sound, and end early

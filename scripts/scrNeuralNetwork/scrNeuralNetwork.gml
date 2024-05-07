@@ -11,7 +11,7 @@ function NNA_Identity(_input) {
 
 // Non-linear S-Curve from -1 to 1.
 function NNA_Tanh(_input) {
-	return ((2 / (1 + exp(-2 * input))) - 1);
+	return ((2 / (1 + exp(-2 * _input))) - 1);
 }
 
 // Similar to Tanh, but ranges from 0 to 1.
@@ -45,6 +45,21 @@ function NeuralLayerBase(_size) {
 	static Forward = function() {};
 	
 	static Destroy = function() {};
+	
+	static Draw = function(_x,_y,_scale) {
+		_y -= _scale * (size/2);
+		for (var i = 0; i < size; i++) {
+			var value = output[i];
+			var R = clamp(-min(0,value)*255,0,255);
+			var G = clamp(+min(0,value)*255,0,255);
+			var B = 32;
+			var colour = make_color_rgb(R,G,B);
+			draw_circle_color(_x,_y,_scale*.5-0, c_dkgrey, c_dkgrey, false);
+			draw_circle_color(_x,_y,_scale*.5-2, c_black, c_black, false);
+			draw_circle_color(_x,_y,_scale*.5-4, colour, colour, false);
+			_y += _scale;
+		}
+	}
 }
 
 function NeuralLayerInput(_size) : NeuralLayerBase(_size) constructor {
@@ -131,6 +146,20 @@ function NeuralNetwork() constructor {
 		// Return outputs
 		return last.output;
 	}
+	
+	static Destroy = function() {
+		for (var i = 0; i < size; i++) {
+			layers[i].Destroy();
+		}
+	}
+	
+	static Draw = function(_x,_y,_scale) {
+		_x -= _scale * (size/2);
+		for (var i = 0; i < size; i++) {
+			layers[i].Draw(_x,_y,_scale);
+			_x += _scale;
+		}
+	}
 }
 
 // Neural Network Training
@@ -140,9 +169,14 @@ function GenerateDefaultNetworks(_count, _inputCount, _outputCount) {
 	for (var i = 0; i < _count; i++) {
 		var newNetwork = new NeuralNetwork();
 		newNetwork.add.Input(_inputCount);
-		newNetwork.add.Dense(_outputCount*5, NNActivationType.TANH);
-		newNetwork.add.Dense(_outputCount*2, NNActivationType.RELU);
-		newNetwork.add.Dense(_outputCount, NNActivationType.SIGMOID);
+		newNetwork.add.Dense(_inputCount*3, NNActivationType.IDENTITY);
+		newNetwork.add.Dense(_inputCount*4, NNActivationType.TANH);
+		newNetwork.add.Dense(_inputCount*5, NNActivationType.IDENTITY);
+		newNetwork.add.Dense(_outputCount*4, NNActivationType.IDENTITY);
+		newNetwork.add.Dense(_outputCount*3, NNActivationType.TANH);
+		newNetwork.add.Dense(_outputCount*2, NNActivationType.IDENTITY);
+		newNetwork.add.Dense(_outputCount+1, NNActivationType.TANH);
+		newNetwork.add.Dense(_outputCount, NNActivationType.IDENTITY);
 		
 		networks[i] = newNetwork;
 		
