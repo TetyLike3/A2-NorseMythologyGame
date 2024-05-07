@@ -142,21 +142,6 @@ function HandlePlayerState() {
 	lastState = currentState;
 }
 
-
-
-function StepNeuralNetwork() {
-	var input = [];
-	input[0] = min((distance_to_object(objPlayer)/room_width)*4,1);
-	input[1] = currentState;
-	input[2] = objPlayer.currentState;
-	input[3] = damageTimer;
-	
-	neuralNetworks[0].Input(input);
-	result = neuralNetworks[0].Forward();
-	aiXInput = (result[0] > 0.1 and result[0]) or 0;
-	aiJumpInput = result[1] > 0.8;
-}
-
 function HandleAIState() {
 	charToFace = instance_find(objPlayer,0);
 	StepNeuralNetwork();
