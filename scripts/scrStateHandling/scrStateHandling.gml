@@ -264,7 +264,7 @@ function HandleAIState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if spriteDir { xSpeed = 9; } else xSpeed = -9;
+				if charToFace.spriteDir { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
