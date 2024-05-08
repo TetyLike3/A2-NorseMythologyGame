@@ -9,4 +9,4 @@
 #macro INPUT_GRAB (gamepad_button_check(deviceIndex,gp_shoulderl) or gamepad_button_check(deviceIndex,gp_shoulderr))
 
 #macro END_OF_SPRITE (ceil(image_index) == image_number)
-#macro FACE_TARGET if (charToFace) spriteDir = (x > charToFace.x)
+#macro FACE_TARGET if instance_exists(charToFace) spriteDir = (x > charToFace.x)

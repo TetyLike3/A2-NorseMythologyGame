@@ -21,3 +21,8 @@ floorPadding = 64;
 
 // Gameplay
 gameGravity = 0.6;
+
+averageDTLogSize = 240;
+averageDTLog = [];
+averageDT = 0;
+averageFPS = 0;

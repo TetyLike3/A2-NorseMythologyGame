@@ -30,3 +30,14 @@ cameraTargetY = _camY2-(cameraTargetH);
 
 
 if (gamepad_button_check_pressed(0,gp_start) or keyboard_check_pressed(vk_escape)) game_end();
+
+
+var DTLogSize = array_length(averageDTLog);
+array_push(averageDTLog,delta_time);
+if (DTLogSize > averageDTLogSize) array_delete(averageDTLog,0,1);
+averageDT = 0;
+for (var i = 0; i < DTLogSize; i++) {
+	averageDT += averageDTLog[i];
+}
+averageDT /= DTLogSize;
+averageFPS = 1000/(averageDT/1000);

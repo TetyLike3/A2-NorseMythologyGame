@@ -6,7 +6,7 @@ bestFitness = 0;
 bestSpecimen = undefined;
 globalBestFitness = 0;
 
-count = 10;
+count = 5;
 population = array_create(count);
 for (var i = 0; i < count; i++) {
 	population[@i] = instance_create_layer(1856,1056,"Instances",objEnemy);

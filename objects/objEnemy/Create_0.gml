@@ -1,6 +1,7 @@
 event_inherited();
 
 moveSpeed = 8;
+lightAttackDamage = 20;
 
 neuralNetwork = NN_GenerateDefaultNetwork(8, 4);
 aiShouldTrain = false;
@@ -26,29 +27,32 @@ function Restart() {
 	aiBoolConfidence = lerp(aiBoolConfidence,0.8,0.1);
 }
 
-function UpdateFitness(_inputs) {
+function UpdateFitness() {
 	if (aiFitnessUpdateTimer > 0) return;
 	aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 	
 	// Fitness
 	aiFitness += (charHealth/10); // Reward for maintaining health
-	if (abs(xSpeed) < 7) { aiFitness -= 10; } // Punish for standing still (or moving slow)
+	if (abs(xSpeed) == 0) { aiFitness -= 100; } // Punish for standing still (or moving slow)
 	//aiFitness += (7-abs(xSpeed))*100; // Reward for moving (fast)
-	aiFitness += (100-aiLocalEnemy.charHealth); // Reward for low enemy health
-	aiFitness -= (aiTimeSinceAttack*0.01); // Punish for not attacking frequently
-
-	if (attackHitbox) {
-		aiFitness += (array_length(attackHitbox.collidedWith)*800); // Reward for having active hitbox with collision history
+	if !instance_exists(aiLocalEnemy) {
+		aiFitness += 400; // Reward for killing target
+	} else {
+		if (attackHitbox) {
+			aiFitness += (array_length(attackHitbox.collidedWith)*800); // Reward for having active hitbox with collision history
+		}
+		aiFitness += (100-aiLocalEnemy.charHealth)*10; // Reward for low enemy health
+		aiFitness -= (distance_to_object(aiLocalEnemy)/4); // Punish for being too far away from target
 	}
-	
-	if (charHealth > 70) {
-		if ((_inputs[2] > .1) and (_inputs[2] < .3)) aiFitness += (20 * (1-_inputs[2])); // Reward for keeping close distance to enemy at high health
-		//if !((_inputs[2] > .1) and (_inputs[2] < 1)) aiFitness -= (10 * (1-_inputs[2])); // Punish for sitting out of optimal range to enemy at high health
-	}
+	aiFitness -= (aiTimeSinceAttack*0.03); // Punish for not attacking frequently
 }
 
 function StepNeuralNetwork() {
 	// Inputs
+	if !instance_exists(aiLocalEnemy) {
+		UpdateFitness();
+		return;
+	}
 	var inputs = [];
 	inputs[0] = charHealth/100;
 	inputs[1] = currentState/7;
@@ -62,14 +66,14 @@ function StepNeuralNetwork() {
 	neuralNetwork.Input(inputs);
 	
 	// Outputs
-	outputs = neuralNetwork.Forward();
+	var outputs = neuralNetwork.Forward();
 	aiXInput = (abs(outputs[0]) > 0.1) ? outputs[0] : 0;
 	//aiXInput = outputs[0];
 	aiJumpInput = outputs[1] > aiBoolConfidence;
 	aiLightAttackInput = outputs[2] > aiBoolConfidence;
 	aiBlockInput = outputs[3] > aiBoolConfidence;
 	
-	UpdateFitness(inputs);
+	UpdateFitness();
 }
 
 Restart();
