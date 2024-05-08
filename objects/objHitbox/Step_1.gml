@@ -1,11 +1,6 @@
 var collisionsOnSpawn = ds_list_create();
 
-if object_index == objPlayer {
-	collision_rectangle_list(x-(sprite_width/2),y-(sprite_height/2),x+(sprite_width/2),y+(sprite_height/2),objEnemy,true,true,collisionsOnSpawn,false);
-} else {
-	collision_rectangle_list(x-(sprite_width/2),y-(sprite_height/2),x+(sprite_width/2),y+(sprite_height/2),aiLocalEnemy,true,true,collisionsOnSpawn,false);
-}
-
+collision_rectangle_list(x-(sprite_width/2),y-(sprite_height/2),x+(sprite_width/2),y+(sprite_height/2),collidable,true,true,collisionsOnSpawn,false);
 
 for (var i = 0; i < ds_list_size(collisionsOnSpawn); ++i) {
 	var _char = ds_list_find_value(collisionsOnSpawn,i);

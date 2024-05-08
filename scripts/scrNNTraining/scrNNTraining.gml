@@ -8,12 +8,12 @@ function NN_GenerateDefaultNetwork(_inputCount, _outputCount) {
 	var newNetwork = new NeuralTapedNetwork();
 	newNetwork.add.Input(_inputCount);
 	newNetwork.add.Dense(_inputCount*2, NNActivationType.IDENTITY);
-	newNetwork.add.Dense(_inputCount*3, NNActivationType.TANH);
+	newNetwork.add.Dense(_inputCount*3, NNActivationType.IDENTITY);
 	newNetwork.add.Dense((_inputCount*3)+2, NNActivationType.IDENTITY);
 	newNetwork.add.Dense((_outputCount*5), NNActivationType.IDENTITY);
-	newNetwork.add.Dense((_outputCount*4)+2, NNActivationType.TANH);
+	newNetwork.add.Dense((_outputCount*4)+2, NNActivationType.IDENTITY);
 	newNetwork.add.Dense((_outputCount*3)+2, NNActivationType.IDENTITY);
-	newNetwork.add.Dense((_outputCount*2)+3, NNActivationType.TANH);
+	newNetwork.add.Dense((_outputCount*2)+3, NNActivationType.IDENTITY);
 	newNetwork.add.Dense((_outputCount*2)+1, NNActivationType.IDENTITY);
 	newNetwork.add.Dense((_outputCount*2), NNActivationType.IDENTITY);
 	newNetwork.add.Dense(_outputCount, NNActivationType.IDENTITY);

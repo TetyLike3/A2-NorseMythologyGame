@@ -2,6 +2,9 @@
   "resourceType": "GMMainOptions",
   "resourceVersion": "1.4",
   "name": "Main",
+  "ConfigValues": {
+    "test": {"option_game_speed":"60",},
+  },
   "option_author": "",
   "option_collision_compatibility": false,
   "option_copy_on_write_enabled": false,

@@ -4,4 +4,9 @@ draw_text(16,208,string_concat("Best Fitness: ",bestFitness));
 draw_text(16,240,string_concat("Global Best Fitness: ",globalBestFitness));
 draw_text(16,272,string_concat("Generation: ",generation));
 
-bestSpecimen.neuralNetwork.Draw(384, 768, 1.8, 42, 42);
+if instance_exists(bestSpecimen) {
+	draw_text(16,304,string_concat("Attack Input: ",bestSpecimen.aiLightAttackInput));
+	draw_text(16,332,string_concat("Jump Input: ",bestSpecimen.aiJumpInput));
+
+	bestSpecimen.neuralNetwork.Draw(384, 768, 1.8, 42, 42);
+}

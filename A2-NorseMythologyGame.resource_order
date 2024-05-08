@@ -9,6 +9,7 @@
     {"name":"Paths","order":4,"path":"folders/Paths.yy",},
     {"name":"Rooms","order":10,"path":"folders/Rooms.yy",},
     {"name":"Scripts","order":5,"path":"folders/Scripts.yy",},
+    {"name":"NeuralNetwork","order":5,"path":"folders/Scripts/NeuralNetwork.yy",},
     {"name":"Sequences","order":11,"path":"folders/Sequences.yy",},
     {"name":"Shaders","order":6,"path":"folders/Shaders.yy",},
     {"name":"Sounds","order":3,"path":"folders/Sounds.yy",},
@@ -18,7 +19,6 @@
     {"name":"Env","order":7,"path":"folders/Sprites/Env.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"NeuralNetwork","order":5,"path":"folders/Scripts/NeuralNetwork.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"sprPlayerJump","order":3,"path":"sprites/sprPlayerJump/sprPlayerJump.yy",},

@@ -8,9 +8,11 @@ uTint = shader_get_uniform(sdrTint,"u_TintColour");
 moveSpeed = 12;
 jumpPower = 18;
 
-inAir = false;
+canJump = false;
 currentState = CharacterStates.IDLE;
 lastState = currentState;
+stateChangeCDMax = 5;
+stateChangeCD = 0;
 
 xSpeed = 0;
 ySpeed = 0;
@@ -22,7 +24,7 @@ spriteDir = 1;
 charToFace = -1;
 
 // Other
-attackHitbox = -1;
+attackHitbox = undefined;
 
 // Stunning
 stunTimer = 0;
