@@ -1,12 +1,12 @@
-event_inherited();
+ event_inherited();
 
 moveSpeed = 8;
 lightAttackDamage = 20;
+heavyAttackDamage = 40;
 
-neuralNetwork = NN_GenerateDefaultNetwork(8, 4);
-aiShouldTrain = false;
+neuralNetwork = NN_GenerateDefaultNetwork(10, 5);
 aiXInput = 0; aiJumpInput = 0;
-aiLightAttackInput = 0;
+aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 aiBlockInput = 0;
 
 aiFitness = 0;
@@ -15,63 +15,89 @@ aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 aiLocalEnemy = undefined;
 aiTimeSinceAttack = 0;
 aiBoolConfidence = 0.02;
+aiTimeSinceMove = 0;
+aiMissCount = 0;
+
+aiStepCooldownMax = 5; // Step every 5 frames
+aiStepCooldown = 0;
+
+aiAttackCDMax = 30;
+aiAttackCD = aiAttackCDMax;
 
 function Restart() {
-	x = 1856;
+	x = 1856 + random_range(-128,128);
 	y = 1056;
 	aiFitness = 0;
 	aiTimeSinceAttack = 0;
 	if aiLocalEnemy instance_destroy(aiLocalEnemy);
-	aiLocalEnemy = instance_create_layer(1280,1216,"Instances",objPlayer);
+	aiLocalEnemy = instance_create_layer(1856,1216,"Instances",objPlayer);
 	charToFace = aiLocalEnemy;
 	aiBoolConfidence = lerp(aiBoolConfidence,0.8,0.1);
+	aiTimeSinceMove = 0;
+	aiMissCount = 0;
 }
 
 function UpdateFitness() {
 	if (aiFitnessUpdateTimer > 0) return;
 	aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 	
-	// Fitness
-	aiFitness += (charHealth/10); // Reward for maintaining health
-	if (abs(xSpeed) == 0) { aiFitness -= 100; } // Punish for standing still (or moving slow)
-	//aiFitness += (7-abs(xSpeed))*100; // Reward for moving (fast)
-	if !instance_exists(aiLocalEnemy) {
-		aiFitness += 400; // Reward for killing target
+	if !instance_exists(aiLocalEnemy) { aiFitness += 1; return; }
+	aiFitness += (charHealth/100); // Reward for maintaining health
+	if (abs(xSpeed) == 0) {
+		aiFitness -= min((1 + (aiTimeSinceMove)/100)^1.5,4); // Punish for standing still
 	} else {
-		if (attackHitbox) {
-			aiFitness += (array_length(attackHitbox.collidedWith)*800); // Reward for having active hitbox with collision history
-		}
-		aiFitness += (100-aiLocalEnemy.charHealth)*10; // Reward for low enemy health
-		aiFitness -= (distance_to_object(aiLocalEnemy)/4); // Punish for being too far away from target
+		aiFitness += (xSpeed^1.2)/10; // Reward for moving faster
 	}
-	aiFitness -= (aiTimeSinceAttack*0.03); // Punish for not attacking frequently
+	
+	if (attackHitbox) {
+		var hitCount = array_length(attackHitbox.collidedWith);
+		if (hitCount > 0) {
+			aiFitness += (hitCount)^1.1; // Reward for having active hitbox with collision history
+		} else { aiFitness -= (aiMissCount^1.2); } // Punish for missing an attack
+	}
+	
+	aiFitness += ((100-aiLocalEnemy.charHealth)^1.02)/100; // Reward for low target health
+	aiFitness += clamp((768-distance_to_object(aiLocalEnemy))/512,-2,2); // Reward (or punish) based on distance from target
+	aiFitness -= (aiTimeSinceAttack*0.01)^1.1; // Punish for not attacking frequently
+	aiFitness -= clamp((64+distance_to_point(room_width/2,y))/64,-1,1); // Encourage AI to stay in centre of room
+	
+	aiFitness = max(aiFitness,objGeneticControl.fitnessLowerLimit); // Encourages AI to make a new move if their fitness is increased from this limit
 }
 
 function StepNeuralNetwork() {
+	if aiStepCooldown > 0 return;
+	aiStepCooldown = aiStepCooldownMax;
+	
 	// Inputs
 	if !instance_exists(aiLocalEnemy) {
+		aiXInput = 0; aiJumpInput = 0;
+		aiLightAttackInput = 0; aiHeavyAttackInput = 0;
+		aiBlockInput = 0;
 		UpdateFitness();
 		return;
 	}
 	var inputs = [];
-	inputs[0] = charHealth/100;
-	inputs[1] = currentState/7;
-	inputs[2] = min((distance_to_object(aiLocalEnemy)/room_width)*120,1);
-	inputs[3] = aiLocalEnemy.charHealth/100;
-	inputs[4] = aiLocalEnemy.currentState/7;
-	inputs[5] = damageTimer/damageTimerMax;
+	inputs[0] = clamp(aiFitness/(objGeneticControl.bestFitness+1),-1,1);
+	inputs[1] = x/room_width;
+	inputs[2] = charHealth/100;
+	inputs[3] = currentState/7;
+	inputs[4] = spriteDir;
+	inputs[5] = min(aiAttackCD/aiAttackCDMax,1);
 	inputs[6] = stunTimer/stunTimerMax;
-	inputs[7] = clamp(ySpeed/16,-1,1);
+	inputs[7] = min((distance_to_object(aiLocalEnemy)/room_width)*120,1);
+	inputs[8] = aiLocalEnemy.charHealth/100;
+	inputs[9] = aiLocalEnemy.currentState/7;
 	
 	neuralNetwork.Input(inputs);
 	
 	// Outputs
 	var outputs = neuralNetwork.Forward();
-	aiXInput = (abs(outputs[0]) > 0.1) ? outputs[0] : 0;
+	aiXInput = (abs(outputs[0]) > 0.2) ? clamp(outputs[0],-1,1) : 0;
 	//aiXInput = outputs[0];
 	aiJumpInput = outputs[1] > aiBoolConfidence;
 	aiLightAttackInput = outputs[2] > aiBoolConfidence;
-	aiBlockInput = outputs[3] > aiBoolConfidence;
+	aiHeavyAttackInput = outputs[3] > aiBoolConfidence;
+	aiBlockInput = outputs[4] > aiBoolConfidence;
 	
 	UpdateFitness();
 }

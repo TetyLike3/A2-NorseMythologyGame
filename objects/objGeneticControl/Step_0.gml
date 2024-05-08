@@ -16,14 +16,33 @@ for (var i = 0; i < count; i++) {
 	}
 }
 
+if (remainingCounter < lastRemainingCounter) {
+	var diff = lastRemainingCounter - remainingCounter;
+	
+	timeLeft = ceil(timeLeft/(diff+1)); // Decrease time left for others to finish
+	
+	fitnessLowerLimit -= (diff*200); // Increase fitness lower limit to help remove others from softlock
+}
+
 // End this generation's simulation
-if (remainingCounter == 0) or (timeLeft <= 0) {
+if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"))) or (bestFitness == fitnessLowerLimit) {
+	/*
+	if instance_exists(bestSpecimen) {
+		if bestSpecimen.aiFitness > globalBestFitness {
+			globalBestNetwork = bestSpecimen.neuralNetwork;
+		} else {
+			bestSpecimen.neuralNetwork = globalBestNetwork;
+		};
+	}
+	*/
+	
 	NeuralGeneticSelection(population);
 	NeuralGeneticCrossover(population, .1);
-	NeuralGeneticMutation(population, .2, 1, .4, .1);
+	NeuralGeneticMutation(population, .7, 1, .2, .05);
 	generation++;
 	timeLeft = timeLeftMax;
 	globalBestFitness = max(bestFitness, globalBestFitness);
+	fitnessLowerLimit = -500;
 	
 	instance_activate_object(objEnemy);
 	with (objEnemy) {
@@ -31,4 +50,5 @@ if (remainingCounter == 0) or (timeLeft <= 0) {
 	}
 }
 
+lastRemainingCounter = remainingCounter;
 timeLeft--;

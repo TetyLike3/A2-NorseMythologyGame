@@ -46,6 +46,7 @@
     {"name":"sprWall","order":1,"path":"sprites/sprWall/sprWall.yy",},
     {"name":"sprPlayerGetUp","order":10,"path":"sprites/sprPlayerGetUp/sprPlayerGetUp.yy",},
     {"name":"sprPlayerBlock","order":11,"path":"sprites/sprPlayerBlock/sprPlayerBlock.yy",},
+    {"name":"sprPlayerLightSide1Hitbox","order":15,"path":"sprites/sprPlayerLightSide1Hitbox/sprPlayerLightSide1Hitbox.yy",},
     {"name":"sprPlayerLying","order":9,"path":"sprites/sprPlayerLying/sprPlayerLying.yy",},
     {"name":"sprNN_Neuron","order":1,"path":"sprites/sprNN_Neuron/sprNN_Neuron.yy",},
     {"name":"sprPlayerFloorImpact","order":8,"path":"sprites/sprPlayerFloorImpact/sprPlayerFloorImpact.yy",},

@@ -68,6 +68,7 @@
     {"id":{"name":"scrNNCommon","path":"scripts/scrNNCommon/scrNNCommon.yy",},},
     {"id":{"name":"sprPlayerGetUp","path":"sprites/sprPlayerGetUp/sprPlayerGetUp.yy",},},
     {"id":{"name":"sprPlayerBlock","path":"sprites/sprPlayerBlock/sprPlayerBlock.yy",},},
+    {"id":{"name":"sprPlayerLightSide1Hitbox","path":"sprites/sprPlayerLightSide1Hitbox/sprPlayerLightSide1Hitbox.yy",},},
     {"id":{"name":"sprPlayerLying","path":"sprites/sprPlayerLying/sprPlayerLying.yy",},},
     {"id":{"name":"sndJumpLand","path":"sounds/sndJumpLand/sndJumpLand.yy",},},
     {"id":{"name":"sprNN_Neuron","path":"sprites/sprNN_Neuron/sprNN_Neuron.yy",},},

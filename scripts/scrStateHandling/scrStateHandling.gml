@@ -217,7 +217,8 @@ function HandleAIState() {
 			
 			if (aiXInput != 0) and !stateChangeCD { currentState = CharacterStates.MOVE; return; }
 			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
-			if (aiLightAttackInput) and !stateChangeCD { currentState = CharacterStates.LATTACK; return; }
+			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
+			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 
 			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			//if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
@@ -230,6 +231,8 @@ function HandleAIState() {
 			// Update speed
 			xSpeed = aiXInput * moveSpeed;
 			
+			if (xSpeed != 0) aiTimeSinceMove = 0;
+			
 			/*
 			if (aiShouldJump and not canJump) {
 				currentState = CharacterStates.JUMP;
@@ -240,7 +243,8 @@ function HandleAIState() {
 			*/
 			if (aiXInput == 0) and !stateChangeCD { currentState = CharacterStates.IDLE; return; }
 			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
-			if (aiLightAttackInput) and !stateChangeCD { currentState = CharacterStates.LATTACK; return; }
+			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
+			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 		} break;
 		case CharacterStates.JUMP: {
 			// If just started jumping, change sprite, play sound, and end early
@@ -272,49 +276,59 @@ function HandleAIState() {
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
-				return;
-			}
-			if (image_index >= 8) and (not attackHitbox) {
-				attackHitbox = instance_create_layer(
-					x + (sprite_width/4),
-					y - (sprite_height/2),
-					"Instances",
-					objHitbox
-				);
+				
+				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 				attackHitbox.collidable = aiLocalEnemy;
+				
+				return;
 			}
+			attackHitbox.image_index = image_index;
 			
-			aiTimeSinceAttack = 0;
 			if (END_OF_SPRITE) { // Switch to Idle state
 				currentState = CharacterStates.IDLE; lastState = currentState;
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
+				if instance_exists(attackHitbox) {
+					if (array_length(attackHitbox.collidedWith) < 1) aiMissCount++;
+					instance_destroy(attackHitbox);
+				}
 				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
+				
+				aiTimeSinceAttack = 0;
+				aiAttackCD = (aiAttackCDMax) * max(4-(aiTimeSinceAttack/10),0);
 				return;
 			}
 		} break;
 		case CharacterStates.HATTACK: {
-			if (lastState != CharacterStates.LATTACK) {
-				changeSprite(sprPlayerHeavySide);
+			if (lastState != CharacterStates.HATTACK) {
+				changeSprite(sprPlayerLightSide1);
 				xSpeed = 0;
-				attackHitbox = instance_create_layer(
-					x + (sprite_width/4),
-					y - (sprite_height/2),
-					"Instances",
-					objHitbox
-				);
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				
+				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = aiLocalEnemy;
+				
+				return;
 			}
-			aiTimeSinceAttack = 0;
+			attackHitbox.image_index = image_index;
+			
 			if (END_OF_SPRITE) { // Switch to Idle state
-				currentState = CharacterStates.IDLE;
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
+				currentState = CharacterStates.IDLE; lastState = currentState;
+				if instance_exists(attackHitbox) {
+					if (array_length(attackHitbox.collidedWith) < 1) aiMissCount++;
+					instance_destroy(attackHitbox);
+				}
 				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
+				
+				aiTimeSinceAttack = 0;
+				aiAttackCD = (aiAttackCDMax) * max(4-(aiTimeSinceAttack/10),0);
 				return;
 			}
 		} break;
