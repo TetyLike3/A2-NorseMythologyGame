@@ -18,9 +18,9 @@ if(stars)
 		stars=false
 }
 
-		if(layer_sequence_is_finished(sqButtonFadeIn))
-		{
-			instance_create_layer(,960,540,"Instances",objStartButton)
-			layer_sequence_destroy(sqButtonFadeIn)
-			print("Destroying")
-		}
+if(layer_sequence_is_finished(sqButtonFadeIn))
+{
+	instance_create_layer(,960,540,"Instances",objStartButton)
+	layer_sequence_destroy(sqButtonFadeIn)
+	print("Destroying")
+}
