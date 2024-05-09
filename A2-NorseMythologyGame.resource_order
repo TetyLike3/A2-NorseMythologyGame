@@ -26,6 +26,7 @@
     {"name":"sprPlayerJump","order":3,"path":"sprites/sprPlayerJump/sprPlayerJump.yy",},
     {"name":"scrMacros","order":1,"path":"scripts/scrMacros/scrMacros.yy",},
     {"name":"sndStepR","order":3,"path":"sounds/sndStepR/sndStepR.yy",},
+    {"name":"fntSmallViking","order":1,"path":"fonts/fntSmallViking/fntSmallViking.yy",},
     {"name":"sndStepL","order":2,"path":"sounds/sndStepL/sndStepL.yy",},
     {"name":"sprPlayerAirIdle","order":4,"path":"sprites/sprPlayerAirIdle/sprPlayerAirIdle.yy",},
     {"name":"sprButton","order":1,"path":"sprites/sprButton/sprButton.yy",},

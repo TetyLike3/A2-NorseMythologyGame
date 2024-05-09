@@ -29,7 +29,10 @@
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"buttonText","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"Sample Text","varType":2,},
   ],
   "solid": false,
-  "spriteId": null,
+  "spriteId": {
+    "name": "sprButton",
+    "path": "sprites/sprButton/sprButton.yy",
+  },
   "spriteMaskId": null,
   "visible": true,
 }

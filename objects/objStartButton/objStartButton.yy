@@ -4,7 +4,9 @@
   "name": "objStartButton",
   "eventList": [],
   "managed": true,
-  "overriddenProperties": [],
+  "overriddenProperties": [
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objParentButton","path":"objects/objParentButton/objParentButton.yy",},"propertyId":{"name":"buttonText","path":"objects/objParentButton/objParentButton.yy",},"value":"START",},
+  ],
   "parent": {
     "name": "Buttons",
     "path": "folders/Objects/Buttons.yy",
