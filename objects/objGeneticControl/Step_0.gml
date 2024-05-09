@@ -19,9 +19,9 @@ for (var i = 0; i < count; i++) {
 if (remainingCounter < lastRemainingCounter) {
 	var diff = lastRemainingCounter - remainingCounter;
 	
-	timeLeft = ceil(timeLeft/(diff+1)); // Decrease time left for others to finish
+	timeLeft = ceil(timeLeft/(diff+.2)); // Decrease time left for others to finish
 	
-	fitnessLowerLimit -= (diff*200); // Increase fitness lower limit to help remove others from softlock
+	//fitnessLowerLimit -= (diff*200); // Increase fitness lower limit to help remove others from softlock
 }
 
 // End this generation's simulation
@@ -52,3 +52,23 @@ if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"
 
 lastRemainingCounter = remainingCounter;
 timeLeft--;
+
+if (keyboard_check_pressed(vk_home)) and instance_exists(bestSpecimen) {
+	var stringified = NeuralModelStringify(bestSpecimen.neuralNetwork);
+	clipboard_set_text(stringified);
+	show_message("clipped fr");
+}
+
+if (keyboard_check_pressed(vk_insert)) {
+	var stringified = clipboard_get_text();
+	var network = NeuralModelParse(stringified, true);
+	
+	if (is_undefined(network)) {
+		show_message("Failed to parse model from clipboard.");
+	} else {
+		for (var i = 0; i < count; i++) {
+			NeuralModelCopy(population[i].neuralNetwork,network);
+		}
+		show_message("Successfully parsed model :3");
+	}
+}
