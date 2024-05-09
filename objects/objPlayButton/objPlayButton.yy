@@ -1,8 +1,12 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objStartButton",
-  "eventList": [],
+  "name": "objPlayButton",
+  "eventList": [
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":4,"eventType":6,"isDnD":false,},
+  ],
   "managed": true,
   "overriddenProperties": [],
   "parent": {
@@ -10,8 +14,8 @@
     "path": "folders/Objects/Buttons.yy",
   },
   "parentObjectId": {
-    "name": "objPlayButton",
-    "path": "objects/objPlayButton/objPlayButton.yy",
+    "name": "objParentButton",
+    "path": "objects/objParentButton/objParentButton.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
