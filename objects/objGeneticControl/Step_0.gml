@@ -38,7 +38,7 @@ if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"
 	
 	NeuralGeneticSelection(population);
 	NeuralGeneticCrossover(population, .1);
-	NeuralGeneticMutation(population, .7, 1, .2, .05);
+	NeuralGeneticMutation(population, .7, 1, .4*(remainingCounter/count), .2*(remainingCounter/count));
 	generation++;
 	timeLeft = timeLeftMax;
 	globalBestFitness = max(bestFitness, globalBestFitness);

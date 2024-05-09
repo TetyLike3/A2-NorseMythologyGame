@@ -13,9 +13,10 @@ aiFitness = 0;
 aiFitnessUpdateTimerMax = 10;
 aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 aiLocalEnemy = undefined;
-aiTimeSinceAttack = 0;
 aiBoolConfidence = 0.02;
+aiTimeSinceAttack = 0;
 aiTimeSinceMove = 0;
+aiTimeAgainstWall = 0;
 aiMissCount = 0;
 
 aiStepCooldownMax = 5; // Step every 5 frames
@@ -28,12 +29,13 @@ function Restart() {
 	x = 1856 + random_range(-128,128);
 	y = 1056;
 	aiFitness = 0;
-	aiTimeSinceAttack = 0;
 	if aiLocalEnemy instance_destroy(aiLocalEnemy);
 	aiLocalEnemy = instance_create_layer(1856,1216,"Instances",objPlayer);
 	charToFace = aiLocalEnemy;
 	aiBoolConfidence = lerp(aiBoolConfidence,0.8,0.1);
 	aiTimeSinceMove = 0;
+	aiTimeSinceAttack = 0;
+	aiTimeAgainstWall = 0;
 	aiMissCount = 0;
 }
 
@@ -41,7 +43,7 @@ function UpdateFitness() {
 	if (aiFitnessUpdateTimer > 0) return;
 	aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 	
-	if !instance_exists(aiLocalEnemy) { aiFitness += 1; return; }
+	if !instance_exists(aiLocalEnemy) { aiFitness += (objGeneticControl.count-objGeneticControl.remainingCounter); return; }
 	aiFitness += (charHealth/100); // Reward for maintaining health
 	if (abs(xSpeed) == 0) {
 		aiFitness -= min((1 + (aiTimeSinceMove)/100)^1.5,4); // Punish for standing still
@@ -59,7 +61,10 @@ function UpdateFitness() {
 	aiFitness += ((100-aiLocalEnemy.charHealth)^1.02)/100; // Reward for low target health
 	aiFitness += clamp((768-distance_to_object(aiLocalEnemy))/512,-2,2); // Reward (or punish) based on distance from target
 	aiFitness -= (aiTimeSinceAttack*0.01)^1.1; // Punish for not attacking frequently
-	aiFitness -= clamp((64+distance_to_point(room_width/2,y))/64,-1,1); // Encourage AI to stay in centre of room
+	//aiFitness -= clamp((64+distance_to_point(room_width/2,y))/64,-1,1); // Encourage AI to stay in centre of room
+	if getWallCollision() {
+		aiFitness -= aiTimeAgainstWall^1.1; // Punish AI for waiting against a wall
+	}
 	
 	aiFitness = max(aiFitness,objGeneticControl.fitnessLowerLimit); // Encourages AI to make a new move if their fitness is increased from this limit
 }
