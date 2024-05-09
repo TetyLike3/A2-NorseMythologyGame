@@ -16,7 +16,7 @@ function getPlayerHorizontalInput() {
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
 
 function HandlePlayerState() {
-	charToFace = instance_find(objCharacter,1);
+	charToFace = instance_find(objEnemy,0);
 	switch currentState {
 		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
@@ -28,11 +28,11 @@ function HandlePlayerState() {
 				} else changeSprite(sprPlayerIdle);
 			}
 			xSpeed = 0;
-			//if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
-			//if (INPUT_JUMP and not canJump) { currentState = CharacterStates.JUMP; return; }
-			//if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
-			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
-			//if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
+			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
+			if (INPUT_JUMP and not canJump) { currentState = CharacterStates.JUMP; return; }
+			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
+			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
+			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			
 			FACE_TARGET;
 		} break;
@@ -79,22 +79,20 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
-				changeSprite(sprPlayerHeavySide);
+				changeSprite(sprPlayerLightSide1);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
-				return;
-			}
-			if (image_index >= 8) and (not attackHitbox) {
-				attackHitbox = instance_create_layer(
-					x + (sprite_width/2),
-					y - (sprite_height/2),
-					"Instances",
-					objHitbox
-				);
+				
+				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
+				attackHitbox.collidable = objEnemy;
+				
+				return;
 			}
+			attackHitbox.image_index = image_index;
 			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
@@ -106,19 +104,18 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
-				changeSprite(sprPlayerHeavySide);
+				changeSprite(sprPlayerLightSide1);
 				xSpeed = 0;
-			}
-			if (image_index >= 8) and (not attackHitbox) {
-				attackHitbox = instance_create_layer(
-					x + (sprite_width/2),
-					y - (sprite_height/2),
-					"Instances",
-					objHitbox
-				);
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				
+				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
+				attackHitbox.collidable = objEnemy;
 			}
+			attackHitbox.image_index = image_index;
 			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
@@ -172,7 +169,57 @@ function HandlePlayerState() {
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
-	canJump = not getGroundCollision();
+	canJump = getGroundCollision();
+	lastState = currentState;
+}
+
+function HandleDummyState() {
+	switch currentState {
+		case CharacterStates.IDLE: {
+			if (sprite_index != sprPlayerIdle) {
+				if sprite_index == sprPlayerJumpLand {
+					if END_OF_SPRITE {
+						changeSprite(sprPlayerIdle);
+					}
+				} else changeSprite(sprPlayerIdle);
+			}
+			xSpeed = 0;
+			
+			FACE_TARGET;
+		} break;
+		case CharacterStates.STUN: {
+			if (lastState != CharacterStates.STUN) {
+				changeSprite(sprPlayerInjured);
+				if charToFace.spriteDir { xSpeed = -9; } else xSpeed = 9;
+				ySpeed = -abs(xSpeed*2);
+				executeGroundCollision(); executeWallCollision();
+				lastState = currentState;
+				stunTimer = stunTimerMax;
+				return;
+			}
+			
+			// Every bounce, reduce speed until below 2, then freeze
+			if getGroundCollision() {
+				if (abs(xSpeed) > 2) {
+					changeSprite(sprPlayerFloorImpact);
+					xSpeed/=3; ySpeed = -abs(xSpeed*3);
+					executeGroundCollision(); executeWallCollision();
+					return;
+				} else {
+					xSpeed = 0; ySpeed = 0;
+					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
+				}
+				if (stunTimer < 1) {
+					currentState = CharacterStates.IDLE;
+				}
+			}
+		} break;
+	}
+	
+	// Physics code
+	ySpeed += objGameManager.gameGravity;
+	executeGroundCollision();
+	executeWallCollision();
 	lastState = currentState;
 }
 
@@ -281,7 +328,7 @@ function HandleAIState() {
 				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
-				attackHitbox.collidable = aiLocalEnemy;
+				attackHitbox.collidable = charToFace;
 				
 				return;
 			}
@@ -312,7 +359,7 @@ function HandleAIState() {
 				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
-				attackHitbox.collidable = aiLocalEnemy;
+				attackHitbox.collidable = charToFace;
 				
 				return;
 			}
@@ -380,6 +427,6 @@ function HandleAIState() {
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
-	canJump = not getGroundCollision();
+	canJump = getGroundCollision();
 	lastState = currentState;
 }

@@ -1,6 +1,6 @@
 /// @description
 
-with (objEnemy) {
+with (specimenObj) {
 	draw_text(x, (y-sprite_height)-16,string_concat("fitness: ",aiFitness));
 	draw_text(x, (y-sprite_height)-32,string_concat("state: ",currentState));
 	draw_text(x, (y-sprite_height)-48,string_concat("xSpeed: ",xSpeed));

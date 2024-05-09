@@ -26,15 +26,11 @@ if (remainingCounter < lastRemainingCounter) {
 
 // End this generation's simulation
 if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"))) or (bestFitness == fitnessLowerLimit) {
-	/*
 	if instance_exists(bestSpecimen) {
 		if bestSpecimen.aiFitness > globalBestFitness {
-			globalBestNetwork = bestSpecimen.neuralNetwork;
-		} else {
-			bestSpecimen.neuralNetwork = globalBestNetwork;
-		};
+			global.BestNetwork = bestSpecimen.neuralNetwork;
+		}
 	}
-	*/
 	
 	NeuralGeneticSelection(population);
 	NeuralGeneticCrossover(population, .1);
@@ -44,8 +40,8 @@ if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"
 	globalBestFitness = max(bestFitness, globalBestFitness);
 	fitnessLowerLimit = -500;
 	
-	instance_activate_object(objEnemy);
-	with (objEnemy) {
+	instance_activate_object(specimenObj);
+	with (specimenObj) {
 		Restart();
 	}
 }
@@ -55,20 +51,30 @@ timeLeft--;
 
 if (keyboard_check_pressed(vk_home)) and instance_exists(bestSpecimen) {
 	var stringified = NeuralModelStringify(bestSpecimen.neuralNetwork);
-	clipboard_set_text(stringified);
-	show_message("clipped fr");
+	var modelFilePath = get_save_filename("Model Save|*.txt","NNModel_");
+	var modelFile = file_text_open_write(modelFilePath);
+	if modelFile {
+		file_text_write_string(modelFile,stringified);
+		file_text_close(modelFile);
+		print("saved fr");
+	}
 }
 
 if (keyboard_check_pressed(vk_insert)) {
-	var stringified = clipboard_get_text();
-	var network = NeuralModelParse(stringified, true);
+	var modelFilePath = get_open_filename("Model Save|*.txt","NNModel_");
+	var modelFile = file_text_open_read(modelFilePath);
+	if modelFile {
+		var stringified = file_text_read_string(modelFile);
+		file_text_close(modelFile);
+		var network = NeuralModelParse(stringified, true);
 	
-	if (is_undefined(network)) {
-		show_message("Failed to parse model from clipboard.");
-	} else {
-		for (var i = 0; i < count; i++) {
-			NeuralModelCopy(population[i].neuralNetwork,network);
+		if (is_undefined(network)) {
+			print("Failed to parse model from file.");
+		} else {
+			for (var i = 0; i < count; i++) {
+				NeuralModelCopy(population[i].neuralNetwork,network);
+			}
+			print("Successfully parsed model");
 		}
-		show_message("Successfully parsed model :3");
 	}
 }

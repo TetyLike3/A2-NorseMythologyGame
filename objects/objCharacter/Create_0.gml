@@ -31,7 +31,7 @@ stunTimer = 0;
 stunTimerMax = 120;
 
 function TakeDamage(dmg) {
-	if (damageTimer >  0) or (currentState == CharacterStates.BLOCK) return;
+	if (damageTimer > 0) or (currentState == CharacterStates.BLOCK) return;
 	damageTimer = damageTimerMax;
 	charHealth -= dmg;
 	if (charHealth <= 0) instance_destroy();

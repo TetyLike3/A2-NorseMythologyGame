@@ -113,3 +113,17 @@ function NeuralAddStructure(_network, _layer) {
 		default: throw("Unexpected layer type while building network from JSON.");
 	}
 }
+
+
+/// @func NeuralLoadModel();
+/// @desc Loads a model's save file selected by the player.
+function NeuralLoadModel() {
+	
+}
+
+/// @func NeuralSaveModel(stringified);
+/// @desc Create/overwrite a model's save file selected by the player.
+/// @param {string} stringified The stringified neural network data.
+function NeuralSaveModel(_stringified) {
+	
+}

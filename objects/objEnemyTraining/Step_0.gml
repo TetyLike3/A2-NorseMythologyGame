@@ -1,6 +1,7 @@
 event_inherited();
 HandleAIState();
 
+aiFitnessUpdateTimer--;
 aiStepCooldown--;
 aiStepCooldown = max(0, aiStepCooldown-1);
 aiTimeSinceAttack++;

@@ -26,3 +26,5 @@ averageDTLogSize = 240;
 averageDTLog = [];
 averageDT = 0;
 averageFPS = 0;
+
+charDrawAlpha = 1;

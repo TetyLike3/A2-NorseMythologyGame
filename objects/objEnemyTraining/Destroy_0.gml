@@ -3,3 +3,9 @@
 
 // Inherit the parent event
 event_inherited();
+
+print(x);
+print(y);
+print(charHealth);
+print(id);
+print(attackHitbox.id);
