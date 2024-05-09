@@ -1,0 +1,2 @@
+rotate=false
+stars=false

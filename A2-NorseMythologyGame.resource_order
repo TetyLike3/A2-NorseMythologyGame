@@ -18,6 +18,7 @@
     {"name":"Env","order":7,"path":"folders/Sprites/Env.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
+    {"name":"Menu","order":9,"path":"folders/Sprites/Menu.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"sprPlayerJump","order":3,"path":"sprites/sprPlayerJump/sprPlayerJump.yy",},
@@ -35,6 +36,7 @@
     {"name":"sprPlayerHeavySide","order":1,"path":"sprites/sprPlayerHeavySide/sprPlayerHeavySide.yy",},
     {"name":"sndJump","order":1,"path":"sounds/sndJump/sndJump.yy",},
     {"name":"sprWall","order":1,"path":"sprites/sprWall/sprWall.yy",},
+    {"name":"rmMainMenu","order":1,"path":"rooms/rmMainMenu/rmMainMenu.yy",},
     {"name":"sprPlayerGetUp","order":10,"path":"sprites/sprPlayerGetUp/sprPlayerGetUp.yy",},
     {"name":"sprPlayerBlock","order":11,"path":"sprites/sprPlayerBlock/sprPlayerBlock.yy",},
     {"name":"sprPlayerLying","order":9,"path":"sprites/sprPlayerLying/sprPlayerLying.yy",},
@@ -48,5 +50,6 @@
     {"name":"objCharacter","order":3,"path":"objects/objCharacter/objCharacter.yy",},
     {"name":"sndLightSide","order":4,"path":"sounds/sndLightSide/sndLightSide.yy",},
     {"name":"sprPlayerJumpLand","order":5,"path":"sprites/sprPlayerJumpLand/sprPlayerJumpLand.yy",},
+    {"name":"objBackground","order":7,"path":"objects/objBackground/objBackground.yy",},
   ],
 }
