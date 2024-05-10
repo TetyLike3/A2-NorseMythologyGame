@@ -1,26 +1,27 @@
-if(rotate)
-{
-	image_angle++	
-	if(image_angle==180)
-	{
-		rotate=false
-		stars=true
+if isNight { // Switch to moon
+	if image_angle != 180 {
+		spinLerpTime = lerp(spinLerpTime,1,((image_angle+1)/180)*spinLerpSpeed);
+		image_angle = lerp(0,180,spinLerpTime);
+	} else if !showStars {
+		showStars = true;
 	}
-}
-if (image_angle>=360) image_angle = 0;
-
-if(stars)
-{
-	
-	layer_sequence_create("Assets",960,540,sqButtonFadeIn);
-	print("working")
-
-		stars=false
+} else { // Switch to sun
+	showStars = false;
+	if (image_angle != 360) and (image_angle != 0) {
+		spinLerpTime = lerp(spinLerpTime,1,((image_angle-179)/180)*spinLerpSpeed);
+		image_angle = lerp(180,360,spinLerpTime);
+	}
+	if image_angle >= 360 image_angle = 0;
 }
 
-if(layer_sequence_is_finished(sqButtonFadeIn) >=0)
-{
-	instance_create_layer(960,540,"Instances",objStartButton)
-	layer_sequence_destroy(sqButtonFadeIn)
-	print("Destroying")
+if(showStars and is_undefined(buttonFadeInId)) {
+	buttonFadeInId = layer_sequence_create("Assets",960,540,sqButtonFadeIn);
+	print("working");
+}
+
+//print(layer_sequence_exists("Assets", sqButtonFadeIn));
+if(!is_undefined(buttonFadeInId) and layer_sequence_is_finished(buttonFadeInId)) {
+	instance_create_layer(960,540,"Instances",objStartButton);
+	layer_sequence_destroy(buttonFadeInId);
+	print("Destroying");
 }

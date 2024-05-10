@@ -1,7 +1,7 @@
-if(RoomStarted)
+if(roomStarted)
 {
-layer_sequence_create("Sequence",960,540,sqLoading);
-RoomStarted=false
+	layer_sequence_create("Sequence",960,540,sqLoading);
+	roomStarted=false
 }
 
 if(layer_sequence_is_finished(sqLoading))
