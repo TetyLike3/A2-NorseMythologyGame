@@ -3,7 +3,7 @@ function print(text) {
 }
 
 enum CharacterStates {
-	IDLE, MOVE, JUMP, LATTACK, HATTACK, STUN, BLOCK
+	IDLE, MOVE, JUMP, LATTACK, HATTACK, STUN, BLOCK, DEAD
 }
 
 function getPlayerHorizontalInput() {
@@ -163,6 +163,7 @@ function HandlePlayerState() {
 					return;
 				} else {
 					xSpeed = 0; ySpeed = 0;
+					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
 					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
 				}
 				if (stunTimer < 1) {
@@ -179,7 +180,15 @@ function HandlePlayerState() {
 				currentState = CharacterStates.IDLE;
 			}
 			if END_OF_SPRITE image_index = 3;
+			FACE_TARGET;
 		} break;
+		case CharacterStates.DEAD: {
+			if (sprite_index != sprPlayerLying) {
+				changeSprite(sprPlayerLying);
+				xSpeed = 0; ySpeed = 0;
+				charHealth = 0;
+			}
+		}
 	}
 	
 	if instance_exists(attackHitbox) {
@@ -232,6 +241,7 @@ function HandleDummyState() {
 					return;
 				} else {
 					xSpeed = 0; ySpeed = 0;
+					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
 					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
 				}
 				if (stunTimer < 1) {
@@ -239,6 +249,13 @@ function HandleDummyState() {
 				}
 			}
 		} break;
+		case CharacterStates.DEAD: {
+			if (sprite_index != sprPlayerLying) {
+				changeSprite(sprPlayerLying);
+				xSpeed = 0; ySpeed = 0;
+				charHealth = 0;
+			}
+		}
 	}
 	
 	// Physics code
@@ -291,9 +308,7 @@ function HandleAIState() {
 			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
-
-			//if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
-			//if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
+			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
 		} break;
 		case CharacterStates.MOVE: {
 			// Change sprite
@@ -317,6 +332,7 @@ function HandleAIState() {
 			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
+			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
 		} break;
 		case CharacterStates.JUMP: {
 			// If just started jumping, change sprite, play sound, and end early
@@ -412,6 +428,7 @@ function HandleAIState() {
 					return;
 				} else {
 					xSpeed = 0; ySpeed = 0;
+					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
 					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
 				}
 				if (stunTimer < 1) {
@@ -424,13 +441,19 @@ function HandleAIState() {
 				changeSprite(sprPlayerBlock);
 				xSpeed = 0;
 			}
-			/*
-			if (not INPUT_BLOCK) {
+			if (not aiBlockInput) {
 				currentState = CharacterStates.IDLE;
 			}
-			*/
 			if END_OF_SPRITE image_index = 3;
+			FACE_TARGET;
 		} break;
+		case CharacterStates.DEAD: {
+			if (sprite_index != sprPlayerLying) {
+				changeSprite(sprPlayerLying);
+				xSpeed = 0; ySpeed = 0;
+				charHealth = 0;
+			}
+		}
 	}
 	
 	if instance_exists(attackHitbox) {

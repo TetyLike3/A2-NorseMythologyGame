@@ -13,9 +13,17 @@ globalBestFitness = 0;
 global.BestNetwork = undefined;
 
 count = 30;
-population = array_create(count);
-for (var i = 0; i < count; i++) {
-	population[@i] = instance_create_layer(1856,1056,"Instances",specimenObj);
+populationA = array_create(count/2);
+populationB = array_create(count/2);
+for (var i = 0; i < (count/2); i++) {
+	var charA = instance_create_layer(-192,1056,"Instances",specimenObj);
+	var charB = instance_create_layer(3904,1056,"Instances",specimenObj);
+	charA.aiLocalEnemy = charB;
+	charB.aiLocalEnemy = charA;
+	charA.Restart();
+	charB.Restart();
+	populationA[@i] = charA;
+	populationB[@i] = charB;
 }
 fitnessLowerLimit = -500;
 remainingCounter = 0;

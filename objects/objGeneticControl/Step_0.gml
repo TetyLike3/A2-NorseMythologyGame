@@ -1,15 +1,28 @@
 remainingCounter = 0;
 bestFitness = 0;
 
-for (var i = 0; i < count; i++) {
-	var specimen = population[i];
+// Check population A
+for (var i = 0; i < (count/2); i++) {
+	var specimen = populationA[i];
 	if !instance_exists(specimen) {
-		count--;
-		array_delete(population, array_get_index(population,specimen), 1);
+		array_delete(populationA, array_get_index(populationA,specimen), 1);
 		continue;
 	}
-	//if (specimen.aiFitness < -100) instance_deactivate_object(specimen);
-	if instance_exists(specimen.aiLocalEnemy) remainingCounter++;
+	if (specimen.aiLocalEnemy.currentState != CharacterStates.DEAD) remainingCounter++;
+	if (i == 0) or (specimen.aiFitness > bestFitness) {
+		bestFitness = specimen.aiFitness;
+		bestSpecimen = specimen;
+	}
+}
+
+// Check population B
+for (var i = 0; i < (count/2); i++) {
+	var specimen = populationB[i];
+	if !instance_exists(specimen) {
+		array_delete(populationB, array_get_index(populationB,specimen), 1);
+		continue;
+	}
+	if (specimen.aiLocalEnemy.currentState != CharacterStates.DEAD) remainingCounter++;
 	if (i == 0) or (specimen.aiFitness > bestFitness) {
 		bestFitness = specimen.aiFitness;
 		bestSpecimen = specimen;
@@ -31,10 +44,11 @@ if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"
 			global.BestNetwork = bestSpecimen.neuralNetwork;
 		}
 	}
+	var mergedPopulation = array_concat(populationA,populationB);
 	
-	NeuralGeneticSelection(population);
-	NeuralGeneticCrossover(population, .1);
-	NeuralGeneticMutation(population, .7, 1, .4*(remainingCounter/count), .2*(remainingCounter/count));
+	NeuralGeneticSelection(mergedPopulation);
+	NeuralGeneticCrossover(mergedPopulation, .1);
+	NeuralGeneticMutation(mergedPopulation, .7, 1, .4*(remainingCounter/count), .2*(remainingCounter/count));
 	generation++;
 	timeLeft = timeLeftMax;
 	globalBestFitness = max(bestFitness, globalBestFitness);
@@ -71,8 +85,9 @@ if (keyboard_check_pressed(vk_insert)) {
 		if (is_undefined(network)) {
 			print("Failed to parse model from file.");
 		} else {
-			for (var i = 0; i < count; i++) {
-				NeuralModelCopy(population[i].neuralNetwork,network);
+			for (var i = 0; i < (count/2); i++) {
+				NeuralModelCopy(populationA[i].neuralNetwork,network);
+				NeuralModelCopy(populationB[i].neuralNetwork,network);
 			}
 			print("Successfully parsed model");
 		}
