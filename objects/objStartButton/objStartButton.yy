@@ -5,7 +5,7 @@
   "eventList": [],
   "managed": true,
   "overriddenProperties": [
-    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objParentButton","path":"objects/objParentButton/objParentButton.yy",},"propertyId":{"name":"buttonText","path":"objects/objParentButton/objParentButton.yy",},"value":"START",},
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objParentButton","path":"objects/objParentButton/objParentButton.yy",},"propertyId":{"name":"buttonText","path":"objects/objParentButton/objParentButton.yy",},"value":"< START >",},
   ],
   "parent": {
     "name": "Buttons",

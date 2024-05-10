@@ -18,7 +18,7 @@ if(stars)
 		stars=false
 }
 
-if(layer_sequence_is_finished(sqButtonFadeIn) >=0)
+if(layer_sequence_is_finished(sqButtonFadeIn)==true)
 {
 	instance_create_layer(960,540,"Instances",objStartButton)
 	layer_sequence_destroy(sqButtonFadeIn)
