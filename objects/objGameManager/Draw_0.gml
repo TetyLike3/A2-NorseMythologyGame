@@ -3,10 +3,12 @@
 if (room == rmTraining) {
 	charDrawAlpha = .3;
 	game_set_speed(240,gamespeed_fps);
+	audio_master_gain(0.2);
 }
 if (room == rmGame) {
 	charDrawAlpha = 1;
 	game_set_speed(60,gamespeed_fps);
+	audio_master_gain(1);
 }
 
 with (objCharacter) {

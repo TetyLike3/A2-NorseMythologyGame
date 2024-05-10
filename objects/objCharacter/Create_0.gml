@@ -1,4 +1,5 @@
 // Health
+charHealth = charHealthMax;
 damageTimer = 0;
 damageTimerMax = 45;
 damageFlashInterval = 15;
@@ -25,6 +26,7 @@ charToFace = -1;
 
 // Other
 attackHitbox = undefined;
+spriteEventLog = [];
 
 // Stunning
 stunTimer = 0;

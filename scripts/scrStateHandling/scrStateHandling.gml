@@ -3,7 +3,7 @@ function print(text) {
 }
 
 enum CharacterStates {
-	IDLE, MOVE, JUMP, LATTACK, HATTACK, STUN, BLOCK, DEAD
+	IDLE, MOVE, JUMP, LATTACK, HATTACK, STUN, BLOCK, GRABBING, GRABBED, DEAD
 }
 
 function getPlayerHorizontalInput() {
@@ -11,6 +11,14 @@ function getPlayerHorizontalInput() {
 	if keyboard_check(ord("A")) input = -1;
 	if keyboard_check(ord("D")) input = 1;
 	return input;
+}
+
+function hasSpriteEventOccurred(msg, shouldDelete = true) {
+	var _index = array_get_index(spriteEventLog,msg);
+	if _index {
+		if (shouldDelete) array_delete(spriteEventLog,_index);
+		return _index;
+	} else return false;
 }
 
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
@@ -182,6 +190,34 @@ function HandlePlayerState() {
 			if END_OF_SPRITE image_index = 3;
 			FACE_TARGET;
 		} break;
+		case CharacterStates.GRABBING: {
+			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) {
+				changeSprite(sprPlayerGrab);
+				xSpeed = 0;
+			}
+			if hasSpriteEventOccurred("GrabStart") {
+				var _grabbable = collision_line(x,y+(sprite_height/2),x+(sprite_width*image_xscale),y+(sprite_height/2),charToFace,false,true);
+				if _grabbable {
+					_grabbable.currentState = CharacterStates.GRABBED;
+					_grabbable.x = x+(128*image_xscale);
+					_grabbable.y = y+32;
+				}
+			}
+			if hasSpriteEventOccurred("GrabEnd") {
+				if INPUT_BLOCK {
+					changeSprite(sprPlayerGrabHolding);
+				} else {
+					charToFace.TakeDamage(10);
+				}
+			}
+			if END_OF_SPRITE {
+				if (sprite_index == sprPlayerGrabHolding) {
+					changeSprite(sprPlayerForwardThrow);
+				} else if (sprite_index == sprPlayerForwardThrow) {
+					currentState = CharacterStates.IDLE;
+				}
+			}
+		} break;
 		case CharacterStates.DEAD: {
 			if (sprite_index != sprPlayerLying) {
 				changeSprite(sprPlayerLying);
@@ -247,6 +283,12 @@ function HandleDummyState() {
 				if (stunTimer < 1) {
 					currentState = CharacterStates.IDLE;
 				}
+			}
+		} break;
+		case CharacterStates.GRABBED: {
+			if (sprite_index != sprPlayerInjured) {
+				changeSprite(sprPlayerInjured);
+				xSpeed = 0; ySpeed = 0;
 			}
 		} break;
 		case CharacterStates.DEAD: {
@@ -446,6 +488,14 @@ function HandleAIState() {
 			}
 			if END_OF_SPRITE image_index = 3;
 			FACE_TARGET;
+		} break;
+		case CharacterStates.GRABBED: {
+			if (sprite_index != sprPlayerInjured) {
+				changeSprite(sprPlayerInjured);
+				xSpeed = 0; ySpeed = 0;
+			}
+			
+			
 		} break;
 		case CharacterStates.DEAD: {
 			if (sprite_index != sprPlayerLying) {

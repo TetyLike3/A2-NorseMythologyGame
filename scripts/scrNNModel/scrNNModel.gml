@@ -118,12 +118,32 @@ function NeuralAddStructure(_network, _layer) {
 /// @func NeuralLoadModel();
 /// @desc Loads a model's save file selected by the player.
 function NeuralLoadModel() {
+	var modelFilePath = get_open_filename("Model Save|*.txt","NNModel_");
+	var modelFile = file_text_open_read(modelFilePath);
+	if modelFile {
+		var stringified = file_text_read_string(modelFile);
+		file_text_close(modelFile);
+		var network = NeuralModelParse(stringified, true);
 	
+		if (is_undefined(network)) {
+			print("Failed to parse model from file.");
+			return undefined;
+		} else {
+			print("Successfully parsed model");
+			return network;
+		}
+	}
 }
 
 /// @func NeuralSaveModel(stringified);
 /// @desc Create/overwrite a model's save file selected by the player.
 /// @param {string} stringified The stringified neural network data.
 function NeuralSaveModel(_stringified) {
-	
+	var modelFilePath = get_save_filename("Model Save|*.txt","NNModel_");
+	var modelFile = file_text_open_write(modelFilePath);
+	if modelFile {
+		file_text_write_string(modelFile,_stringified);
+		file_text_close(modelFile);
+		print("saved fr");
+	}
 }

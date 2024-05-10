@@ -6,7 +6,8 @@ heavyAttackDamage = 40;
 
 neuralNetwork = global.BestNetwork;
 if is_undefined(neuralNetwork) {
-	NeuralLoadModel();
+	neuralNetwork = NeuralLoadModel();
+	global.BestNetwork = neuralNetwork;
 }
 
 aiXInput = 0; aiJumpInput = 0;

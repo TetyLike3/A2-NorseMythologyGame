@@ -65,31 +65,15 @@ timeLeft--;
 
 if (keyboard_check_pressed(vk_home)) and instance_exists(bestSpecimen) {
 	var stringified = NeuralModelStringify(bestSpecimen.neuralNetwork);
-	var modelFilePath = get_save_filename("Model Save|*.txt","NNModel_");
-	var modelFile = file_text_open_write(modelFilePath);
-	if modelFile {
-		file_text_write_string(modelFile,stringified);
-		file_text_close(modelFile);
-		print("saved fr");
-	}
+	NeuralSaveModel(stringified);
 }
 
 if (keyboard_check_pressed(vk_insert)) {
-	var modelFilePath = get_open_filename("Model Save|*.txt","NNModel_");
-	var modelFile = file_text_open_read(modelFilePath);
-	if modelFile {
-		var stringified = file_text_read_string(modelFile);
-		file_text_close(modelFile);
-		var network = NeuralModelParse(stringified, true);
-	
-		if (is_undefined(network)) {
-			print("Failed to parse model from file.");
-		} else {
-			for (var i = 0; i < (count/2); i++) {
-				NeuralModelCopy(populationA[i].neuralNetwork,network);
-				NeuralModelCopy(populationB[i].neuralNetwork,network);
-			}
-			print("Successfully parsed model");
+	var newNetwork = NeuralLoadModel();
+	if !is_undefined(newNetwork) {
+		for (var i = 0; i < (count/2); i++) {
+			NeuralModelCopy(populationA[i].neuralNetwork,newNetwork);
+			NeuralModelCopy(populationB[i].neuralNetwork,newNetwork);
 		}
 	}
 }
