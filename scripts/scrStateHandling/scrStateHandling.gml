@@ -20,12 +20,34 @@ function HandlePlayerState() {
 	switch currentState {
 		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
-				if sprite_index == sprPlayerJumpLand {
-					if END_OF_SPRITE {
-						changeSprite(sprPlayerIdle);
+				switch sprite_index {
+					case sprPlayerJumpLand: {
+						// Wait until landed jump
+						if END_OF_SPRITE {
+							changeSprite(sprPlayerIdle);
+							canJump = true;
+						}
+					} break;
+					case sprPlayerFloorImpact: {
+						// Play get up animation
+						if END_OF_SPRITE changeSprite(sprPlayerGetUp);
+						return;
+					} break;
+					case sprPlayerLying: {
+						// Play get up animation
+						changeSprite(sprPlayerGetUp);
+						return;
+					} break;
+					case sprPlayerGetUp: {
+						// Wait until finished getting up
+						if END_OF_SPRITE changeSprite(sprPlayerIdle);
 						canJump = true;
-					}
-				} else changeSprite(sprPlayerIdle);
+						return;
+					} break;
+					default: {
+						changeSprite(sprPlayerIdle);
+					} break;
+				}
 			}
 			xSpeed = 0;
 			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
@@ -96,8 +118,6 @@ function HandlePlayerState() {
 			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
-				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
 				return;
 			}
@@ -119,8 +139,6 @@ function HandlePlayerState() {
 			
 			if END_OF_SPRITE { // Switch to Idle state
 				currentState = CharacterStates.IDLE;
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
-				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
 				return;
 			}
@@ -128,7 +146,7 @@ function HandlePlayerState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if charToFace.spriteDir { xSpeed = -9; } else xSpeed = 9;
+				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -164,6 +182,13 @@ function HandlePlayerState() {
 		} break;
 	}
 	
+	if instance_exists(attackHitbox) {
+		if (currentState != CharacterStates.LATTACK) and (currentState != CharacterStates.HATTACK) {
+			instance_destroy(attackHitbox);
+			attackHitbox = undefined;
+		}
+	}
+	
 	// Physics code
 	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = 1; } else image_speed = -1; }
 	ySpeed += objGameManager.gameGravity;
@@ -190,7 +215,7 @@ function HandleDummyState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if charToFace.spriteDir { xSpeed = -9; } else xSpeed = 9;
+				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -329,18 +354,12 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 				attackHitbox.collidable = charToFace;
-				
 				return;
 			}
 			attackHitbox.image_index = image_index;
 			
 			if (END_OF_SPRITE) { // Switch to Idle state
 				currentState = CharacterStates.IDLE; lastState = currentState;
-				if instance_exists(attackHitbox) {
-					if (array_length(attackHitbox.collidedWith) < 1) aiMissCount++;
-					instance_destroy(attackHitbox);
-				}
-				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
 				
 				aiTimeSinceAttack = 0;
@@ -360,18 +379,12 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = charToFace;
-				
 				return;
 			}
 			attackHitbox.image_index = image_index;
 			
 			if (END_OF_SPRITE) { // Switch to Idle state
 				currentState = CharacterStates.IDLE; lastState = currentState;
-				if instance_exists(attackHitbox) {
-					if (array_length(attackHitbox.collidedWith) < 1) aiMissCount++;
-					instance_destroy(attackHitbox);
-				}
-				attackHitbox = undefined;
 				changeSprite(sprPlayerIdle);
 				
 				aiTimeSinceAttack = 0;
@@ -382,7 +395,7 @@ function HandleAIState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if charToFace.spriteDir { xSpeed = -9; } else xSpeed = 9;
+				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -418,6 +431,14 @@ function HandleAIState() {
 			*/
 			if END_OF_SPRITE image_index = 3;
 		} break;
+	}
+	
+	if instance_exists(attackHitbox) {
+		if (currentState != CharacterStates.LATTACK) and (currentState != CharacterStates.HATTACK) {
+			if (array_length(attackHitbox.collidedWith) < 1) aiMissCount++;
+			instance_destroy(attackHitbox);
+			attackHitbox = undefined;
+		}
 	}
 	
 	// Physics code
