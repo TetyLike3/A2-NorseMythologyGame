@@ -21,7 +21,9 @@ if(showStars and is_undefined(buttonFadeInId)) {
 
 //print(layer_sequence_exists("Assets", sqButtonFadeIn));
 if(!is_undefined(buttonFadeInId) and layer_sequence_is_finished(buttonFadeInId)) {
-	instance_create_layer(960,540,"Instances",objStartButton);
 	layer_sequence_destroy(buttonFadeInId);
+	instance_create_layer(960,540,"Instances",objStartButton);
+	instance_create_layer(960,248.5,"Instances",objOptionsButton);
+	
 	print("Destroying");
 }

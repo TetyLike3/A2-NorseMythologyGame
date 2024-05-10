@@ -59,6 +59,7 @@
     {"id":{"name":"rmSplashScreen","path":"rooms/rmSplashScreen/rmSplashScreen.yy",},},
     {"id":{"name":"sprSunAndMoon","path":"sprites/sprSunAndMoon/sprSunAndMoon.yy",},},
     {"id":{"name":"scrCollisions","path":"scripts/scrCollisions/scrCollisions.yy",},},
+    {"id":{"name":"objOptionsButton","path":"objects/objOptionsButton/objOptionsButton.yy",},},
     {"id":{"name":"fntViking","path":"fonts/fntViking/fntViking.yy",},},
     {"id":{"name":"scrStateHandling","path":"scripts/scrStateHandling/scrStateHandling.yy",},},
     {"id":{"name":"sprPlayerInjured","path":"sprites/sprPlayerInjured/sprPlayerInjured.yy",},},
@@ -99,8 +100,8 @@
   ],
   "RoomOrderNodes": [
     {"roomId":{"name":"rmMainMenu","path":"rooms/rmMainMenu/rmMainMenu.yy",},},
-    {"roomId":{"name":"rmGame","path":"rooms/rmGame/rmGame.yy",},},
     {"roomId":{"name":"rmSplashScreen","path":"rooms/rmSplashScreen/rmSplashScreen.yy",},},
+    {"roomId":{"name":"rmGame","path":"rooms/rmGame/rmGame.yy",},},
   ],
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},

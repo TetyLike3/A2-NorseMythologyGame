@@ -37,6 +37,7 @@
     {"name":"sprPlayerLightSide2","order":13,"path":"sprites/sprPlayerLightSide2/sprPlayerLightSide2.yy",},
     {"name":"rmSplashScreen","order":2,"path":"rooms/rmSplashScreen/rmSplashScreen.yy",},
     {"name":"scrCollisions","order":2,"path":"scripts/scrCollisions/scrCollisions.yy",},
+    {"name":"objOptionsButton","order":4,"path":"objects/objOptionsButton/objOptionsButton.yy",},
     {"name":"scrStateHandling","order":3,"path":"scripts/scrStateHandling/scrStateHandling.yy",},
     {"name":"sprPlayerInjured","order":6,"path":"sprites/sprPlayerInjured/sprPlayerInjured.yy",},
     {"name":"psSnow","order":1,"path":"particles/psSnow/psSnow.yy",},
