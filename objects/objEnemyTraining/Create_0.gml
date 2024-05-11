@@ -52,7 +52,7 @@ function UpdateFitness() {
 	aiLastFitness = aiFitness;
 	
 	//aiFitness -= aiTimeAgainstWall^1.3; // Punish AI for waiting against a wall
-	aiFitness += (1-(point_distance(x,y,room_width/2,y)/(room_width/2)))*5 // Reward AI for staying near centre
+	aiFitness += (.5-(point_distance(x,y,room_width/2,y)/(room_width/2)))*2.2 // Reward AI for staying near centre
 
 	if !instance_exists(aiLocalEnemy) or (aiLocalEnemy.currentState == CharacterStates.DEAD) {
 		aiFitness += ((objGeneticControl.count-objGeneticControl.remainingCounter));
