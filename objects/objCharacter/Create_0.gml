@@ -20,6 +20,9 @@ ySpeed = 0;
 canCollideX = true;
 canCollideY = true;
 
+stunBounceMax = 3;
+stunBounce = 0;
+
 // Visual
 spriteDir = 1;
 charToFace = -1;

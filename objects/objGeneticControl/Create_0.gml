@@ -11,25 +11,36 @@ bestFitness = 0;
 bestSpecimen = undefined;
 globalBestFitness = 0;
 
-count = 30;
-populationA = array_create(count/2);
-populationB = array_create(count/2);
-for (var i = 0; i < (count/2); i++) {
+countPerPop = 10;
+count = countPerPop*2;
+populationA = array_create(countPerPop);
+populationB = array_create(countPerPop);
+for (var i = 0; i < countPerPop; i++) {
 	var charA = instance_create_layer(-192,1056,"Instances",specimenObj);
 	var charB = instance_create_layer(3904,1056,"Instances",specimenObj);
 	charA.aiLocalEnemy = charB;
 	charB.aiLocalEnemy = charA;
 	
+	/*
 	if !is_undefined(global.BestNetwork) {
 		charA.neuralNetwork = global.BestNetwork;
 		charB.neuralNetwork = global.BestNetwork;
 	}
+	*/
 	
 	charA.Restart();
 	charB.Restart();
 	populationA[@i] = charA;
 	populationB[@i] = charB;
 }
-fitnessLowerLimit = -500;
-remainingCounter = 0;
-lastRemainingCounter = 0;
+
+fitnessLowerLimit = -10000;
+remainingCounter = count;
+lastRemainingCounter = count;
+
+function MutatePopulation() {
+	var mergedPopulation = array_concat(populationA,populationB);
+	NeuralGeneticSelection(mergedPopulation);
+	NeuralGeneticCrossover(mergedPopulation, .1);
+	NeuralGeneticMutation(mergedPopulation, .7, 1, .4*(remainingCounter/count), .2*(remainingCounter/count));
+}

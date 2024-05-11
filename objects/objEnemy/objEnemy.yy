@@ -13,8 +13,8 @@
     {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"heavyAttackDamage","path":"objects/objCharacter/objCharacter.yy",},"value":"6",},
   ],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "Characters",
+    "path": "folders/Objects/Characters.yy",
   },
   "parentObjectId": {
     "name": "objCharacter",

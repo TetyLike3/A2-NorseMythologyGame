@@ -2,7 +2,7 @@
 
 if (room == rmTraining) {
 	charDrawAlpha = .3;
-	game_set_speed(240,gamespeed_fps);
+	game_set_speed(360,gamespeed_fps);
 	audio_master_gain(0.2);
 }
 if (room == rmGame) {

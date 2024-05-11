@@ -10,14 +10,16 @@ function getPlayerHorizontalInput() {
 	var input = gamepad_axis_value(0, gp_axislh);
 	if keyboard_check(ord("A")) input = -1;
 	if keyboard_check(ord("D")) input = 1;
+	if (abs(input) < INPUT_DEADZONE) return 0;
 	return input;
 }
 
 function hasSpriteEventOccurred(msg, shouldDelete = true) {
 	var _index = array_get_index(spriteEventLog,msg);
-	if _index {
-		if (shouldDelete) array_delete(spriteEventLog,_index);
-		return _index;
+	if (_index >= 0) {
+		//print(string_concat("found ",msg," at index ",_index));
+		if (shouldDelete) array_delete(spriteEventLog,_index,1);
+		return _index+1;
 	} else return false;
 }
 
@@ -59,10 +61,11 @@ function HandlePlayerState() {
 			}
 			xSpeed = 0;
 			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
-			if (INPUT_JUMP and not canJump) { currentState = CharacterStates.JUMP; return; }
+			if (INPUT_JUMP and canJump) { currentState = CharacterStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
+			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
 			
 			FACE_TARGET;
 		} break;
@@ -73,6 +76,7 @@ function HandlePlayerState() {
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
+			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
 			if (charToFace) { spriteDir = (x > charToFace.x); } else { spriteDir = (xSpeed < 0); }
@@ -191,29 +195,37 @@ function HandlePlayerState() {
 			FACE_TARGET;
 		} break;
 		case CharacterStates.GRABBING: {
-			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) {
+			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
 				changeSprite(sprPlayerGrab);
 				xSpeed = 0;
 			}
 			if hasSpriteEventOccurred("GrabStart") {
-				var _grabbable = collision_line(x,y+(sprite_height/2),x+(sprite_width*image_xscale),y+(sprite_height/2),charToFace,false,true);
-				if _grabbable {
-					_grabbable.currentState = CharacterStates.GRABBED;
-					_grabbable.x = x+(128*image_xscale);
-					_grabbable.y = y+32;
+				var _grabbable = place_meeting(x,y,charToFace);
+				if _grabbable and (charToFace.currentState == CharacterStates.BLOCK) {
+					charToFace.currentState = CharacterStates.GRABBED;
+					charToFace.x = x+(128*image_xscale);
+					charToFace.y = y-32;
 				}
 			}
 			if hasSpriteEventOccurred("GrabEnd") {
-				if INPUT_BLOCK {
-					changeSprite(sprPlayerGrabHolding);
-				} else {
-					charToFace.TakeDamage(10);
+				if (charToFace.currentState == CharacterStates.GRABBED) {
+					if (sprite_index == sprPlayerGrab) {
+						if aiGrabInput {
+							if (charToFace.currentState == CharacterStates.GRABBED) {
+								changeSprite(sprPlayerGrabHolding);
+							}
+						} else {
+							charToFace.TakeDamage(heavyAttackDamage);
+						}
+					} else if (sprite_index == sprPlayerForwardThrow) {
+						charToFace.TakeDamage(heavyAttackDamage*1.1);
+					}
 				}
 			}
 			if END_OF_SPRITE {
 				if (sprite_index == sprPlayerGrabHolding) {
 					changeSprite(sprPlayerForwardThrow);
-				} else if (sprite_index == sprPlayerForwardThrow) {
+				} else if (sprite_index == sprPlayerForwardThrow) or (sprite_index == sprPlayerGrab) {
 					currentState = CharacterStates.IDLE;
 				}
 			}
@@ -285,12 +297,6 @@ function HandleDummyState() {
 				}
 			}
 		} break;
-		case CharacterStates.GRABBED: {
-			if (sprite_index != sprPlayerInjured) {
-				changeSprite(sprPlayerInjured);
-				xSpeed = 0; ySpeed = 0;
-			}
-		} break;
 		case CharacterStates.DEAD: {
 			if (sprite_index != sprPlayerLying) {
 				changeSprite(sprPlayerLying);
@@ -351,6 +357,7 @@ function HandleAIState() {
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
+			if (aiGrabInput) and !stateChangeCD { currentState = CharacterStates.GRABBING; return; }
 		} break;
 		case CharacterStates.MOVE: {
 			// Change sprite
@@ -375,6 +382,7 @@ function HandleAIState() {
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
+			if (aiGrabInput) and !stateChangeCD { currentState = CharacterStates.GRABBING; return; }
 		} break;
 		case CharacterStates.JUMP: {
 			// If just started jumping, change sprite, play sound, and end early
@@ -453,8 +461,9 @@ function HandleAIState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
-				ySpeed = -abs(xSpeed*2);
+				stunBounce = stunBounceMax;
+				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -stunBounce*3; } else xSpeed = stunBounce*3;
+				ySpeed = -abs(stunBounce*6);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				stunTimer = stunTimerMax;
@@ -463,9 +472,10 @@ function HandleAIState() {
 			
 			// Every bounce, reduce speed until below 2, then freeze
 			if getGroundCollision() {
-				if (abs(xSpeed) > 2) {
+				stunBounce--;
+				if (stunBounce > 0) {
 					changeSprite(sprPlayerFloorImpact);
-					xSpeed/=3; ySpeed = -abs(xSpeed*3);
+					xSpeed/=3; ySpeed = -abs(stunBounce*6);
 					executeGroundCollision(); executeWallCollision();
 					return;
 				} else {
@@ -489,13 +499,48 @@ function HandleAIState() {
 			if END_OF_SPRITE image_index = 3;
 			FACE_TARGET;
 		} break;
+		case CharacterStates.GRABBING: {
+			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
+				changeSprite(sprPlayerGrab);
+				xSpeed = 0;
+			}
+			if hasSpriteEventOccurred("GrabStart") {
+				var _grabbable = place_meeting(x,y,charToFace);
+				//var _grabbable = collision_line(x,y+(sprite_height/2),x+(sprite_width*image_xscale),y+(sprite_height/2),charToFace,true,true);
+				if _grabbable and (charToFace.currentState == CharacterStates.BLOCK) {
+					charToFace.currentState = CharacterStates.GRABBED;
+					charToFace.x = x+(128*image_xscale);
+					charToFace.y = y-32;
+				}
+			}
+			if hasSpriteEventOccurred("GrabEnd") {
+				if (charToFace.currentState == CharacterStates.GRABBED) {
+					if (sprite_index == sprPlayerGrab) {
+						if aiGrabInput {
+							if (charToFace.currentState == CharacterStates.GRABBED) {
+								changeSprite(sprPlayerGrabHolding);
+							}
+						} else {
+							charToFace.TakeDamage(10);
+						}
+					} else if (sprite_index == sprPlayerForwardThrow) {
+						charToFace.TakeDamage(15);
+					}
+				}
+			}
+			if END_OF_SPRITE {
+				if (sprite_index == sprPlayerGrabHolding) {
+					changeSprite(sprPlayerForwardThrow);
+				} else if (sprite_index == sprPlayerForwardThrow) or (sprite_index == sprPlayerGrab) {
+					currentState = CharacterStates.IDLE;
+				}
+			}
+		} break;
 		case CharacterStates.GRABBED: {
 			if (sprite_index != sprPlayerInjured) {
 				changeSprite(sprPlayerInjured);
 				xSpeed = 0; ySpeed = 0;
 			}
-			
-			
 		} break;
 		case CharacterStates.DEAD: {
 			if (sprite_index != sprPlayerLying) {

@@ -2,7 +2,7 @@ remainingCounter = 0;
 bestFitness = 0;
 
 // Check population A
-for (var i = 0; i < (count/2); i++) {
+for (var i = 0; i < countPerPop; i++) {
 	var specimen = populationA[i];
 	if !instance_exists(specimen) {
 		array_delete(populationA, array_get_index(populationA,specimen), 1);
@@ -16,7 +16,7 @@ for (var i = 0; i < (count/2); i++) {
 }
 
 // Check population B
-for (var i = 0; i < (count/2); i++) {
+for (var i = 0; i < countPerPop; i++) {
 	var specimen = populationB[i];
 	if !instance_exists(specimen) {
 		array_delete(populationB, array_get_index(populationB,specimen), 1);
@@ -44,15 +44,11 @@ if (remainingCounter == 0) or (timeLeft <= 0) or (keyboard_check_pressed(ord("P"
 			global.BestNetwork = bestSpecimen.neuralNetwork;
 		}
 	}
-	var mergedPopulation = array_concat(populationA,populationB);
-	
-	NeuralGeneticSelection(mergedPopulation);
-	NeuralGeneticCrossover(mergedPopulation, .1);
-	NeuralGeneticMutation(mergedPopulation, .7, 1, .4*(remainingCounter/count), .2*(remainingCounter/count));
+	MutatePopulation();
 	generation++;
 	timeLeft = timeLeftMax;
 	globalBestFitness = max(bestFitness, globalBestFitness);
-	fitnessLowerLimit = -500;
+	fitnessLowerLimit = -10000;
 	
 	instance_activate_object(specimenObj);
 	with (specimenObj) {
@@ -71,7 +67,7 @@ if (keyboard_check_pressed(vk_home)) and instance_exists(bestSpecimen) {
 if (keyboard_check_pressed(vk_insert)) {
 	var newNetwork = NeuralLoadModel();
 	if !is_undefined(newNetwork) {
-		for (var i = 0; i < (count/2); i++) {
+		for (var i = 0; i < countPerPop; i++) {
 			NeuralModelCopy(populationA[i].neuralNetwork,newNetwork);
 			NeuralModelCopy(populationB[i].neuralNetwork,newNetwork);
 		}

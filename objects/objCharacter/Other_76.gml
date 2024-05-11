@@ -11,5 +11,9 @@ switch (event_data[?"message"]) {
 		audio_play_sound(sndLightSide, 0, false);
 	} break;
 	
-	default: array_push(spriteEventLog,event_data[?"message"]);
+	default: {
+		//print(string_concat("new message logged for: ",object_get_name(object_index)));
+		//print(event_data[?"message"]);
+		array_push(spriteEventLog,event_data[?"message"]);
+	} break;
 }
