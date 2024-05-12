@@ -106,8 +106,8 @@
     {"id":{"name":"rmGame","path":"rooms/rmGame/rmGame.yy",},},
   ],
   "RoomOrderNodes": [
-    {"roomId":{"name":"rmGame","path":"rooms/rmGame/rmGame.yy",},},
     {"roomId":{"name":"rmMainMenu","path":"rooms/rmMainMenu/rmMainMenu.yy",},},
+    {"roomId":{"name":"rmGame","path":"rooms/rmGame/rmGame.yy",},},
     {"roomId":{"name":"rmSplashScreen","path":"rooms/rmSplashScreen/rmSplashScreen.yy",},},
   ],
   "TextureGroups": [
