@@ -5,9 +5,8 @@ damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
 //Healthbar
-HealthBarHeight=128;
-HealthBarWidth=498;
-charHealthMax=charHealth
+charHealthMax=charHealth;
+
 // Physics
 moveSpeed = 12;
 jumpPower = 18;

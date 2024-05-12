@@ -1,4 +1,10 @@
+// Health bars
+if room == rmGame {
+	with (objPlayer) { other.DrawHealthBar(64,128,(charHealth/charHealthMax),false); }
+	with (objEnemy) { other.DrawHealthBar(SCREEN_WIDTH-64,128,(charHealth/charHealthMax),true); }
+}
 
+// Debug
 draw_text(16,16,string_concat("cameraCurrentX: ",cameraCurrentX," cameraCurrentY: ",cameraCurrentY));
 draw_text(16,48,string_concat("cameraTargetX: ",cameraTargetX," cameraTargetY: ",cameraTargetY));
 draw_text(16,80,string_concat("cameraCurrentW: ",cameraCurrentW," cameraCurrentH: ",cameraCurrentH));
