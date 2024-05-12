@@ -181,8 +181,6 @@ function HandleAIState() {
 			
 			FACE_TARGET;
 			
-			currentState = CharacterStates.BLOCK;
-			return;
 			// AI decision-making
 			/*
 			if (distance_to_object(objPlayer) < 128) {

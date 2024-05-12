@@ -10,3 +10,6 @@
 
 #macro END_OF_SPRITE (ceil(image_index) == image_number)
 #macro FACE_TARGET if (charToFace) spriteDir = (x > charToFace.x)
+
+#macro SCREEN_WIDTH surface_get_width(application_surface)
+#macro SCREEN_HEIGHT surface_get_height(application_surface)
