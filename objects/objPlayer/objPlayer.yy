@@ -7,7 +7,9 @@
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":76,"eventType":7,"isDnD":false,},
   ],
   "managed": true,
-  "overriddenProperties": [],
+  "overriddenProperties": [
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"HealthBarY","path":"objects/objCharacter/objCharacter.yy",},"value":"100",},
+  ],
   "parent": {
     "name": "Objects",
     "path": "folders/Objects.yy",
