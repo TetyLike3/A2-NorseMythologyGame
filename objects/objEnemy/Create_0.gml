@@ -1,8 +1,8 @@
 event_inherited();
 
 moveSpeed = 8;
-lightAttackDamage = 20;
-heavyAttackDamage = 40;
+lightAttackDamage = 8;
+heavyAttackDamage = 14;
 
 neuralNetwork = global.BestNetwork;
 if is_undefined(neuralNetwork) {
