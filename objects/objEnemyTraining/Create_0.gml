@@ -77,7 +77,7 @@ function UpdateFitness() {
 	
 	// Reward for successfully grabbing (or punish for missing)
 	if (aiLocalEnemy.currentState == CharacterStates.GRABBED) {
-		aiFitness += 200;
+		aiFitness += 12;
 	} else if (currentState == CharacterStates.GRABBING) {
 		aiFitness -= 8;
 	}
