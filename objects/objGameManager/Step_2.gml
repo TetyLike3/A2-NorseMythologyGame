@@ -1,3 +1,4 @@
+// Camera movement
 var _camX1 = infinity;
 var _camY1 = infinity;
 var _camX2 = -infinity;
@@ -29,4 +30,24 @@ cameraTargetX = (_avgCharPosX - (cameraTargetW/2))-focusPadding;
 cameraTargetY = _camY2-(cameraTargetH);
 
 
+// Exit game
 if (gamepad_button_check_pressed(0,gp_start) or keyboard_check_pressed(vk_escape)) game_end();
+
+
+// Average FPS calculation
+var DTLogSize = array_length(averageDTLog);
+array_push(averageDTLog,delta_time);
+if (DTLogSize > averageDTLogSize) array_delete(averageDTLog,0,1);
+averageDT = 0;
+for (var i = 0; i < DTLogSize; i++) {
+	averageDT += averageDTLog[i];
+}
+averageDT /= DTLogSize;
+averageFPS = 1000/(averageDT/1000);
+
+
+// Switch between training mode and fighting mode
+if keyboard_check_pressed(vk_pause) {
+	if (room == rmTraining) room_goto(rmGame);
+	if (room == rmGame) room_goto(rmTraining);
+}

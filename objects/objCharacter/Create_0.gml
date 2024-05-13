@@ -1,4 +1,5 @@
 // Health
+charHealth = charHealthMax;
 damageTimer = 0;
 damageTimerMax = 45;
 damageFlashInterval = 15;
@@ -11,31 +12,36 @@ charHealthMax=charHealth;
 moveSpeed = 12;
 jumpPower = 18;
 
-inAir = false;
+canJump = false;
 currentState = CharacterStates.IDLE;
 lastState = currentState;
+stateChangeCDMax = 5;
+stateChangeCD = 0;
 
 xSpeed = 0;
 ySpeed = 0;
 canCollideX = true;
 canCollideY = true;
 
+stunBounceMax = 3;
+stunBounce = 0;
+
 // Visual
 spriteDir = 1;
 charToFace = -1;
 
 // Other
-attackHitbox = -1;
+attackHitbox = undefined;
+spriteEventLog = [];
 
 // Stunning
 stunTimer = 0;
 stunTimerMax = 120;
 
 function TakeDamage(dmg) {
-	if (damageTimer >  0) or (currentState == CharacterStates.BLOCK) return;
+	if (damageTimer > 0) or (currentState == CharacterStates.BLOCK) return;
 	damageTimer = damageTimerMax;
 	charHealth -= dmg;
-	if (charHealth <= 0) instance_destroy();
 	currentState = CharacterStates.STUN;
 }
 

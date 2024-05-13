@@ -8,13 +8,13 @@
   ],
   "managed": true,
   "overriddenProperties": [
-    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"charHealth","path":"objects/objCharacter/objCharacter.yy",},"value":"100",},
+    {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"charHealthMax","path":"objects/objCharacter/objCharacter.yy",},"value":"100",},
     {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"lightAttackDamage","path":"objects/objCharacter/objCharacter.yy",},"value":"2",},
     {"resourceType":"GMOverriddenProperty","resourceVersion":"1.0","name":"","objectId":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},"propertyId":{"name":"heavyAttackDamage","path":"objects/objCharacter/objCharacter.yy",},"value":"6",},
   ],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "Characters",
+    "path": "folders/Objects/Characters.yy",
   },
   "parentObjectId": {
     "name": "objCharacter",

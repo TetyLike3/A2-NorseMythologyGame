@@ -7,15 +7,22 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_6BBDA2F6","path":"rooms/rmGame/rmGame.yy",},
-    {"name":"inst_74BF12B9","path":"rooms/rmGame/rmGame.yy",},
-    {"name":"inst_5E874068","path":"rooms/rmGame/rmGame.yy",},
-    {"name":"inst_6EE4ABB0","path":"rooms/rmGame/rmGame.yy",},
-    {"name":"inst_FC88C6D","path":"rooms/rmGame/rmGame.yy",},
-    {"name":"inst_3C14C696","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_6BBDA2F6_1","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_74BF12B9_1","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_5E874068_1","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_6EE4ABB0_1","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_4CA1AFBF","path":"rooms/rmGame/rmGame.yy",},
+    {"name":"inst_437D2707","path":"rooms/rmGame/rmGame.yy",},
   ],
   "isDnd": false,
   "layers": [
+    {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Instances","depth":0,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_6BBDA2F6_1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objGameManager","path":"objects/objGameManager/objGameManager.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":0.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_74BF12B9_1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objWall","path":"objects/objWall/objWall.yy",},"properties":[],"rotation":0.0,"scaleX":80.0,"scaleY":1.0,"x":2560.0,"y":1440.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_5E874068_1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objWall","path":"objects/objWall/objWall.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":21.0,"x":32.0,"y":1376.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_6EE4ABB0_1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objWall","path":"objects/objWall/objWall.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":21.0,"x":5088.0,"y":1376.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4CA1AFBF","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objEnemy","path":"objects/objEnemy/objEnemy.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":4256.0,"y":1120.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_437D2707","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objPlayer","path":"objects/objPlayer/objPlayer.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1120.0,"y":1088.0,},
     {"resourceType":"GMRAssetLayer","resourceVersion":"1.0","name":"Particles","assets":[
         {"resourceType":"GMRParticleSystem","resourceVersion":"1.0","name":"particle_24355686","colour":4294967295,"frozen":false,"ignore":false,"inheritedItemId":null,"inheritItemSettings":false,"particleSystemId":{"name":"psSnow","path":"particles/psSnow/psSnow.yy",},"rotation":0.0,"scaleX":3.6780307,"scaleY":3.678031,"x":2464.0,"y":1376.0,},
       ],"depth":0,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
