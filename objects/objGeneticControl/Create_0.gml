@@ -1,9 +1,9 @@
-//randomise();
-random_set_seed(940061644);
+randomise();
+//random_set_seed(940061644);
 
 generation = 0;
 time = 0;
-timeLeftMax = (60*120);
+timeLeftMax = (60*60);
 timeLeft = timeLeftMax;
 
 specimenObj = objEnemyTraining;
@@ -11,13 +11,13 @@ bestFitness = 0;
 bestSpecimen = undefined;
 globalBestFitness = 0;
 
-countPerPop = 10;
+countPerPop = 20;
 count = countPerPop*2;
 populationA = array_create(countPerPop);
 populationB = array_create(countPerPop);
 for (var i = 0; i < countPerPop; i++) {
-	var charA = instance_create_layer(-192,1056,"Instances",specimenObj);
-	var charB = instance_create_layer(3904,1056,"Instances",specimenObj);
+	var charA = instance_create_layer((room_width/2)-2048,1056,"Instances",specimenObj);
+	var charB = instance_create_layer((room_width/2)+2048,1056,"Instances",specimenObj);
 	charA.aiLocalEnemy = charB;
 	charB.aiLocalEnemy = charA;
 	

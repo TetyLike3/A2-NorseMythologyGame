@@ -36,9 +36,9 @@ function NeuralLayerBase(_size) {
 			var colour = NN_GetNeuronColour(value);
 			draw_sprite_ext(sprNN_Neuron, 0, _x, _y, _scale, _scale, 0, c_white, 1);
 			draw_sprite_ext(sprNN_Neuron, 1, _x, _y, _scale, _scale, 0, colour, 1);
-			draw_set_valign(fa_middle); draw_set_halign(fa_center); draw_set_font(fntNN_NeuronValue);
-			draw_text(_x,_y,value);
-			draw_set_valign(fa_top); draw_set_halign(fa_left); draw_set_font(fntDefault);
+			//draw_set_valign(fa_middle); draw_set_halign(fa_center); draw_set_font(fntNN_NeuronValue);
+			//draw_text(_x,_y,value);
+			//draw_set_valign(fa_top); draw_set_halign(fa_left); draw_set_font(fntDefault);
 			_y += _ySpacing;
 		}
 	}

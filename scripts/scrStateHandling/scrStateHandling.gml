@@ -136,13 +136,13 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
-				changeSprite(sprPlayerLightSide1);
+				changeSprite(sprPlayerLightSide3);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				
 				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
+				attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = objEnemy;
@@ -163,6 +163,8 @@ function HandlePlayerState() {
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				stunTimer = stunTimerMax;
+				
+				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
 				return;
 			}
 			
@@ -201,7 +203,11 @@ function HandlePlayerState() {
 			}
 			if hasSpriteEventOccurred("GrabStart") {
 				var _grabbable = place_meeting(x,y,charToFace);
-				if _grabbable and (charToFace.currentState == CharacterStates.BLOCK) {
+				if _grabbable and (
+					charToFace.currentState == CharacterStates.BLOCK
+					or charToFace.currentState == CharacterStates.LATTACK
+					or charToFace.currentState == CharacterStates.HATTACK
+				) {
 					charToFace.currentState = CharacterStates.GRABBED;
 					charToFace.x = x+(128*image_xscale);
 					charToFace.y = y-32;
@@ -435,13 +441,13 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
-				changeSprite(sprPlayerLightSide1);
+				changeSprite(sprPlayerLightSide3);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				
 				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
+				attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = charToFace;
@@ -467,6 +473,8 @@ function HandleAIState() {
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				stunTimer = stunTimerMax;
+				
+				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
 				return;
 			}
 			
@@ -506,8 +514,11 @@ function HandleAIState() {
 			}
 			if hasSpriteEventOccurred("GrabStart") {
 				var _grabbable = place_meeting(x,y,charToFace);
-				//var _grabbable = collision_line(x,y+(sprite_height/2),x+(sprite_width*image_xscale),y+(sprite_height/2),charToFace,true,true);
-				if _grabbable and (charToFace.currentState == CharacterStates.BLOCK) {
+				if _grabbable and (
+					charToFace.currentState == CharacterStates.BLOCK
+					or charToFace.currentState == CharacterStates.LATTACK
+					or charToFace.currentState == CharacterStates.HATTACK
+				) {
 					charToFace.currentState = CharacterStates.GRABBED;
 					charToFace.x = x+(128*image_xscale);
 					charToFace.y = y-32;

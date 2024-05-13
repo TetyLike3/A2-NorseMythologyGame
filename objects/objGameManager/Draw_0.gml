@@ -18,10 +18,15 @@ with (objCharacter) {
 		image_xscale = -1;
 	}
 	
+	var drawCol = c_grey;
+	if (room == rmTraining) and (object_index == objEnemyTraining) {
+		var fitnessScore = aiFitness/objGeneticControl.bestFitness;
+		drawCol = make_color_rgb((fitnessScore-0.5)*255,(0.5-fitnessScore)*255,80);
+	}
 	if (damageTimer > 0) and ((damageTimer mod damageFlashInterval) > (damageFlashInterval/2)) {
 		shader_set(sdrTint);
 		shader_set_uniform_f(uTint,.8,.4,.4,1);
-		draw_sprite_ext(sprite_index,image_index,x,y,image_xscale,image_yscale,image_angle,c_grey,other.charDrawAlpha);
+		draw_sprite_ext(sprite_index,image_index,x,y,image_xscale,image_yscale,image_angle,drawCol,other.charDrawAlpha);
 		shader_reset();
-	} else draw_sprite_ext(sprite_index,image_index,x,y,image_xscale,image_yscale,image_angle,c_grey,other.charDrawAlpha);
+	} else draw_sprite_ext(sprite_index,image_index,x,y,image_xscale,image_yscale,image_angle,drawCol,other.charDrawAlpha);
 }

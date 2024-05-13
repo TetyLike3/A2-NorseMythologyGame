@@ -34,6 +34,7 @@ function NeuralBuilder(_target) constructor {
 /// @func NeuralNetwork();
 /// @desc Creates base structure for a neural network.
 function NeuralNetwork() constructor {
+	// Properties
 	static taped = false;
 	layers = [];
 	size = 0;

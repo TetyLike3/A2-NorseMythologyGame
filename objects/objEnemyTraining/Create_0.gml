@@ -1,4 +1,4 @@
- event_inherited();
+event_inherited();
 
 moveSpeed = 11;
 lightAttackDamage = 8;
@@ -22,7 +22,7 @@ aiTimeSinceBlock = 0;
 aiMissCount = 0;
 
 aiStepCooldownMax = 5; // Step every 5 frames
-aiStepCooldown = 0;
+aiStepCooldown = irandom(aiStepCooldownMax); // Randomise so work is spread across frames
 
 aiAttackCDMax = 30;
 aiAttackCD = aiAttackCDMax;
@@ -52,7 +52,7 @@ function UpdateFitness() {
 	aiLastFitness = aiFitness;
 	
 	//aiFitness -= aiTimeAgainstWall^1.3; // Punish AI for waiting against a wall
-	aiFitness += (.5-(point_distance(x,y,room_width/2,y)/(room_width/2)))*2.2 // Reward AI for staying near centre
+	aiFitness += clamp((.5-(point_distance(x,y,room_width/2,y)/(room_width/2)))*40,-40,4) // Reward AI for staying near centre
 
 	if !instance_exists(aiLocalEnemy) or (aiLocalEnemy.currentState == CharacterStates.DEAD) {
 		aiFitness += ((objGeneticControl.count-objGeneticControl.remainingCounter));
@@ -65,7 +65,7 @@ function UpdateFitness() {
 	} else {
 		aiFitness += (xSpeed^1.2)/10; // Reward for moving faster
 	}
-	if (attackHitbox) {
+	if (instance_exists(attackHitbox)) {
 		var hitCount = array_length(attackHitbox.collidedWith);
 		if (hitCount > 0) {
 			aiFitness += (hitCount)^1.1; // Reward for having active hitbox with collision history
@@ -74,13 +74,12 @@ function UpdateFitness() {
 	aiFitness += ((100-aiLocalEnemy.charHealth)^1.3)/100; // Reward for low target health
 	aiFitness += clamp((768-distance_to_object(aiLocalEnemy))/512,-1,2); // Reward (or punish) based on distance from target
 	aiFitness -= (aiTimeSinceAttack/100)^1.01; // Punish for not attacking frequently
-	//aiFitness -= clamp((64+distance_to_point(room_width/2,y))/64,-1,1); // Encourage AI to stay in centre of room
 	
 	// Reward for successfully grabbing (or punish for missing)
 	if (aiLocalEnemy.currentState == CharacterStates.GRABBED) {
-		aiFitness += 2;
+		aiFitness += 200;
 	} else if (currentState == CharacterStates.GRABBING) {
-		aiFitness -= 1;
+		aiFitness -= 8;
 	}
 	
 	// Reward for not holding block (to an extent)
