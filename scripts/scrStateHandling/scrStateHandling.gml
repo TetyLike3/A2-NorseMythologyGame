@@ -236,6 +236,12 @@ function HandlePlayerState() {
 				}
 			}
 		} break;
+		case CharacterStates.GRABBED: {
+			if (sprite_index != sprPlayerInjured) {
+				changeSprite(sprPlayerInjured);
+				xSpeed = 0; ySpeed = 0;
+			}
+		} break;
 		case CharacterStates.DEAD: {
 			if (sprite_index != sprPlayerLying) {
 				changeSprite(sprPlayerLying);
@@ -247,6 +253,7 @@ function HandlePlayerState() {
 	
 	if instance_exists(attackHitbox) {
 		if (currentState != CharacterStates.LATTACK) and (currentState != CharacterStates.HATTACK) {
+			print("destroyed hitbox");
 			instance_destroy(attackHitbox);
 			attackHitbox = undefined;
 		}
