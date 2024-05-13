@@ -51,8 +51,8 @@
   "nineSlice": null,
   "origin": 9,
   "parent": {
-    "name": "Vidar",
-    "path": "folders/Sprites/Characters/Vidar.yy",
+    "name": "Grab",
+    "path": "folders/Sprites/Characters/Vidar/Grab.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -80,7 +80,7 @@
     "lockOrigin": false,
     "moments": {"resourceType":"KeyframeStore<MomentsEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "playback": 1,
-    "playbackSpeed": 0.35,
+    "playbackSpeed": 0.5,
     "playbackSpeedType": 1,
     "showBackdrop": true,
     "showBackdropImage": false,

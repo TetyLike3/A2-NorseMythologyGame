@@ -66,8 +66,8 @@
   "nineSlice": null,
   "origin": 9,
   "parent": {
-    "name": "Vidar",
-    "path": "folders/Sprites/Characters/Vidar.yy",
+    "name": "Grab",
+    "path": "folders/Sprites/Characters/Vidar/Grab.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

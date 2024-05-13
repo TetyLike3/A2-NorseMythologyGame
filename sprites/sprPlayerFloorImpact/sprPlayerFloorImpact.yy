@@ -34,8 +34,8 @@
   "nineSlice": null,
   "origin": 9,
   "parent": {
-    "name": "Vidar",
-    "path": "folders/Sprites/Characters/Vidar.yy",
+    "name": "Impact",
+    "path": "folders/Sprites/Characters/Vidar/Impact.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
