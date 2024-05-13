@@ -16,3 +16,6 @@
 
 // Set initial global values too
 global.BestNetwork = undefined;
+
+#macro SCREEN_WIDTH surface_get_width(application_surface)
+#macro SCREEN_HEIGHT surface_get_height(application_surface)

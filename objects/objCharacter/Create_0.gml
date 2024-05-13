@@ -5,6 +5,9 @@ damageTimerMax = 45;
 damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
+//Healthbar
+charHealthMax=charHealth;
+
 // Physics
 moveSpeed = 12;
 jumpPower = 18;
