@@ -24,7 +24,7 @@
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"a5536636-0ca9-4f59-b699-3ef6b8e84c4c","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
-  "origin": 9,
+  "origin": 4,
   "parent": {
     "name": "Impact",
     "path": "folders/Sprites/Characters/Vidar/Impact.yy",
@@ -61,7 +61,7 @@
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 1200,
+    "xorigin": 512,
     "yorigin": 512,
   },
   "swatchColours": null,

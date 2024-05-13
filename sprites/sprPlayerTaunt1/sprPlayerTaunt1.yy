@@ -44,7 +44,7 @@
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"c9b7c004-a42e-4ebd-92c4-537c76fc9f07","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
-  "origin": 7,
+  "origin": 4,
   "parent": {
     "name": "Vidar",
     "path": "folders/Sprites/Characters/Vidar.yy",
@@ -102,7 +102,7 @@
     "visibleRange": null,
     "volume": 1.0,
     "xorigin": 512,
-    "yorigin": 1024,
+    "yorigin": 512,
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
