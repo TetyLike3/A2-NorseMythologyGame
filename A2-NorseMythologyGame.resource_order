@@ -1,4 +1,6 @@
 {
   "FolderOrderSettings": [],
-  "ResourceOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"rmGame","order":1,"path":"rooms/rmGame/rmGame.yy",},
+  ],
 }
