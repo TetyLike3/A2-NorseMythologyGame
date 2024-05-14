@@ -44,6 +44,9 @@ function TakeDamage(dmg) {
 	damageTimer = damageTimerMax;
 	charHealth -= dmg;
 	currentState = CharacterStates.STUN;
+	var indicator = instance_create_layer(x,y-512,"Instances",objDamageIndicator);
+	indicator.depth = -100;
+	indicator.valueShown = dmg;
 }
 
 array_push(objGameManager.focusedCharacters,self);
