@@ -1,7 +1,16 @@
 {
-  "FolderOrderSettings": [],
+  "FolderOrderSettings": [
+    {"name":"Light Attacks","order":1,"path":"folders/Sprites/Characters/Vidar/Attacks/Light Attacks.yy",},
+  ],
   "ResourceOrderSettings": [
+    {"name":"sprPlayerLightSide3Hitbox","order":6,"path":"sprites/sprPlayerLightSide3Hitbox/sprPlayerLightSide3Hitbox.yy",},
+    {"name":"sprPlayerLightDown","order":7,"path":"sprites/sprPlayerLightDown/sprPlayerLightDown.yy",},
+    {"name":"sprPlayerLightSide3","order":5,"path":"sprites/sprPlayerLightSide3/sprPlayerLightSide3.yy",},
+    {"name":"sprPlayerLightSide2","order":3,"path":"sprites/sprPlayerLightSide2/sprPlayerLightSide2.yy",},
     {"name":"rmGame","order":1,"path":"rooms/rmGame/rmGame.yy",},
+    {"name":"sprPlayerLightSide1Hitbox","order":2,"path":"sprites/sprPlayerLightSide1Hitbox/sprPlayerLightSide1Hitbox.yy",},
+    {"name":"sprPlayerLightSide2Hitbox","order":4,"path":"sprites/sprPlayerLightSide2Hitbox/sprPlayerLightSide2Hitbox.yy",},
+    {"name":"sprPlayerLightSide1","order":1,"path":"sprites/sprPlayerLightSide1/sprPlayerLightSide1.yy",},
     {"name":"objSurfaceFix","order":1,"path":"objects/objSurfaceFix/objSurfaceFix.yy",},
     {"name":"objWall","order":1,"path":"objects/objWall/objWall.yy",},
     {"name":"rmOptions","order":2,"path":"rooms/rmOptions/rmOptions.yy",},
