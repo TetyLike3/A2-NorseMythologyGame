@@ -2,7 +2,7 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "sprPlayerLightSide3Hitbox",
-  "bbox_bottom": 609,
+  "bbox_bottom": 380,
   "bbox_left": 0,
   "bbox_right": 1023,
   "bbox_top": 0,
@@ -51,8 +51,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "Light Attacks",
-    "path": "folders/Sprites/Characters/Vidar/Attacks/Light Attacks.yy",
+    "name": "Ground",
+    "path": "folders/Sprites/Characters/Vidar/Attacks/Light Attacks/Ground.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

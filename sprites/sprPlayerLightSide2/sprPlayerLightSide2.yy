@@ -40,8 +40,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "Light Attacks",
-    "path": "folders/Sprites/Characters/Vidar/Attacks/Light Attacks.yy",
+    "name": "Ground",
+    "path": "folders/Sprites/Characters/Vidar/Attacks/Light Attacks/Ground.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
