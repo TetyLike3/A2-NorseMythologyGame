@@ -11,8 +11,8 @@ if instance_exists(bestSpecimen) {
 	draw_text(512,102,string_concat("Jump: ",bestSpecimen.aiJumpInput));
 	draw_text(512,134,string_concat("Block: ",bestSpecimen.aiBlockInput));
 	draw_text(512,166,string_concat("Grab: ",bestSpecimen.aiGrabInput));
-	if instance_exists(bestSpecimen.aiLocalEnemy) {
-		draw_text(512,198,string_concat("Target Health: ",bestSpecimen.aiLocalEnemy.charHealth));
+	if instance_exists(bestSpecimen.targetChar) {
+		draw_text(512,198,string_concat("Target Health: ",bestSpecimen.targetChar.charHealth));
 	}
 
 	bestSpecimen.neuralNetwork.Draw(384, 768, 1.8, 42, 42);

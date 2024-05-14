@@ -15,7 +15,6 @@ aiFitnessDelta = 0;
 aiFitnessUpdateTimerMax = 10;
 aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
 aiBoolConfidence = 0.02;
-aiLocalEnemy = undefined;
 aiTimeSinceAttack = 0;
 aiTimeSinceMove = 0;
 aiTimeSinceBlock = 0;
@@ -33,7 +32,6 @@ function Restart() {
 	aiFitness = 0;
 	aiLastFitness = 0;
 	aiFitnessDelta = 0;
-	charToFace = aiLocalEnemy;
 	aiBoolConfidence = lerp(aiBoolConfidence,0.8,0.1);
 	aiTimeSinceMove = 0;
 	aiTimeSinceAttack = 0;
@@ -54,7 +52,7 @@ function UpdateFitness() {
 	//aiFitness -= aiTimeAgainstWall^1.3; // Punish AI for waiting against a wall
 	aiFitness += clamp((.5-(point_distance(x,y,room_width/2,y)/(room_width/2)))*40,-40,4) // Reward AI for staying near centre
 
-	if !instance_exists(aiLocalEnemy) or (aiLocalEnemy.currentState == CharacterStates.DEAD) {
+	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
 		aiFitness += ((objGeneticControl.count-objGeneticControl.remainingCounter));
 		return;
 	}
@@ -71,12 +69,12 @@ function UpdateFitness() {
 			aiFitness += (hitCount)^1.1; // Reward for having active hitbox with collision history
 		} else { aiFitness -= (aiMissCount^1.1); } // Punish for missing an attack
 	}
-	aiFitness += ((100-aiLocalEnemy.charHealth)^1.3)/100; // Reward for low target health
-	aiFitness += clamp((768-distance_to_object(aiLocalEnemy))/512,-1,2); // Reward (or punish) based on distance from target
+	aiFitness += ((100-targetChar.charHealth)^1.3)/100; // Reward for low target health
+	aiFitness += clamp((768-distance_to_object(targetChar))/512,-1,2); // Reward (or punish) based on distance from target
 	aiFitness -= (aiTimeSinceAttack/100)^1.01; // Punish for not attacking frequently
 	
 	// Reward for successfully grabbing (or punish for missing)
-	if (aiLocalEnemy.currentState == CharacterStates.GRABBED) {
+	if (targetChar.currentState == CharacterStates.GRABBED) {
 		aiFitness += 12;
 	} else if (currentState == CharacterStates.GRABBING) {
 		aiFitness -= 8;
@@ -94,7 +92,7 @@ function StepNeuralNetwork() {
 	aiStepCooldown = aiStepCooldownMax;
 	
 	// Inputs
-	if !instance_exists(aiLocalEnemy) or (aiLocalEnemy.currentState == CharacterStates.DEAD) {
+	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
 		aiXInput = 0; aiJumpInput = 0;
 		aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 		aiBlockInput = 0; aiGrabInput = 0;
@@ -110,9 +108,9 @@ function StepNeuralNetwork() {
 	inputs[5] = spriteDir;
 	inputs[6] = min(aiAttackCD/aiAttackCDMax,1);
 	inputs[7] = stunTimer/stunTimerMax;
-	inputs[8] = min((distance_to_object(aiLocalEnemy)/room_width)*120,1);
-	inputs[9] = aiLocalEnemy.charHealth/100;
-	inputs[10] = aiLocalEnemy.currentState/7;
+	inputs[8] = min((distance_to_object(targetChar)/room_width)*120,1);
+	inputs[9] = targetChar.charHealth/100;
+	inputs[10] = targetChar.currentState/7;
 	
 	neuralNetwork.Input(inputs);
 	

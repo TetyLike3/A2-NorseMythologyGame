@@ -1,0 +1,1 @@
+collidedWith = -1;

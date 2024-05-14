@@ -4,11 +4,7 @@ bestFitness = 0;
 // Check population A
 for (var i = 0; i < countPerPop; i++) {
 	var specimen = populationA[i];
-	if !instance_exists(specimen) {
-		array_delete(populationA, array_get_index(populationA,specimen), 1);
-		continue;
-	}
-	if (specimen.aiLocalEnemy.currentState != CharacterStates.DEAD) remainingCounter++;
+	if (specimen.targetChar.currentState != CharacterStates.DEAD) remainingCounter++;
 	if (i == 0) or (specimen.aiFitness > bestFitness) {
 		bestFitness = specimen.aiFitness;
 		bestSpecimen = specimen;
@@ -18,11 +14,7 @@ for (var i = 0; i < countPerPop; i++) {
 // Check population B
 for (var i = 0; i < countPerPop; i++) {
 	var specimen = populationB[i];
-	if !instance_exists(specimen) {
-		array_delete(populationB, array_get_index(populationB,specimen), 1);
-		continue;
-	}
-	if (specimen.aiLocalEnemy.currentState != CharacterStates.DEAD) remainingCounter++;
+	if (specimen.targetChar.currentState != CharacterStates.DEAD) remainingCounter++;
 	if (i == 0) or (specimen.aiFitness > bestFitness) {
 		bestFitness = specimen.aiFitness;
 		bestSpecimen = specimen;

@@ -28,14 +28,14 @@ aiStepCooldown = 0;
 aiAttackCDMax = 30;
 aiAttackCD = aiAttackCDMax;
 
-charToFace = instance_find(objPlayer,0);
+targetChar = instance_find(objPlayer,0);
 
 function StepNeuralNetwork() {
 	if aiStepCooldown > 0 return;
 	aiStepCooldown = aiStepCooldownMax;
 	
 	// Inputs
-	if !instance_exists(charToFace) or (charToFace.currentState == CharacterStates.DEAD) {
+	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
 		aiXInput = 0; aiJumpInput = 0;
 		aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 		aiBlockInput = 0; aiGrabInput = 0;
@@ -59,7 +59,6 @@ function StepNeuralNetwork() {
 	// Outputs
 	var outputs = neuralNetwork.Forward();
 	aiXInput = (abs(outputs[0]) > INPUT_DEADZONE) ? clamp(outputs[0],-1,1) : 0;
-	//aiXInput = outputs[0];
 	aiJumpInput = outputs[1] > aiBoolConfidence;
 	aiLightAttackInput = outputs[2] > aiBoolConfidence;
 	aiHeavyAttackInput = outputs[3] > aiBoolConfidence;

@@ -1,3 +1,5 @@
+targetChar = undefined;
+
 // Health
 charHealth = charHealthMax;
 damageTimer = 0;
@@ -28,7 +30,6 @@ stunBounce = 0;
 
 // Visual
 spriteDir = 1;
-charToFace = -1;
 
 // Other
 attackHitbox = undefined;
