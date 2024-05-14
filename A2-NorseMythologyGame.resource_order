@@ -1,4 +1,7 @@
 {
   "FolderOrderSettings": [],
-  "ResourceOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"sprHeavyDownHitbox","order":1,"path":"sprites/sprHeavyDownHitbox/sprHeavyDownHitbox.yy",},
+    {"name":"sprTitle","order":1,"path":"sprites/sprTitle/sprTitle.yy",},
+  ],
 }
