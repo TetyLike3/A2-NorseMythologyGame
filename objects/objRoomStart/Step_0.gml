@@ -1,11 +1,14 @@
-if(roomStarted)
-{
-	layer_sequence_create("Sequence",960,540,sqLoading);
+
+if(roomStarted) {
+	buttonFadeInId = layer_sequence_create("Assets",960,540,sqLoading);
+	print("I GOT")
 	roomStarted=false
 }
 
-if(layer_sequence_is_finished(sqLoading))
-{
-	print("DONEZO")
-	room_goto(rmMainMenu)
+//print(layer_sequence_exists("Assets", sqButtonFadeIn));
+if(!is_undefined(buttonFadeInId) and layer_sequence_is_finished(buttonFadeInId)) {
+	print("something")
+	room_goto(rmMainMenu);
+	
+	
 }

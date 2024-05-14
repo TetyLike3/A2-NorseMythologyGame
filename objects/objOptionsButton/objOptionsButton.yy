@@ -4,6 +4,7 @@
   "name": "objOptionsButton",
   "eventList": [
     {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":4,"eventType":6,"isDnD":false,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,},
   ],
   "managed": true,
   "overriddenProperties": [
@@ -14,8 +15,8 @@
     "path": "folders/Objects/Buttons.yy",
   },
   "parentObjectId": {
-    "name": "objPlayButton",
-    "path": "objects/objPlayButton/objPlayButton.yy",
+    "name": "objBackButton",
+    "path": "objects/objBackButton/objBackButton.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,

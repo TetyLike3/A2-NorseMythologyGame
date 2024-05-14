@@ -1,0 +1,2 @@
+shouldHideScreen = true;
+

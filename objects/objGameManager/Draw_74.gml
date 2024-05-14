@@ -12,6 +12,7 @@ draw_text(16,80,string_concat("cameraCurrentW: ",cameraCurrentW," cameraCurrentH
 draw_text(16,112,string_concat("cameraTargetW: ",cameraTargetW," cameraTargetH: ",cameraTargetH));
 */
 // Column 2 X: 1024
+draw_set_font(fntSmallViking)
 draw_text(16,16,string_concat("Avg FPS: ",averageFPS));
 draw_text(16,48,string_concat("Avg dT: ",averageDT));
 draw_text(16,80,string_concat("Seed: ",random_get_seed()));
