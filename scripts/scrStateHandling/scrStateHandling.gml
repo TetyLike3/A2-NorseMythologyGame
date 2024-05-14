@@ -216,16 +216,10 @@ function HandlePlayerState() {
 			if hasSpriteEventOccurred("GrabEnd") {
 				if (targetChar.currentState == CharacterStates.GRABBED) {
 					if (sprite_index == sprPlayerGrab) {
-						if aiGrabInput {
-							if (targetChar.currentState == CharacterStates.GRABBED) {
-								changeSprite(sprPlayerGrabHolding);
-							}
-						} else {
-							targetChar.TakeDamage(heavyAttackDamage);
-						}
-					} else if (sprite_index == sprPlayerForwardThrow) {
-						targetChar.TakeDamage(heavyAttackDamage*1.1);
-					}
+						if INPUT_GRAB {
+							if (targetChar.currentState == CharacterStates.GRABBED) { changeSprite(sprPlayerGrabHolding); }
+						} else { targetChar.TakeDamage(heavyAttackDamage); }
+					} else if (sprite_index == sprPlayerForwardThrow) { targetChar.TakeDamage(heavyAttackDamage*1.1); }
 				}
 			}
 			if END_OF_SPRITE {
