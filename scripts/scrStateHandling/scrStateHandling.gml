@@ -123,6 +123,7 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 				attackHitbox.collidable = objEnemy;
+				attackHitbox.shouldStun = false;
 				
 				return;
 			}
@@ -146,6 +147,9 @@ function HandlePlayerState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = objEnemy;
+				attackHitbox.shouldStun = true;
+				attackHitbox.stunDir = spriteDir;
+				attackHitbox.stunHeight = 18;
 			}
 			attackHitbox.image_index = image_index;
 			
@@ -218,8 +222,14 @@ function HandlePlayerState() {
 					if (sprite_index == sprPlayerGrab) {
 						if INPUT_GRAB {
 							if (targetChar.currentState == CharacterStates.GRABBED) { changeSprite(sprPlayerGrabHolding); }
-						} else { targetChar.TakeDamage(heavyAttackDamage); }
-					} else if (sprite_index == sprPlayerForwardThrow) { targetChar.TakeDamage(heavyAttackDamage*1.1); }
+						} else {
+							targetChar.TakeDamage(heavyAttackDamage);
+							if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
+						}
+					} else if (sprite_index == sprPlayerForwardThrow) {
+						targetChar.TakeDamage(heavyAttackDamage*1.1);
+						if (spriteDir) { targetChar.GetStunned(0,22); } else { targetChar.GetStunned(1,22); }
+					}
 				}
 			}
 			if END_OF_SPRITE {
@@ -279,8 +289,6 @@ function HandleDummyState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -9; } else xSpeed = 9;
-				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				stunTimer = stunTimerMax;
@@ -426,6 +434,7 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
 				attackHitbox.collidable = targetChar;
+				attackHitbox.shouldStun = false;
 				return;
 			}
 			attackHitbox.image_index = image_index;
@@ -451,6 +460,9 @@ function HandleAIState() {
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
 				attackHitbox.collidable = targetChar;
+				attackHitbox.shouldStun = true;
+				attackHitbox.stunDir = spriteDir;
+				attackHitbox.stunHeight = 18;
 				return;
 			}
 			attackHitbox.image_index = image_index;
@@ -533,9 +545,11 @@ function HandleAIState() {
 							}
 						} else {
 							targetChar.TakeDamage(10);
+							if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
 						}
 					} else if (sprite_index == sprPlayerForwardThrow) {
 						targetChar.TakeDamage(15);
+						if (spriteDir) { targetChar.GetStunned(0,22); } else { targetChar.GetStunned(1,22); }
 					}
 				}
 			}

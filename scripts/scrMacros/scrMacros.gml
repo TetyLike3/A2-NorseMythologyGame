@@ -21,3 +21,4 @@ global.BestNetwork = undefined;
 #macro SCREEN_HEIGHT surface_get_height(application_surface)
 
 #macro DRAW_RESET draw_set_font(fntDefault); draw_set_color(c_white); draw_set_alpha(1)
+#macro DRAW_CENTRE draw_set_halign(fa_center); draw_set_valign(fa_middle)

@@ -3,7 +3,7 @@ targetChar = undefined;
 // Health
 charHealth = charHealthMax;
 damageTimer = 0;
-damageTimerMax = 120;
+damageTimerMax = 180;
 damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
@@ -39,14 +39,21 @@ spriteEventLog = [];
 stunTimer = 0;
 stunTimerMax = 120;
 
-function TakeDamage(dmg) {
+function TakeDamage(_dmg) {
 	if (damageTimer > 0) or (currentState == CharacterStates.BLOCK) return;
 	damageTimer = damageTimerMax;
-	charHealth -= dmg;
-	currentState = CharacterStates.STUN;
+	charHealth -= _dmg;
 	var indicator = instance_create_layer(x,y-512,"Instances",objDamageIndicator);
 	indicator.depth = -100;
-	indicator.valueShown = dmg;
+	indicator.valueShown = _dmg;
+}
+
+function GetStunned(_dir, _height) {
+	currentState = CharacterStates.STUN;
+	spriteDir = _dir;
+	ySpeed = -_height;
+	xSpeed = _height/2;
+	if (!spriteDir) { xSpeed *= -1; }
 }
 
 array_push(objGameManager.focusedCharacters,self);

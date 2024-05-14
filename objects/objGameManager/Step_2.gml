@@ -33,6 +33,7 @@ cameraTargetY = _camY2-(cameraTargetH);
 // Exit game
 if (gamepad_button_check_pressed(0,gp_start) or keyboard_check_pressed(vk_escape)) game_end();
 
+timerRemaining--;
 
 // Average FPS calculation
 var DTLogSize = array_length(averageDTLog);
