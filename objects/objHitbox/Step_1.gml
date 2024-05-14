@@ -9,6 +9,7 @@ for (var i = 0; i < ds_list_size(currentCollisions); ++i) {
 		if (currentState != CharacterStates.DEAD) TakeDamage(other.collisionDamage);
 	}
 	if !(_char.currentState == CharacterStates.BLOCK) array_push(collidedWith,_char);
+	else if (_char.object_index == objEnemyTraining) _char.aiFitness += 40;
 }
 
 ds_list_destroy(currentCollisions);
