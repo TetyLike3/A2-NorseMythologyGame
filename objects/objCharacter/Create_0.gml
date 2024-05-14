@@ -3,7 +3,7 @@ targetChar = undefined;
 // Health
 charHealth = charHealthMax;
 damageTimer = 0;
-damageTimerMax = 45;
+damageTimerMax = 120;
 damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
