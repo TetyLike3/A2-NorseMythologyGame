@@ -8,5 +8,7 @@ for (var i = 0; i < ds_list_size(currentCollisions); ++i) {
 	with _char {
 		if (currentState != CharacterStates.DEAD) TakeDamage(other.collisionDamage);
 	}
-	if (instance_exists(_char) and !(_char.currentState == CharacterStates.BLOCK)) array_push(collidedWith,_char);
+	if !(_char.currentState == CharacterStates.BLOCK) array_push(collidedWith,_char);
 }
+
+ds_list_destroy(currentCollisions);
