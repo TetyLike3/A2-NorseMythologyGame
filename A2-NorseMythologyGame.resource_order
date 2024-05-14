@@ -4,6 +4,7 @@
     {"name":"rmGame","order":1,"path":"rooms/rmGame/rmGame.yy",},
     {"name":"objSurfaceFix","order":1,"path":"objects/objSurfaceFix/objSurfaceFix.yy",},
     {"name":"objWall","order":1,"path":"objects/objWall/objWall.yy",},
+    {"name":"rmOptions","order":2,"path":"rooms/rmOptions/rmOptions.yy",},
     {"name":"objBackground","order":2,"path":"objects/objBackground/objBackground.yy",},
   ],
 }

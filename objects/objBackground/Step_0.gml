@@ -1,4 +1,4 @@
-if isNight { // Switch to moon
+/*if isNight { // Switch to moon
 	if image_angle != 180 {
 		spinLerpTime = lerp(spinLerpTime,1,((image_angle+1)/180)*spinLerpSpeed);
 		image_angle = ceil(lerp(0,180,spinLerpTime)*10)/10;
@@ -25,4 +25,4 @@ if(!buttonFadedIn and !is_undefined(buttonFadeInId) and layer_sequence_is_finish
 	
 	var startButton = instance_create_layer(960,540,"Instances",objStartButton, {depth : 400});
 	var optionsButton = instance_create_layer(960,248.5,"Instances",objOptionsButton, {depth : 400});
-}
+}*/
