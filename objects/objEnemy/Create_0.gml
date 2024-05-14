@@ -28,8 +28,6 @@ aiStepCooldown = 0;
 aiAttackCDMax = 30;
 aiAttackCD = aiAttackCDMax;
 
-targetChar = instance_find(objPlayer,0);
-
 function StepNeuralNetwork() {
 	if aiStepCooldown > 0 return;
 	aiStepCooldown = aiStepCooldownMax;
