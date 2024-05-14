@@ -1,7 +1,9 @@
 {
   "FolderOrderSettings": [],
   "ResourceOrderSettings": [
-    {"name":"sprHeavyDownHitbox","order":1,"path":"sprites/sprHeavyDownHitbox/sprHeavyDownHitbox.yy",},
+    {"name":"sprHealthBar2","order":1,"path":"sprites/sprHealthBar2/sprHealthBar2.yy",},
+    {"name":"sprHeavyUpHitbox","order":2,"path":"sprites/sprHeavyUpHitbox/sprHeavyUpHitbox.yy",},
     {"name":"sprTitle","order":1,"path":"sprites/sprTitle/sprTitle.yy",},
+    {"name":"sprHeavyDownHitbox","order":1,"path":"sprites/sprHeavyDownHitbox/sprHeavyDownHitbox.yy",},
   ],
 }
