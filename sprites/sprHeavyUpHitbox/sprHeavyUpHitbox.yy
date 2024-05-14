@@ -82,8 +82,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "Heavy Attacks",
-    "path": "folders/Sprites/Characters/Vidar/Attacks/Heavy Attacks.yy",
+    "name": "Ground",
+    "path": "folders/Sprites/Characters/Vidar/Attacks/Heavy Attacks/Ground.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
