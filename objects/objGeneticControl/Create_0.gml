@@ -18,8 +18,8 @@ populationB = array_create(countPerPop);
 for (var i = 0; i < countPerPop; i++) {
 	var charA = instance_create_layer((room_width/2)-2048,1056,"Instances",specimenObj);
 	var charB = instance_create_layer((room_width/2)+2048,1056,"Instances",specimenObj);
-	charA.aiLocalEnemy = charB;
-	charB.aiLocalEnemy = charA;
+	charA.targetChar = charB;
+	charB.targetChar = charA;
 	
 	/*
 	if !is_undefined(global.BestNetwork) {

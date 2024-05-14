@@ -26,7 +26,7 @@ function hasSpriteEventOccurred(msg, shouldDelete = true) {
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
 
 function HandlePlayerState() {
-	charToFace = instance_find(objEnemy,0);
+	if !instance_exists(targetChar) return;
 	switch currentState {
 		case CharacterStates.IDLE: {
 			if (sprite_index != sprPlayerIdle) {
@@ -79,7 +79,7 @@ function HandlePlayerState() {
 			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			if (charToFace) { spriteDir = (x > charToFace.x); } else { spriteDir = (xSpeed < 0); }
+			if (instance_exists(targetChar)) { spriteDir = (x > targetChar.x); } else { spriteDir = (xSpeed < 0); }
 			
 			if (INPUT_JUMP and canJump) {
 				currentState = CharacterStates.JUMP;
@@ -158,7 +158,7 @@ function HandlePlayerState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
+				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -202,29 +202,29 @@ function HandlePlayerState() {
 				xSpeed = 0;
 			}
 			if hasSpriteEventOccurred("GrabStart") {
-				var _grabbable = place_meeting(x,y,charToFace);
+				var _grabbable = place_meeting(x,y,targetChar);
 				if _grabbable and (
-					charToFace.currentState == CharacterStates.BLOCK
-					or charToFace.currentState == CharacterStates.LATTACK
-					or charToFace.currentState == CharacterStates.HATTACK
+					targetChar.currentState == CharacterStates.BLOCK
+					or targetChar.currentState == CharacterStates.LATTACK
+					or targetChar.currentState == CharacterStates.HATTACK
 				) {
-					charToFace.currentState = CharacterStates.GRABBED;
-					charToFace.x = x+(128*image_xscale);
-					charToFace.y = y-32;
+					targetChar.currentState = CharacterStates.GRABBED;
+					targetChar.x = x+(128*image_xscale);
+					targetChar.y = y-32;
 				}
 			}
 			if hasSpriteEventOccurred("GrabEnd") {
-				if (charToFace.currentState == CharacterStates.GRABBED) {
+				if (targetChar.currentState == CharacterStates.GRABBED) {
 					if (sprite_index == sprPlayerGrab) {
 						if aiGrabInput {
-							if (charToFace.currentState == CharacterStates.GRABBED) {
+							if (targetChar.currentState == CharacterStates.GRABBED) {
 								changeSprite(sprPlayerGrabHolding);
 							}
 						} else {
-							charToFace.TakeDamage(heavyAttackDamage);
+							targetChar.TakeDamage(heavyAttackDamage);
 						}
 					} else if (sprite_index == sprPlayerForwardThrow) {
-						charToFace.TakeDamage(heavyAttackDamage*1.1);
+						targetChar.TakeDamage(heavyAttackDamage*1.1);
 					}
 				}
 			}
@@ -285,7 +285,7 @@ function HandleDummyState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -9; } else xSpeed = 9;
+				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -9; } else xSpeed = 9;
 				ySpeed = -abs(xSpeed*2);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -328,7 +328,6 @@ function HandleDummyState() {
 
 function HandleAIState() {
 	if (currentState != lastState) stateChangeCD = stateChangeCDMax;
-	//charToFace = instance_find(objPlayer,0);
 	StepNeuralNetwork();
 	
 	switch currentState {
@@ -432,7 +431,7 @@ function HandleAIState() {
 				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = lightAttackDamage;
-				attackHitbox.collidable = charToFace;
+				attackHitbox.collidable = targetChar;
 				return;
 			}
 			attackHitbox.image_index = image_index;
@@ -457,7 +456,7 @@ function HandleAIState() {
 				attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
 				attackHitbox.image_xscale = image_xscale;
 				attackHitbox.collisionDamage = heavyAttackDamage;
-				attackHitbox.collidable = charToFace;
+				attackHitbox.collidable = targetChar;
 				return;
 			}
 			attackHitbox.image_index = image_index;
@@ -475,7 +474,7 @@ function HandleAIState() {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
 				stunBounce = stunBounceMax;
-				if (instance_exists(charToFace) and charToFace.spriteDir) { xSpeed = -stunBounce*3; } else xSpeed = stunBounce*3;
+				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -stunBounce*3; } else xSpeed = stunBounce*3;
 				ySpeed = -abs(stunBounce*6);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -520,29 +519,29 @@ function HandleAIState() {
 				xSpeed = 0;
 			}
 			if hasSpriteEventOccurred("GrabStart") {
-				var _grabbable = place_meeting(x,y,charToFace);
+				var _grabbable = place_meeting(x,y,targetChar);
 				if _grabbable and (
-					charToFace.currentState == CharacterStates.BLOCK
-					or charToFace.currentState == CharacterStates.LATTACK
-					or charToFace.currentState == CharacterStates.HATTACK
+					targetChar.currentState == CharacterStates.BLOCK
+					or targetChar.currentState == CharacterStates.LATTACK
+					or targetChar.currentState == CharacterStates.HATTACK
 				) {
-					charToFace.currentState = CharacterStates.GRABBED;
-					charToFace.x = x+(128*image_xscale);
-					charToFace.y = y-32;
+					targetChar.currentState = CharacterStates.GRABBED;
+					targetChar.x = x+(128*image_xscale);
+					targetChar.y = y-32;
 				}
 			}
 			if hasSpriteEventOccurred("GrabEnd") {
-				if (charToFace.currentState == CharacterStates.GRABBED) {
+				if (targetChar.currentState == CharacterStates.GRABBED) {
 					if (sprite_index == sprPlayerGrab) {
 						if aiGrabInput {
-							if (charToFace.currentState == CharacterStates.GRABBED) {
+							if (targetChar.currentState == CharacterStates.GRABBED) {
 								changeSprite(sprPlayerGrabHolding);
 							}
 						} else {
-							charToFace.TakeDamage(10);
+							targetChar.TakeDamage(10);
 						}
 					} else if (sprite_index == sprPlayerForwardThrow) {
-						charToFace.TakeDamage(15);
+						targetChar.TakeDamage(15);
 					}
 				}
 			}
