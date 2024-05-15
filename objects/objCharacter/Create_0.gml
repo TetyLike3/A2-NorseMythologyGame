@@ -13,6 +13,12 @@ staminaRegenTimerMax = 180;
 staminaRegenTimer = staminaRegenTimerMax;
 staminaRegenRate = 0.8;
 
+staminaJumpCost = 0;
+staminaLAttackCost = 2;
+staminaHAttackCost = 8;
+staminaBlockCost = 20;
+staminaGrabCost = 28;
+
 // Physics
 moveSpeed = 12;
 jumpPower = 18;

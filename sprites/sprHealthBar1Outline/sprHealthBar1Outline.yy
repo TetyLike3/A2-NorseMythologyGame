@@ -48,8 +48,8 @@
   },
   "origin": 4,
   "parent": {
-    "name": "Health",
-    "path": "folders/Sprites/UI/Health.yy",
+    "name": "Bars",
+    "path": "folders/Sprites/UI/Bars.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

@@ -11,13 +11,14 @@ for (var i = 0; i < ds_list_size(currentCollisions); ++i) {
 				TakeDamage(other.collisionDamage);
 		
 			if (other.shouldStun) GetStunned(other.stunDir,other.stunHeight);
-	}
-}
+			}
+		}
 	}
 	if !(_char.currentState == CharacterStates.BLOCK) {
 		array_push(collidedWith,_char);
 	} else {
 		if array_contains(blockedBy,_char) return;
+		_char.staminaLevel = max(staminaLevel-staminaBlockCost,0);
 		if (_char.object_index == objEnemyTraining) _char.aiFitness += 40;
 		array_push(blockedBy,_char);
 		var indicator = instance_create_layer(x,y-512,"Instances",objDamageIndicator);

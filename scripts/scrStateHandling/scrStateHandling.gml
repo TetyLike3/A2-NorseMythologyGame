@@ -90,6 +90,9 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.JUMP: {
 			if (lastState != CharacterStates.JUMP) {
+				if (staminaLevel < staminaJumpCost) { currentState = lastState; return; }
+				staminaLevel -= staminaJumpCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
 				ySpeed -= jumpPower;
 				executeGroundCollision(); executeWallCollision();
@@ -113,6 +116,9 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
+				if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
+				staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerLightSide1);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
@@ -137,6 +143,9 @@ function HandlePlayerState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
+				if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
+				staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerLightSide3);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
@@ -203,6 +212,14 @@ function HandlePlayerState() {
 			FACE_TARGET;
 		} break;
 		case CharacterStates.GRABBING: {
+			if (lastState != CharacterStates.GRABBING) {
+				if (staminaLevel < staminaGrabCost) { currentState = lastState; return; }
+				staminaLevel -= staminaGrabCost; staminaRegenTimer = staminaRegenTimerMax;
+				
+				lastState = currentState;
+				return;
+			}
+			
 			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
 				changeSprite(sprPlayerGrab);
 				xSpeed = 0;
@@ -259,7 +276,6 @@ function HandlePlayerState() {
 	
 	if instance_exists(attackHitbox) {
 		if (currentState != CharacterStates.LATTACK) and (currentState != CharacterStates.HATTACK) {
-			print("destroyed hitbox");
 			instance_destroy(attackHitbox);
 			attackHitbox = undefined;
 		}
@@ -403,6 +419,9 @@ function HandleAIState() {
 		case CharacterStates.JUMP: {
 			// If just started jumping, change sprite, play sound, and end early
 			if (lastState != CharacterStates.JUMP) {
+				if (staminaLevel < staminaJumpCost) { currentState = lastState; return; }
+				staminaLevel -= staminaJumpCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
 				ySpeed -= jumpPower;
 				executeGroundCollision(); executeWallCollision();
@@ -426,6 +445,9 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.LATTACK: {
 			if (lastState != CharacterStates.LATTACK) {
+				if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
+				staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerLightSide1);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
@@ -452,6 +474,9 @@ function HandleAIState() {
 		} break;
 		case CharacterStates.HATTACK: {
 			if (lastState != CharacterStates.HATTACK) {
+				if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
+				staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+				
 				changeSprite(sprPlayerLightSide3);
 				xSpeed = 0;
 				executeGroundCollision(); executeWallCollision();
@@ -522,6 +547,14 @@ function HandleAIState() {
 			FACE_TARGET;
 		} break;
 		case CharacterStates.GRABBING: {
+			if (lastState != CharacterStates.GRABBING) {
+				if (staminaLevel < staminaGrabCost) { currentState = lastState; return; }
+				staminaLevel -= staminaGrabCost; staminaRegenTimer = staminaRegenTimerMax;
+				
+				lastState = currentState;
+				return;
+			}
+			
 			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
 				changeSprite(sprPlayerGrab);
 				xSpeed = 0;
