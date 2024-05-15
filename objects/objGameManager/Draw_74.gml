@@ -1,10 +1,10 @@
 // Health bars
 if room == rmGame {
-	with (objPlayer) { other.DrawHealthBar(64,128,(charHealth/charHealthMax),false); }
-	with (objEnemy) { other.DrawHealthBar(SCREEN_WIDTH-64,128,(charHealth/charHealthMax),true); }
+	with (objPlayer) { other.DrawHealthBar(32,121,(charHealth/charHealthMax),false); }
+	with (objEnemy) { other.DrawHealthBar(SCREEN_WIDTH-32,121,(charHealth/charHealthMax),true); }
 	DRAW_CENTRE;
 	draw_set_font(fntViking);
-	draw_text((SCREEN_WIDTH/2),30,round(timerRemaining/100));
+	draw_text_transformed((SCREEN_WIDTH/2),200,round(timerRemaining/100),1.5,1.5,0);
 	DRAW_RESET;
 }
 
@@ -17,6 +17,7 @@ draw_text(16,112,string_concat("cameraTargetW: ",cameraTargetW," cameraTargetH: 
 */
 
 // Column 2 X: 1024
+DRAW_RESET;
 draw_set_font(fntSmallViking);
 draw_text(16,16,string_concat("Avg FPS: ",averageFPS));
 draw_text(16,48,string_concat("Avg dT: ",averageDT));

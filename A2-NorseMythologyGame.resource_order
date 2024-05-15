@@ -13,7 +13,6 @@
     {"name":"sprHeavyNeutral","order":2,"path":"sprites/sprHeavyNeutral/sprHeavyNeutral.yy",},
     {"name":"sprHeavyDownHitbox","order":8,"path":"sprites/sprHeavyDownHitbox/sprHeavyDownHitbox.yy",},
     {"name":"sprHeavyUp","order":4,"path":"sprites/sprHeavyUp/sprHeavyUp.yy",},
-    {"name":"sprHealthBar2","order":1,"path":"sprites/sprHealthBar2/sprHealthBar2.yy",},
     {"name":"sprPlayerLightDownHitbox","order":1,"path":"sprites/sprPlayerLightDownHitbox/sprPlayerLightDownHitbox.yy",},
     {"name":"sprPlayerLightDashAttackHitbox","order":4,"path":"sprites/sprPlayerLightDashAttackHitbox/sprPlayerLightDashAttackHitbox.yy",},
     {"name":"sprPlayerLightUpHitbox","order":3,"path":"sprites/sprPlayerLightUpHitbox/sprPlayerLightUpHitbox.yy",},
