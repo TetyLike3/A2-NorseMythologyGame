@@ -79,7 +79,7 @@ function HandlePlayerState() {
 			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
 			
 			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			if (instance_exists(targetChar)) { spriteDir = (x > targetChar.x); } else { spriteDir = (xSpeed < 0); }
+			if (instance_exists(targetChar)) { spriteDir = (x < targetChar.x); } else { spriteDir = (xSpeed > 0); }
 			
 			if (INPUT_JUMP and canJump) {
 				currentState = CharacterStates.JUMP;
@@ -162,8 +162,9 @@ function HandlePlayerState() {
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
-				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -9; } else xSpeed = 9;
-				ySpeed = -abs(xSpeed*2);
+				stunBounce = stunBounceMax;
+				//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
+				ySpeed = -abs(stunBounce*6);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
 				stunTimer = stunTimerMax;
@@ -174,9 +175,10 @@ function HandlePlayerState() {
 			
 			// Every bounce, reduce speed until below 2, then freeze
 			if getGroundCollision() {
-				if (abs(xSpeed) > 2) {
+				stunBounce--;
+				if (stunBounce > 0) {
 					changeSprite(sprPlayerFloorImpact);
-					xSpeed/=3; ySpeed = -abs(xSpeed*3);
+					xSpeed/=3; ySpeed = -abs(stunBounce*6);
 					executeGroundCollision(); executeWallCollision();
 					return;
 				} else {
@@ -228,7 +230,7 @@ function HandlePlayerState() {
 						}
 					} else if (sprite_index == sprPlayerForwardThrow) {
 						targetChar.TakeDamage(heavyAttackDamage*1.1);
-						if (spriteDir) { targetChar.GetStunned(0,22); } else { targetChar.GetStunned(1,22); }
+						if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
 					}
 				}
 			}
@@ -264,7 +266,7 @@ function HandlePlayerState() {
 	}
 	
 	// Physics code
-	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = 1; } else image_speed = -1; }
+	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();
 	executeWallCollision();
@@ -480,7 +482,7 @@ function HandleAIState() {
 			if (lastState != CharacterStates.STUN) {
 				changeSprite(sprPlayerInjured);
 				stunBounce = stunBounceMax;
-				if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = -stunBounce*3; } else xSpeed = stunBounce*3;
+				//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
 				ySpeed = -abs(stunBounce*6);
 				executeGroundCollision(); executeWallCollision();
 				lastState = currentState;
@@ -549,7 +551,7 @@ function HandleAIState() {
 						}
 					} else if (sprite_index == sprPlayerForwardThrow) {
 						targetChar.TakeDamage(15);
-						if (spriteDir) { targetChar.GetStunned(0,22); } else { targetChar.GetStunned(1,22); }
+						if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
 					}
 				}
 			}
@@ -586,7 +588,7 @@ function HandleAIState() {
 	
 	// Physics code
 	if currentState == CharacterStates.MOVE { 
-		if sign(spriteDir) != sign(xSpeed) { image_speed = -1; } else image_speed = 1; 
+		if sign(spriteDir) != sign(xSpeed) { image_speed = 1; } else image_speed = -1; 
 	} else image_speed = 1;
 	ySpeed += objGameManager.gameGravity;
 	executeGroundCollision();

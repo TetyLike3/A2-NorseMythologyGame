@@ -11,13 +11,7 @@ if (room == rmGame) {
 	audio_master_gain(1);
 }
 
-with (objCharacter) {
-	if (spriteDir == 0) {
-		image_xscale = 1;
-	} else {
-		image_xscale = -1;
-	}
-	
+with (objCharacter) {	
 	var drawCol = c_grey;
 	if (room == rmTraining) and (object_index == objEnemyTraining) {
 		var fitnessScore = aiFitness/objGeneticControl.bestFitness;
