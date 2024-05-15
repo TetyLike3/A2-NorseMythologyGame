@@ -35,8 +35,8 @@ averageFPS = 0;
 charDrawAlpha = 1;
 
 // Health Bar
-healthBarWidth = sprite_get_width(sprHealthBar1Outline)*2.5;
-healthBarHeight = sprite_get_height(sprHealthBar1Outline)*2.5;
+healthBarWidth = sprite_get_width(sprHealthBar1Outline)*2;
+healthBarHeight = sprite_get_height(sprHealthBar1Outline)*1.5;
 
 function DrawHealthBar(_x,_y,_val,_flipped) {
     var _fillWidth = round(_val * healthBarWidth);

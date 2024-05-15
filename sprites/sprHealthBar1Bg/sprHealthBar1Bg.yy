@@ -46,7 +46,7 @@
     ],
     "top": 0,
   },
-  "origin": 3,
+  "origin": 4,
   "parent": {
     "name": "Health",
     "path": "folders/Sprites/UI/Health.yy",
@@ -82,7 +82,7 @@
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 0,
+    "xorigin": 175,
     "yorigin": 39,
   },
   "swatchColours": null,
