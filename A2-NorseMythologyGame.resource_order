@@ -1,6 +1,11 @@
 {
   "FolderOrderSettings": [
+    {"name":"Vidar","order":1,"path":"folders/Sprites/Characters/Vidar.yy",},
     {"name":"Ground","order":3,"path":"folders/Sprites/Characters/Vidar/Attacks/Heavy Attacks/Ground.yy",},
+    {"name":"Fenrir","order":2,"path":"folders/Sprites/Characters/Fenrir.yy",},
+    {"name":"Grab","order":1,"path":"folders/Sprites/Characters/Fenrir/Grab.yy",},
+    {"name":"Impact","order":2,"path":"folders/Sprites/Characters/Fenrir/Impact.yy",},
+    {"name":"Movement","order":3,"path":"folders/Sprites/Characters/Fenrir/Movement.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"sprPlayerLightAirSideHitbox","order":3,"path":"sprites/sprPlayerLightAirSideHitbox/sprPlayerLightAirSideHitbox.yy",},
@@ -16,6 +21,8 @@
     {"name":"sprPlayerLightDownHitbox","order":1,"path":"sprites/sprPlayerLightDownHitbox/sprPlayerLightDownHitbox.yy",},
     {"name":"sprPlayerLightDashAttackHitbox","order":4,"path":"sprites/sprPlayerLightDashAttackHitbox/sprPlayerLightDashAttackHitbox.yy",},
     {"name":"sprPlayerLightUpHitbox","order":3,"path":"sprites/sprPlayerLightUpHitbox/sprPlayerLightUpHitbox.yy",},
+    {"name":"sprFenrirIdle","order":4,"path":"sprites/sprFenrirIdle/sprFenrirIdle.yy",},
+    {"name":"sprFenrirBlock","order":5,"path":"sprites/sprFenrirBlock/sprFenrirBlock.yy",},
     {"name":"sprHeavySide","order":3,"path":"sprites/sprHeavySide/sprHeavySide.yy",},
     {"name":"sprHeavyUpHitbox","order":5,"path":"sprites/sprHeavyUpHitbox/sprHeavyUpHitbox.yy",},
     {"name":"sprPlayerLightSideHitbox","order":2,"path":"sprites/sprPlayerLightSideHitbox/sprPlayerLightSideHitbox.yy",},

@@ -1,7 +1,7 @@
 // Health bars
 if room == rmGame {
-	with (objPlayer) { other.DrawHealthBar(32,121,(charHealth/charHealthMax),false); }
-	with (objEnemy) { other.DrawHealthBar(SCREEN_WIDTH-32,121,(charHealth/charHealthMax),true); }
+	with (objPlayer) { other.DrawHealthBar(32,88,(charHealth/charHealthMax),false); }
+	with (objEnemy) { other.DrawHealthBar(SCREEN_WIDTH-32,88,(charHealth/charHealthMax),true); }
 	DRAW_CENTRE;
 	draw_set_font(fntViking);
 	draw_text_transformed((SCREEN_WIDTH/2),200,round(timerRemaining/100),1.5,1.5,0);
