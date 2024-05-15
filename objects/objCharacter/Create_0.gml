@@ -7,8 +7,11 @@ damageTimerMax = 180;
 damageFlashInterval = 15;
 uTint = shader_get_uniform(sdrTint,"u_TintColour");
 
-//Healthbar
-charHealthMax=charHealth;
+// Stamina
+staminaLevel = 100;
+staminaRegenTimerMax = 180;
+staminaRegenTimer = staminaRegenTimerMax;
+staminaRegenRate = 0.8;
 
 // Physics
 moveSpeed = 12;
@@ -40,6 +43,7 @@ stunTimer = 0;
 stunTimerMax = 120;
 
 function TakeDamage(_dmg) {
+	if (targetChar.currentState == CharacterStates.STUN) return;
 	if (damageTimer > 0) or (currentState == CharacterStates.BLOCK) return;
 	damageTimer = damageTimerMax;
 	charHealth -= _dmg;
@@ -49,11 +53,12 @@ function TakeDamage(_dmg) {
 }
 
 function GetStunned(_dir, _height) {
+	if (targetChar.currentState == CharacterStates.STUN) return;
 	currentState = CharacterStates.STUN;
 	spriteDir = _dir;
 	ySpeed = -_height;
 	xSpeed = _height/2;
-	if (!spriteDir) { xSpeed *= -1; }
+	if (_dir == 0) { xSpeed *= -1; }
 }
 
 array_push(objGameManager.focusedCharacters,self);
