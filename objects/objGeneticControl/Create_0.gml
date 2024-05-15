@@ -1,4 +1,3 @@
-randomise();
 //random_set_seed(940061644);
 
 generation = 0;
