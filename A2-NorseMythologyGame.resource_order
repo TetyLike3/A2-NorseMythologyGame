@@ -41,6 +41,7 @@
     {"name":"sprPlayerLightDashAttackHitbox","order":4,"path":"sprites/sprPlayerLightDashAttackHitbox/sprPlayerLightDashAttackHitbox.yy",},
     {"name":"sprPlayerLightUpHitbox","order":3,"path":"sprites/sprPlayerLightUpHitbox/sprPlayerLightUpHitbox.yy",},
     {"name":"sqLoading7","order":2,"path":"sequences/sqLoading7/sqLoading7.yy",},
+    {"name":"sprFenrirLightUpHitbox","order":12,"path":"sprites/sprFenrirLightUpHitbox/sprFenrirLightUpHitbox.yy",},
     {"name":"sprFenrirGetUp","order":4,"path":"sprites/sprFenrirGetUp/sprFenrirGetUp.yy",},
     {"name":"sprFenrirDownThrow","order":3,"path":"sprites/sprFenrirDownThrow/sprFenrirDownThrow.yy",},
     {"name":"sprFenrirLightNeutral1Hitbox","order":8,"path":"sprites/sprFenrirLightNeutral1Hitbox/sprFenrirLightNeutral1Hitbox.yy",},
