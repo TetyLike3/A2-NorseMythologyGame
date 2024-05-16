@@ -4,7 +4,7 @@ moveSpeed = 11;
 lightAttackDamage = 8;
 heavyAttackDamage = 14;
 
-neuralNetwork = NN_GenerateDefaultNetwork(11, 6);
+neuralNetwork = NN_GenerateDefaultNetwork(13, 6);
 aiXInput = 0; aiJumpInput = 0;
 aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 aiBlockInput = 0; aiGrabInput = 0;
@@ -83,6 +83,9 @@ function UpdateFitness() {
 	// Reward for not holding block (to an extent)
 	aiFitness += clamp((aiTimeSinceBlock/100)^1.02,0,1);
 	
+	// Reward AI for maintaining high stamina
+	aiFitness += clamp((staminaLevel/100)^1.02,0,1);
+	
 	// Encourages AI to make a new move if their fitness is increased from this limit
 	aiFitness = max(aiFitness,objGeneticControl.fitnessLowerLimit);
 }
@@ -104,13 +107,15 @@ function StepNeuralNetwork() {
 	inputs[1] = (aiFitnessDelta/10);
 	inputs[2] = x/room_width;
 	inputs[3] = charHealth/100;
-	inputs[4] = currentState/7;
-	inputs[5] = spriteDir;
-	inputs[6] = min(aiAttackCD/aiAttackCDMax,1);
-	inputs[7] = stunTimer/stunTimerMax;
-	inputs[8] = min((distance_to_object(targetChar)/room_width)*120,1);
-	inputs[9] = targetChar.charHealth/100;
-	inputs[10] = targetChar.currentState/7;
+	inputs[4] = charHealth/100;
+	inputs[5] = currentState/7;
+	inputs[6] = spriteDir;
+	inputs[7] = min(aiAttackCD/aiAttackCDMax,1);
+	inputs[8] = stunTimer/stunTimerMax;
+	inputs[9] = min((distance_to_object(targetChar)/room_width)*120,1);
+	inputs[10] = targetChar.charHealth/100;
+	inputs[11] = targetChar.staminaLevel/100;
+	inputs[12] = targetChar.currentState/7;
 	
 	neuralNetwork.Input(inputs);
 	
