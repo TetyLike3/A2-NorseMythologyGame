@@ -192,6 +192,7 @@
     {"id":{"name":"objDummy","path":"objects/objDummy/objDummy.yy",},},
     {"id":{"name":"sprFenrirGetUp","path":"sprites/sprFenrirGetUp/sprFenrirGetUp.yy",},},
     {"id":{"name":"sprFenrirDownThrow","path":"sprites/sprFenrirDownThrow/sprFenrirDownThrow.yy",},},
+    {"id":{"name":"sprCursor","path":"sprites/sprCursor/sprCursor.yy",},},
     {"id":{"name":"sprFenrirLightNeutral1Hitbox","path":"sprites/sprFenrirLightNeutral1Hitbox/sprFenrirLightNeutral1Hitbox.yy",},},
     {"id":{"name":"fntNN_NeuronValue","path":"fonts/fntNN_NeuronValue/fntNN_NeuronValue.yy",},},
     {"id":{"name":"objBackButton","path":"objects/objBackButton/objBackButton.yy",},},
