@@ -59,13 +59,13 @@ function StepNeuralNetwork() {
 	// Outputs
 	var outputs = neuralNetwork.Forward();
 	
-	inputVector[0] = (abs(outputs[0]) > INPUT_DEADZONE) ? outputs[0] : 0;
-	inputVector[1] = (abs(outputs[1]) > INPUT_DEADZONE) ? outputs[1] : 0;
-	
 	aiInputLeft = (outputs[0] < -INPUT_DEADZONE) ? clamp(outputs[0],-1,0) : 0;
 	aiInputRight = (outputs[0] > INPUT_DEADZONE) ? clamp(outputs[0],0,1) : 0;
 	aiInputUp = (outputs[1] > INPUT_DEADZONE) ? clamp(outputs[1],0,1) : 0;
 	aiInputDown = (outputs[1] < -INPUT_DEADZONE) ? clamp(outputs[1],-1,0) : 0;
+	
+	inputVector[0] = aiInputLeft + aiInputRight;
+	inputVector[1] = aiInputDown + aiInputUp;
 	
 	aiLightAttackInput = outputs[2] > aiBoolConfidence;
 	aiHeavyAttackInput = outputs[3] > aiBoolConfidence;

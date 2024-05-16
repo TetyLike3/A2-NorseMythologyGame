@@ -13,6 +13,13 @@ function getPlayerHorizontalInput() {
 	if (abs(input) < INPUT_DEADZONE) return 0;
 	return input;
 }
+function getPlayerVerticalInput() {
+	var input = gamepad_axis_value(0, gp_axislv);
+	if keyboard_check(ord("S")) input = -1;
+	if keyboard_check(ord("W")) input = 1;
+	if (abs(input) < INPUT_DEADZONE) return 0;
+	return input;
+}
 
 function hasSpriteEventOccurred(msg, shouldDelete = true) {
 	var _index = array_get_index(spriteEventLog,msg);
@@ -69,7 +76,10 @@ function baseMoveState() {
 	
 	if (instance_exists(targetChar)) { spriteDir = (x < targetChar.x); } else { spriteDir = (xSpeed > 0); }
 	
+	xSpeed = inputVector[0] * moveSpeed;
+	
 	if !abs(inputVector[0]) { currentState = CharacterStates.IDLE; return; }
+	if ((inputVector[1] > 0) and canJump) { currentState = CharacterStates.JUMP; return; }
 }
 function baseJumpState() {
 	if (lastState != CharacterStates.JUMP) {
@@ -84,13 +94,182 @@ function baseJumpState() {
 	}
 	if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
 	
-	xSpeed = getPlayerHorizontalInput() * moveSpeed;
+	xSpeed = inputVector[0] * moveSpeed;
 			
 	FACE_TARGET;
 	canJump = false;
+	
+	if getGroundCollision() {
+		changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
+		if (inputVector[0]) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
+		executeGroundCollision(); executeWallCollision();
+		return;
+	}
 }
-
-
+function baseLAttackState() {
+	if (lastState != CharacterStates.LATTACK) {
+		if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
+		staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+		
+		changeSprite(sprPlayerLightSide1);
+		xSpeed = 0;
+		executeGroundCollision(); executeWallCollision();
+		lastState = currentState;
+		
+		attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+		attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
+		attackHitbox.image_xscale = image_xscale;
+		attackHitbox.collisionDamage = lightAttackDamage;
+		attackHitbox.collidable = targetChar;
+		attackHitbox.shouldStun = false;
+		
+		return;
+	}
+	attackHitbox.image_index = image_index;
+	
+	if END_OF_SPRITE { // Switch to Idle state
+		currentState = CharacterStates.IDLE;
+		changeSprite(sprPlayerIdle);
+		return;
+	}
+}
+function baseHAttackState() {
+	if (lastState != CharacterStates.HATTACK) {
+		if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
+		staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
+		
+		changeSprite(sprPlayerLightSide3);
+		xSpeed = 0;
+		executeGroundCollision(); executeWallCollision();
+		lastState = currentState;
+		
+		attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
+		attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
+		attackHitbox.image_xscale = image_xscale;
+		attackHitbox.collisionDamage = heavyAttackDamage;
+		attackHitbox.collidable = targetChar;
+		attackHitbox.shouldStun = true;
+		attackHitbox.stunDir = spriteDir;
+		attackHitbox.stunHeight = 18;
+	}
+	attackHitbox.image_index = image_index;
+	
+	if END_OF_SPRITE { // Switch to Idle state
+		currentState = CharacterStates.IDLE;
+		changeSprite(sprPlayerIdle);
+		return;
+	}
+}
+function baseStunnedState() {
+	if (lastState != CharacterStates.STUN) {
+		changeSprite(sprPlayerInjured);
+		stunBounce = stunBounceMax;
+		//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
+		ySpeed = -abs(stunBounce*6);
+		executeGroundCollision(); executeWallCollision();
+		lastState = currentState;
+		stunTimer = stunTimerMax;
+		
+		if instance_exists(attackHitbox) instance_destroy(attackHitbox);
+		return;
+	}
+	
+	// Every bounce, reduce speed until below 2, then freeze
+	if getGroundCollision() {
+		stunBounce--;
+		if (stunBounce > 0) {
+			changeSprite(sprPlayerFloorImpact);
+			xSpeed/=3; ySpeed = -abs(stunBounce*6);
+			executeGroundCollision(); executeWallCollision();
+			return;
+		} else {
+			xSpeed = 0; ySpeed = 0;
+			if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
+			if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
+		}
+		if (stunTimer < 1) {
+			currentState = CharacterStates.IDLE;
+		}
+	}
+}
+function baseBlockState(_blockInput) {
+	if (sprite_index != sprPlayerBlock) {
+		changeSprite(sprPlayerBlock);
+		xSpeed = 0;
+	}
+	if (not _blockInput) { currentState = CharacterStates.IDLE; }
+	if END_OF_SPRITE image_index = 3;
+	FACE_TARGET;
+}
+function baseGrabbingState(_grabInput) {
+	if (lastState != CharacterStates.GRABBING) {
+		if (staminaLevel < staminaGrabCost) { currentState = lastState; return; }
+		staminaLevel -= staminaGrabCost; staminaRegenTimer = staminaRegenTimerMax;
+		
+		lastState = currentState;
+		return;
+	}
+	
+	if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
+		changeSprite(sprPlayerGrab);
+		xSpeed = 0;
+	}
+	if hasSpriteEventOccurred("GrabStart") {
+		var _grabbable = place_meeting(x,y,targetChar);
+		if _grabbable /*and (
+			targetChar.currentState == CharacterStates.BLOCK
+			or targetChar.currentState == CharacterStates.LATTACK
+			or targetChar.currentState == CharacterStates.HATTACK
+		)*/ {
+			targetChar.currentState = CharacterStates.GRABBED;
+			targetChar.x = x+(128*image_xscale);
+			targetChar.y = y-32;
+		}
+	}
+	if hasSpriteEventOccurred("GrabEnd") {
+		if (targetChar.currentState == CharacterStates.GRABBED) {
+			if (sprite_index == sprPlayerGrab) {
+				if _grabInput {
+					if (targetChar.currentState == CharacterStates.GRABBED) { changeSprite(sprPlayerGrabHolding); }
+				} else {
+					targetChar.TakeDamage(heavyAttackDamage);
+					if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
+				}
+			} else if (sprite_index == sprPlayerForwardThrow) {
+				targetChar.TakeDamage(heavyAttackDamage*1.1);
+				if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
+			}
+		}
+	}
+	if END_OF_SPRITE {
+		if (sprite_index == sprPlayerGrabHolding) {
+			changeSprite(sprPlayerForwardThrow);
+		} else if (sprite_index == sprPlayerForwardThrow) or (sprite_index == sprPlayerGrab) {
+			currentState = CharacterStates.IDLE;
+		}
+	}
+}
+function baseGrabbedState() {
+	if (sprite_index != sprPlayerInjured) {
+		changeSprite(sprPlayerInjured);
+		xSpeed = 0; ySpeed = 0;
+	}
+}
+function baseDeadState() {
+	if (sprite_index != sprPlayerLying) {
+		changeSprite(sprPlayerLying);
+		xSpeed = 0; ySpeed = 0;
+		charHealth = 0;
+	}
+}
+function basePhysics() {
+	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
+	ySpeed += objGameManager.gameGravity;
+	executeGroundCollision();
+	executeWallCollision();
+	canJump = getGroundCollision();
+	lastState = currentState;
+}
 
 
 function HandlePlayerState() {
@@ -107,189 +286,34 @@ function HandlePlayerState() {
 		case CharacterStates.MOVE: {
 			baseMoveState();
 
-			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
-			
-			if (INPUT_JUMP and canJump) {
-				currentState = CharacterStates.JUMP;
-				ySpeed += objGameManager.gameGravity;
-				executeGroundCollision(); executeWallCollision();
-				return;
-			}
 		} break;
 		case CharacterStates.JUMP: {
 			baseJumpState();
-			
-			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
-			
-			if getGroundCollision() {
-				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
-				if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
-				executeGroundCollision(); executeWallCollision();
-				return;
-			}
 		} break;
 		case CharacterStates.LATTACK: {
-			if (lastState != CharacterStates.LATTACK) {
-				if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
-				staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerLightSide1);
-				xSpeed = 0;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				
-				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
-				attackHitbox.image_xscale = image_xscale;
-				attackHitbox.collisionDamage = lightAttackDamage;
-				attackHitbox.collidable = objEnemy;
-				attackHitbox.shouldStun = false;
-				
-				return;
-			}
-			attackHitbox.image_index = image_index;
-			
-			if END_OF_SPRITE { // Switch to Idle state
-				currentState = CharacterStates.IDLE;
-				changeSprite(sprPlayerIdle);
-				return;
-			}
+			baseLAttackState();
 		} break;
 		case CharacterStates.HATTACK: {
-			if (lastState != CharacterStates.HATTACK) {
-				if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
-				staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerLightSide3);
-				xSpeed = 0;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				
-				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
-				attackHitbox.image_xscale = image_xscale;
-				attackHitbox.collisionDamage = heavyAttackDamage;
-				attackHitbox.collidable = objEnemy;
-				attackHitbox.shouldStun = true;
-				attackHitbox.stunDir = spriteDir;
-				attackHitbox.stunHeight = 18;
-			}
-			attackHitbox.image_index = image_index;
-			
-			if END_OF_SPRITE { // Switch to Idle state
-				currentState = CharacterStates.IDLE;
-				changeSprite(sprPlayerIdle);
-				return;
-			}
+			baseHAttackState();
 		} break;
 		case CharacterStates.STUN: {
-			if (lastState != CharacterStates.STUN) {
-				changeSprite(sprPlayerInjured);
-				stunBounce = stunBounceMax;
-				//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
-				ySpeed = -abs(stunBounce*6);
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				stunTimer = stunTimerMax;
-				
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
-				return;
-			}
-			
-			// Every bounce, reduce speed until below 2, then freeze
-			if getGroundCollision() {
-				stunBounce--;
-				if (stunBounce > 0) {
-					changeSprite(sprPlayerFloorImpact);
-					xSpeed/=3; ySpeed = -abs(stunBounce*6);
-					executeGroundCollision(); executeWallCollision();
-					return;
-				} else {
-					xSpeed = 0; ySpeed = 0;
-					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
-					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
-				}
-				if (stunTimer < 1) {
-					currentState = CharacterStates.IDLE;
-				}
-			}
+			baseStunnedState();
 		} break;
 		case CharacterStates.BLOCK: {
-			if (sprite_index != sprPlayerBlock) {
-				changeSprite(sprPlayerBlock);
-				xSpeed = 0;
-			}
-			if (not INPUT_BLOCK) {
-				currentState = CharacterStates.IDLE;
-			}
-			if END_OF_SPRITE image_index = 3;
-			FACE_TARGET;
+			baseBlockState(INPUT_BLOCK);
 		} break;
 		case CharacterStates.GRABBING: {
-			if (lastState != CharacterStates.GRABBING) {
-				if (staminaLevel < staminaGrabCost) { currentState = lastState; return; }
-				staminaLevel -= staminaGrabCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				lastState = currentState;
-				return;
-			}
-			
-			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
-				changeSprite(sprPlayerGrab);
-				xSpeed = 0;
-			}
-			if hasSpriteEventOccurred("GrabStart") {
-				var _grabbable = place_meeting(x,y,targetChar);
-				if _grabbable and (
-					targetChar.currentState == CharacterStates.BLOCK
-					or targetChar.currentState == CharacterStates.LATTACK
-					or targetChar.currentState == CharacterStates.HATTACK
-				) {
-					targetChar.currentState = CharacterStates.GRABBED;
-					targetChar.x = x+(128*image_xscale);
-					targetChar.y = y-32;
-				}
-			}
-			if hasSpriteEventOccurred("GrabEnd") {
-				if (targetChar.currentState == CharacterStates.GRABBED) {
-					if (sprite_index == sprPlayerGrab) {
-						if INPUT_GRAB {
-							if (targetChar.currentState == CharacterStates.GRABBED) { changeSprite(sprPlayerGrabHolding); }
-						} else {
-							targetChar.TakeDamage(heavyAttackDamage);
-							if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
-						}
-					} else if (sprite_index == sprPlayerForwardThrow) {
-						targetChar.TakeDamage(heavyAttackDamage*1.1);
-						if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
-					}
-				}
-			}
-			if END_OF_SPRITE {
-				if (sprite_index == sprPlayerGrabHolding) {
-					changeSprite(sprPlayerForwardThrow);
-				} else if (sprite_index == sprPlayerForwardThrow) or (sprite_index == sprPlayerGrab) {
-					currentState = CharacterStates.IDLE;
-				}
-			}
+			baseGrabbingState(INPUT_GRAB);
 		} break;
 		case CharacterStates.GRABBED: {
-			if (sprite_index != sprPlayerInjured) {
-				changeSprite(sprPlayerInjured);
-				xSpeed = 0; ySpeed = 0;
-			}
+			baseGrabbedState();
 		} break;
 		case CharacterStates.DEAD: {
-			if (sprite_index != sprPlayerLying) {
-				changeSprite(sprPlayerLying);
-				xSpeed = 0; ySpeed = 0;
-				charHealth = 0;
-			}
+			baseDeadState();
 		}
 	}
 	
@@ -306,12 +330,7 @@ function HandlePlayerState() {
 	if (INPUT_UP) attackDir = 3;
 	
 	// Physics code
-	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
-	ySpeed += objGameManager.gameGravity;
-	executeGroundCollision();
-	executeWallCollision();
-	canJump = getGroundCollision();
-	lastState = currentState;
+	basePhysics();
 }
 
 function HandleDummyState() {
@@ -320,45 +339,13 @@ function HandleDummyState() {
 			baseIdleState();
 		} break;
 		case CharacterStates.STUN: {
-			if (lastState != CharacterStates.STUN) {
-				changeSprite(sprPlayerInjured);
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				stunTimer = stunTimerMax;
-				return;
-			}
-			
-			// Every bounce, reduce speed until below 2, then freeze
-			if getGroundCollision() {
-				if (abs(xSpeed) > 2) {
-					changeSprite(sprPlayerFloorImpact);
-					xSpeed/=3; ySpeed = -abs(xSpeed*3);
-					executeGroundCollision(); executeWallCollision();
-					return;
-				} else {
-					xSpeed = 0; ySpeed = 0;
-					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
-					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
-				}
-				if (stunTimer < 1) {
-					currentState = CharacterStates.IDLE;
-				}
-			}
+			baseStunnedState();
 		} break;
 		case CharacterStates.DEAD: {
-			if (sprite_index != sprPlayerLying) {
-				changeSprite(sprPlayerLying);
-				xSpeed = 0; ySpeed = 0;
-				charHealth = 0;
-			}
+			baseDeadState();
 		}
 	}
-	
-	// Physics code
-	ySpeed += objGameManager.gameGravity;
-	executeGroundCollision();
-	executeWallCollision();
-	lastState = currentState;
+	basePhysics();
 }
 
 function HandleAIState() {
@@ -377,209 +364,44 @@ function HandleAIState() {
 		case CharacterStates.MOVE: {
 			baseMoveState();
 			
-			xSpeed = (aiInputLeft+aiInputRight) * moveSpeed;
-			
 			if (xSpeed != 0) aiTimeSinceMove = 0;
 			
-			if ((aiInputLeft+aiInputRight) == 0) and !stateChangeCD { currentState = CharacterStates.IDLE; return; }
-			if (aiInputUp and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
 			if (aiGrabInput) and !stateChangeCD { currentState = CharacterStates.GRABBING; return; }
 		} break;
 		case CharacterStates.JUMP: {
-			// If just started jumping, change sprite, play sound, and end early
-			if (lastState != CharacterStates.JUMP) {
-				if (staminaLevel < staminaJumpCost) { currentState = lastState; return; }
-				staminaLevel -= staminaJumpCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
-				ySpeed -= jumpPower;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				return;
-			}
-			// Switch to sprAirIdle if sprPlayerJump anim ended
-			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
-			
-			xSpeed = (aiInputLeft+aiInputRight) * moveSpeed;
-			FACE_TARGET;
-			canJump = false;
-			
-			// If landed, switch to idle state
-			if getGroundCollision() {
-				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
-				if ((aiInputLeft+aiInputRight)) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
-				executeGroundCollision(); executeWallCollision();
-				return;
-			}
+			baseJumpState();
 		} break;
 		case CharacterStates.LATTACK: {
-			if (lastState != CharacterStates.LATTACK) {
-				if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
-				staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerLightSide1);
-				xSpeed = 0;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				
-				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide1Hitbox;
-				attackHitbox.image_xscale = image_xscale;
-				attackHitbox.collisionDamage = lightAttackDamage;
-				attackHitbox.collidable = targetChar;
-				attackHitbox.shouldStun = false;
-				return;
-			}
-			attackHitbox.image_index = image_index;
-			
-			if (END_OF_SPRITE) { // Switch to Idle state
-				currentState = CharacterStates.IDLE; lastState = currentState;
-				changeSprite(sprPlayerIdle);
-				
+			if (END_OF_SPRITE) {
 				aiTimeSinceAttack = 0;
 				aiAttackCD = (aiAttackCDMax) * max(4-(aiTimeSinceAttack/10),0);
-				return;
 			}
+			baseLAttackState();
 		} break;
 		case CharacterStates.HATTACK: {
-			if (lastState != CharacterStates.HATTACK) {
-				if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
-				staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerLightSide3);
-				xSpeed = 0;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				
-				attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-				attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
-				attackHitbox.image_xscale = image_xscale;
-				attackHitbox.collisionDamage = heavyAttackDamage;
-				attackHitbox.collidable = targetChar;
-				attackHitbox.shouldStun = true;
-				attackHitbox.stunDir = spriteDir;
-				attackHitbox.stunHeight = 18;
-				return;
-			}
-			attackHitbox.image_index = image_index;
-			
-			if (END_OF_SPRITE) { // Switch to Idle state
-				currentState = CharacterStates.IDLE; lastState = currentState;
-				changeSprite(sprPlayerIdle);
-				
+			if (END_OF_SPRITE) {
 				aiTimeSinceAttack = 0;
 				aiAttackCD = (aiAttackCDMax) * max(4-(aiTimeSinceAttack/10),0);
-				return;
 			}
+			baseHAttackState();
 		} break;
 		case CharacterStates.STUN: {
-			if (lastState != CharacterStates.STUN) {
-				changeSprite(sprPlayerInjured);
-				stunBounce = stunBounceMax;
-				//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
-				ySpeed = -abs(stunBounce*6);
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				stunTimer = stunTimerMax;
-				
-				if instance_exists(attackHitbox) instance_destroy(attackHitbox);
-				return;
-			}
-			
-			// Every bounce, reduce speed until below 2, then freeze
-			if getGroundCollision() {
-				stunBounce--;
-				if (stunBounce > 0) {
-					changeSprite(sprPlayerFloorImpact);
-					xSpeed/=3; ySpeed = -abs(stunBounce*6);
-					executeGroundCollision(); executeWallCollision();
-					return;
-				} else {
-					xSpeed = 0; ySpeed = 0;
-					if (charHealth <= 0) { currentState = CharacterStates.DEAD; return; }
-					if ((sprite_index == sprPlayerFloorImpact) and END_OF_SPRITE) changeSprite(sprPlayerLying);
-				}
-				if (stunTimer < 1) {
-					currentState = CharacterStates.IDLE;
-				}
-			}
+			baseStunnedState();
 		} break;
 		case CharacterStates.BLOCK: {
-			if (sprite_index != sprPlayerBlock) {
-				changeSprite(sprPlayerBlock);
-				xSpeed = 0;
-			}
-			if (not aiBlockInput) {
-				currentState = CharacterStates.IDLE;
-			}
-			if END_OF_SPRITE image_index = 3;
-			FACE_TARGET;
+			baseBlockState(aiBlockInput);
 		} break;
 		case CharacterStates.GRABBING: {
-			if (lastState != CharacterStates.GRABBING) {
-				if (staminaLevel < staminaGrabCost) { currentState = lastState; return; }
-				staminaLevel -= staminaGrabCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				lastState = currentState;
-				return;
-			}
-			
-			if (sprite_index != sprPlayerGrab) and (sprite_index != sprPlayerGrabHolding) and (sprite_index != sprPlayerForwardThrow) {
-				changeSprite(sprPlayerGrab);
-				xSpeed = 0;
-			}
-			if hasSpriteEventOccurred("GrabStart") {
-				var _grabbable = place_meeting(x,y,targetChar);
-				if _grabbable and (
-					targetChar.currentState == CharacterStates.BLOCK
-					or targetChar.currentState == CharacterStates.LATTACK
-					or targetChar.currentState == CharacterStates.HATTACK
-				) {
-					targetChar.currentState = CharacterStates.GRABBED;
-					targetChar.x = x+(128*image_xscale);
-					targetChar.y = y-32;
-				}
-			}
-			if hasSpriteEventOccurred("GrabEnd") {
-				if (targetChar.currentState == CharacterStates.GRABBED) {
-					if (sprite_index == sprPlayerGrab) {
-						if aiGrabInput {
-							if (targetChar.currentState == CharacterStates.GRABBED) {
-								changeSprite(sprPlayerGrabHolding);
-							}
-						} else {
-							targetChar.TakeDamage(10);
-							if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
-						}
-					} else if (sprite_index == sprPlayerForwardThrow) {
-						targetChar.TakeDamage(15);
-						if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
-					}
-				}
-			}
-			if END_OF_SPRITE {
-				if (sprite_index == sprPlayerGrabHolding) {
-					changeSprite(sprPlayerForwardThrow);
-				} else if (sprite_index == sprPlayerForwardThrow) or (sprite_index == sprPlayerGrab) {
-					currentState = CharacterStates.IDLE;
-				}
-			}
+			baseGrabbingState(aiGrabInput);
 		} break;
 		case CharacterStates.GRABBED: {
-			if (sprite_index != sprPlayerInjured) {
-				changeSprite(sprPlayerInjured);
-				xSpeed = 0; ySpeed = 0;
-			}
+			baseGrabbedState();
 		} break;
 		case CharacterStates.DEAD: {
-			if (sprite_index != sprPlayerLying) {
-				changeSprite(sprPlayerLying);
-				xSpeed = 0; ySpeed = 0;
-				charHealth = 0;
-			}
+			baseDeadState();
 		}
 	}
 	
@@ -597,12 +419,5 @@ function HandleAIState() {
 	if (aiInputUp) attackDir = 3;
 	
 	// Physics code
-	if currentState == CharacterStates.MOVE { 
-		if sign(spriteDir) != sign(xSpeed) { image_speed = 1; } else image_speed = -1; 
-	} else image_speed = 1;
-	ySpeed += objGameManager.gameGravity;
-	executeGroundCollision();
-	executeWallCollision();
-	canJump = getGroundCollision();
-	lastState = currentState;
+	basePhysics();
 }
