@@ -25,61 +25,94 @@ function hasSpriteEventOccurred(msg, shouldDelete = true) {
 
 function changeSprite(newSprite) { sprite_index = newSprite; image_index = 0; image_speed = 1; }
 
+
+function baseIdleState() {
+	if (sprite_index != sprPlayerIdle) {
+		switch sprite_index {
+			case sprPlayerJumpLand: {
+				// Wait until landed jump
+				if END_OF_SPRITE {
+					changeSprite(sprPlayerIdle);
+					canJump = true;
+				}
+			} break;
+			case sprPlayerFloorImpact: {
+				// Play get up animation
+				if END_OF_SPRITE changeSprite(sprPlayerGetUp);
+				return;
+			} break;
+			case sprPlayerLying: {
+				// Play get up animation
+				changeSprite(sprPlayerGetUp);
+				return;
+			} break;
+			case sprPlayerGetUp: {
+				// Wait until finished getting up
+				if END_OF_SPRITE changeSprite(sprPlayerIdle);
+				canJump = true;
+				return;
+			} break;
+			default: {
+				changeSprite(sprPlayerIdle);
+			} break;
+		}
+	}
+	xSpeed = 0;
+		
+	FACE_TARGET;
+	
+	if abs(inputVector[0]) { currentState = CharacterStates.MOVE; return; }
+	if ((inputVector[1] > 0) and canJump) { currentState = CharacterStates.JUMP; return; }
+}
+function baseMoveState() {
+	if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+	
+	if (instance_exists(targetChar)) { spriteDir = (x < targetChar.x); } else { spriteDir = (xSpeed > 0); }
+	
+	if !abs(inputVector[0]) { currentState = CharacterStates.IDLE; return; }
+}
+function baseJumpState() {
+	if (lastState != CharacterStates.JUMP) {
+		if (staminaLevel < staminaJumpCost) { currentState = lastState; return; }
+		staminaLevel -= staminaJumpCost; staminaRegenTimer = staminaRegenTimerMax;
+				
+		changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
+		ySpeed -= jumpPower;
+		executeGroundCollision(); executeWallCollision();
+		lastState = currentState;
+		return;
+	}
+	if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
+	
+	xSpeed = getPlayerHorizontalInput() * moveSpeed;
+			
+	FACE_TARGET;
+	canJump = false;
+}
+
+
+
+
 function HandlePlayerState() {
 	if !instance_exists(targetChar) return;
 	switch currentState {
 		case CharacterStates.IDLE: {
-			if (sprite_index != sprPlayerIdle) {
-				switch sprite_index {
-					case sprPlayerJumpLand: {
-						// Wait until landed jump
-						if END_OF_SPRITE {
-							changeSprite(sprPlayerIdle);
-							canJump = true;
-						}
-					} break;
-					case sprPlayerFloorImpact: {
-						// Play get up animation
-						if END_OF_SPRITE changeSprite(sprPlayerGetUp);
-						return;
-					} break;
-					case sprPlayerLying: {
-						// Play get up animation
-						changeSprite(sprPlayerGetUp);
-						return;
-					} break;
-					case sprPlayerGetUp: {
-						// Wait until finished getting up
-						if END_OF_SPRITE changeSprite(sprPlayerIdle);
-						canJump = true;
-						return;
-					} break;
-					default: {
-						changeSprite(sprPlayerIdle);
-					} break;
-				}
-			}
-			xSpeed = 0;
-			if (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.MOVE; return; }
-			if (INPUT_JUMP and canJump) { currentState = CharacterStates.JUMP; return; }
+			baseIdleState();
+			
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
-			
-			FACE_TARGET;
 		} break;
 		case CharacterStates.MOVE: {
-			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+			baseMoveState();
+
+			xSpeed = getPlayerHorizontalInput() * moveSpeed;
 			
-			if not (INPUT_LEFT or INPUT_RIGHT) { currentState = CharacterStates.IDLE; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
 			if (INPUT_GRAB) { currentState = CharacterStates.GRABBING; return; }
-			
-			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			if (instance_exists(targetChar)) { spriteDir = (x < targetChar.x); } else { spriteDir = (xSpeed > 0); }
 			
 			if (INPUT_JUMP and canJump) {
 				currentState = CharacterStates.JUMP;
@@ -89,23 +122,9 @@ function HandlePlayerState() {
 			}
 		} break;
 		case CharacterStates.JUMP: {
-			if (lastState != CharacterStates.JUMP) {
-				if (staminaLevel < staminaJumpCost) { currentState = lastState; return; }
-				staminaLevel -= staminaJumpCost; staminaRegenTimer = staminaRegenTimerMax;
-				
-				changeSprite(sprPlayerJump); audio_play_sound(sndJump,100,false,0.4);
-				ySpeed -= jumpPower;
-				executeGroundCollision(); executeWallCollision();
-				lastState = currentState;
-				return;
-			}
-			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
+			baseJumpState();
+			
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
-			
-			xSpeed = getPlayerHorizontalInput() * moveSpeed;
-			
-			FACE_TARGET;
-			canJump = false;
 			
 			if getGroundCollision() {
 				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
@@ -281,6 +300,11 @@ function HandlePlayerState() {
 		}
 	}
 	
+	if (INPUT_RIGHT) attackDir = 0;
+	if (INPUT_DOWN) attackDir = 1;
+	if (INPUT_LEFT) attackDir = 2;
+	if (INPUT_UP) attackDir = 3;
+	
 	// Physics code
 	if currentState == CharacterStates.MOVE {  if (sign(spriteDir) != sign(xSpeed)) { image_speed = -1; } else image_speed = 1; }
 	ySpeed += objGameManager.gameGravity;
@@ -293,16 +317,7 @@ function HandlePlayerState() {
 function HandleDummyState() {
 	switch currentState {
 		case CharacterStates.IDLE: {
-			if (sprite_index != sprPlayerIdle) {
-				if sprite_index == sprPlayerJumpLand {
-					if END_OF_SPRITE {
-						changeSprite(sprPlayerIdle);
-					}
-				} else changeSprite(sprPlayerIdle);
-			}
-			xSpeed = 0;
-			
-			FACE_TARGET;
+			baseIdleState();
 		} break;
 		case CharacterStates.STUN: {
 			if (lastState != CharacterStates.STUN) {
@@ -352,65 +367,22 @@ function HandleAIState() {
 	
 	switch currentState {
 		case CharacterStates.IDLE: {
-			if (sprite_index != sprPlayerIdle) {
-				switch sprite_index {
-					case sprPlayerJumpLand: {
-						// If current sprite is sprPlayerJumpLand then wait until it's done before changing
-						if END_OF_SPRITE {
-							changeSprite(sprPlayerIdle);
-							canJump = true;
-						}
-					} break;
-					case sprPlayerFloorImpact: {
-						if END_OF_SPRITE changeSprite(sprPlayerGetUp);
-						return;
-					} break;
-					case sprPlayerLying: {
-						changeSprite(sprPlayerGetUp);
-						return;
-					} break;
-					case sprPlayerGetUp: {
-						if END_OF_SPRITE changeSprite(sprPlayerIdle);
-						canJump = true;
-						return;
-					} break;
-					default: {
-						changeSprite(sprPlayerIdle);
-					} break;
-				}
-			}
-			// Reset speed
-			xSpeed = 0;
+			baseIdleState();
 			
-			FACE_TARGET;
-			
-			if (aiXInput != 0) and !stateChangeCD { currentState = CharacterStates.MOVE; return; }
-			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
 			if (aiGrabInput) and !stateChangeCD { currentState = CharacterStates.GRABBING; return; }
 		} break;
 		case CharacterStates.MOVE: {
-			// Change sprite
-			if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
+			baseMoveState();
 			
-			FACE_TARGET;
-			// Update speed
-			xSpeed = aiXInput * moveSpeed;
+			xSpeed = (aiInputLeft+aiInputRight) * moveSpeed;
 			
 			if (xSpeed != 0) aiTimeSinceMove = 0;
 			
-			/*
-			if (aiShouldJump and not canJump) {
-				currentState = CharacterStates.JUMP;
-				ySpeed += objGameManager.gameGravity;
-				executeGroundCollision(); executeWallCollision();
-				return;
-			}
-			*/
-			if (aiXInput == 0) and !stateChangeCD { currentState = CharacterStates.IDLE; return; }
-			if (aiJumpInput and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
+			if ((aiInputLeft+aiInputRight) == 0) and !stateChangeCD { currentState = CharacterStates.IDLE; return; }
+			if (aiInputUp and canJump) and !stateChangeCD { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
@@ -431,14 +403,14 @@ function HandleAIState() {
 			// Switch to sprAirIdle if sprPlayerJump anim ended
 			if ((sprite_index == sprPlayerJump) and END_OF_SPRITE) changeSprite(sprPlayerAirIdle);
 			
-			xSpeed = aiXInput * moveSpeed;
+			xSpeed = (aiInputLeft+aiInputRight) * moveSpeed;
 			FACE_TARGET;
 			canJump = false;
 			
 			// If landed, switch to idle state
 			if getGroundCollision() {
 				changeSprite(sprPlayerJumpLand); audio_play_sound(sndJumpLand,100,false,4);
-				if (aiXInput) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
+				if ((aiInputLeft+aiInputRight)) { currentState = CharacterStates.MOVE; } else { currentState = CharacterStates.IDLE; }
 				executeGroundCollision(); executeWallCollision();
 				return;
 			}
@@ -618,6 +590,11 @@ function HandleAIState() {
 			attackHitbox = undefined;
 		}
 	}
+	
+	if (aiInputRight) attackDir = 0;
+	if (aiInputDown) attackDir = 1;
+	if (aiInputLeft) attackDir = 2;
+	if (aiInputUp) attackDir = 3;
 	
 	// Physics code
 	if currentState == CharacterStates.MOVE { 

@@ -11,7 +11,7 @@ if is_undefined(neuralNetwork) {
 	global.BestNetwork = neuralNetwork;
 }
 
-aiXInput = 0; aiJumpInput = 0;
+aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
 aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 aiBlockInput = 0; aiGrabInput = 0;
 
@@ -36,7 +36,7 @@ function StepNeuralNetwork() {
 	
 	// Inputs
 	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
-		aiXInput = 0; aiJumpInput = 0;
+		aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
 		aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 		aiBlockInput = 0; aiGrabInput = 0;
 		return;
@@ -58,8 +58,15 @@ function StepNeuralNetwork() {
 	
 	// Outputs
 	var outputs = neuralNetwork.Forward();
-	aiXInput = (abs(outputs[0]) > INPUT_DEADZONE) ? clamp(outputs[0],-1,1) : 0;
-	aiJumpInput = outputs[1] > aiBoolConfidence;
+	
+	inputVector[0] = (abs(outputs[0]) > INPUT_DEADZONE) ? outputs[0] : 0;
+	inputVector[1] = (abs(outputs[1]) > INPUT_DEADZONE) ? outputs[1] : 0;
+	
+	aiInputLeft = (outputs[0] < -INPUT_DEADZONE) ? clamp(outputs[0],-1,0) : 0;
+	aiInputRight = (outputs[0] > INPUT_DEADZONE) ? clamp(outputs[0],0,1) : 0;
+	aiInputUp = (outputs[1] > INPUT_DEADZONE) ? clamp(outputs[1],0,1) : 0;
+	aiInputDown = (outputs[1] < -INPUT_DEADZONE) ? clamp(outputs[1],-1,0) : 0;
+	
 	aiLightAttackInput = outputs[2] > aiBoolConfidence;
 	aiHeavyAttackInput = outputs[3] > aiBoolConfidence;
 	aiBlockInput = outputs[4] > aiBoolConfidence;

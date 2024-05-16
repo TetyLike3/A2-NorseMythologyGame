@@ -5,15 +5,17 @@ draw_text(192,102,string_concat("Global Best Fitness: ",globalBestFitness));
 draw_text(192,134,string_concat("Generation: ",generation));
 
 if instance_exists(bestSpecimen) {
-	draw_text(512,16,string_concat("X Input: ",bestSpecimen.aiXInput));
-	draw_text(512,48,string_concat("Light Attack: ",bestSpecimen.aiLightAttackInput));
-	draw_text(512,80,string_concat("Heavy Attack: ",bestSpecimen.aiHeavyAttackInput));
-	draw_text(512,102,string_concat("Jump: ",bestSpecimen.aiJumpInput));
-	draw_text(512,134,string_concat("Block: ",bestSpecimen.aiBlockInput));
-	draw_text(512,166,string_concat("Grab: ",bestSpecimen.aiGrabInput));
-	if instance_exists(bestSpecimen.targetChar) {
-		draw_text(512,198,string_concat("Target Health: ",bestSpecimen.targetChar.charHealth));
+	with (bestSpecimen) {
+		draw_text(512,16,string_concat("X Input: ",aiInputLeft + aiInputRight));
+		draw_text(512,48,string_concat("Y Input: ",aiInputDown + aiInputUp));
+		draw_text(512,80,string_concat("Light Attack: ",aiLightAttackInput));
+		draw_text(512,102,string_concat("Heavy Attack: ",aiHeavyAttackInput));
+		draw_text(512,134,string_concat("Block: ",aiBlockInput));
+		draw_text(512,166,string_concat("Grab: ",aiGrabInput));
+		if instance_exists(targetChar) {
+			draw_text(512,198,string_concat("Target Health: ",targetChar.charHealth));
+		}
+		neuralNetwork.Draw(384, 768, 1.8, 42, 42);
 	}
 
-	bestSpecimen.neuralNetwork.Draw(384, 768, 1.8, 42, 42);
 }

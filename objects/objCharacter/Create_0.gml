@@ -23,6 +23,7 @@ staminaGrabCost = 28;
 moveSpeed = 12;
 jumpPower = 18;
 
+inputVector = [0,0];
 canJump = false;
 currentState = CharacterStates.IDLE;
 lastState = currentState;
@@ -38,9 +39,10 @@ stunBounceMax = 3;
 stunBounce = 0;
 
 // Visual
-spriteDir = 1;
+spriteDir = 1; // 0: Left, 1: Right
 
 // Other
+attackDir = 0; // 0: Right, 1: Down, 2: Left, 3: Up
 attackHitbox = undefined;
 spriteEventLog = [];
 
