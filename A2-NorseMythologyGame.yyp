@@ -201,6 +201,7 @@
     {"id":{"name":"objCharacter","path":"objects/objCharacter/objCharacter.yy",},},
     {"id":{"name":"sprFenrirInjured","path":"sprites/sprFenrirInjured/sprFenrirInjured.yy",},},
     {"id":{"name":"rmOptions","path":"rooms/rmOptions/rmOptions.yy",},},
+    {"id":{"name":"sprFenrirHeavyNeutralHitbox","path":"sprites/sprFenrirHeavyNeutralHitbox/sprFenrirHeavyNeutralHitbox.yy",},},
     {"id":{"name":"sprFakeCrash","path":"sprites/sprFakeCrash/sprFakeCrash.yy",},},
     {"id":{"name":"sprHeavyUpHitbox","path":"sprites/sprHeavyUpHitbox/sprHeavyUpHitbox.yy",},},
     {"id":{"name":"sndLightSide","path":"sounds/sndLightSide/sndLightSide.yy",},},

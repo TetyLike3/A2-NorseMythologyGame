@@ -50,6 +50,7 @@
     {"name":"sprFenrirTaunt","order":7,"path":"sprites/sprFenrirTaunt/sprFenrirTaunt.yy",},
     {"name":"sprHeavySide","order":3,"path":"sprites/sprHeavySide/sprHeavySide.yy",},
     {"name":"sprFenrirInjured","order":2,"path":"sprites/sprFenrirInjured/sprFenrirInjured.yy",},
+    {"name":"sprFenrirHeavyNeutralHitbox","order":1,"path":"sprites/sprFenrirHeavyNeutralHitbox/sprFenrirHeavyNeutralHitbox.yy",},
     {"name":"sprHeavyUpHitbox","order":5,"path":"sprites/sprHeavyUpHitbox/sprHeavyUpHitbox.yy",},
     {"name":"sprPlayerLightSideHitbox","order":2,"path":"sprites/sprPlayerLightSideHitbox/sprPlayerLightSideHitbox.yy",},
     {"name":"sprStaminaBar","order":3,"path":"sprites/sprStaminaBar/sprStaminaBar.yy",},
