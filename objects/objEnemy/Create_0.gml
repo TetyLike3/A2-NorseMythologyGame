@@ -1,14 +1,18 @@
 event_inherited();
 
-moveSpeed = 8;
+moveSpeed =11;
 lightAttackDamage = 8;
 heavyAttackDamage = 14;
 
 neuralNetwork = global.BestNetwork;
 if is_undefined(neuralNetwork) {
 	neuralNetwork = NeuralLoadModel();
-	if is_undefined(neuralNetwork) room_goto(rmTraining);
-	global.BestNetwork = neuralNetwork;
+	if is_undefined(neuralNetwork) {
+		if (room == rmTraining) {
+			neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
+		} else room_goto(rmTraining);
+	}
+	//global.BestNetwork = neuralNetwork;
 }
 
 aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
@@ -19,12 +23,11 @@ aiBlockInput = 0; aiGrabInput = 0;
 aiBoolConfidence = 0.8;
 aiTimeSinceAttack = 0;
 aiTimeSinceMove = 0;
-aiTimeAgainstWall = 0;
-aiTimeInBlock = 0;
+aiTimeSinceBlock = 0;
 aiMissCount = 0;
 
 aiStepCooldownMax = 5; // Step every 5 frames
-aiStepCooldown = 0;
+aiStepCooldown = irandom(aiStepCooldownMax); // Randomise so work is spread across frames
 
 aiAttackCDMax = 30;
 aiAttackCD = aiAttackCDMax;

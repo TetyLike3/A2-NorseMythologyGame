@@ -58,17 +58,17 @@ function DrawHealthBar(_x,_y,_val,_flipped) {
 staminaBarWidth = sprite_get_width(sprHealthBar1Outline);
 staminaBarHeight = sprite_get_height(sprHealthBar1Outline)*.5;
 function DrawStaminaBar(_x,_y,_val,_flipped) {
-    var _fillWidth = round(_val * staminaBarWidth);
-    if _flipped {
-        _x -= staminaBarWidth;
-        draw_set_halign(fa_center);
-        draw_sprite_stretched(sprHealthBar1Bg,0,_x,_y,staminaBarWidth,staminaBarHeight);
-        draw_sprite_stretched(sprStaminaBar,0,_x,_y,_fillWidth,staminaBarHeight);
-        draw_sprite_stretched(sprHealthBar1Outline,0,_x,_y,staminaBarWidth,staminaBarHeight);
-    } else {
-        draw_sprite_stretched(sprHealthBar1Bg,0,_x,_y,staminaBarWidth,staminaBarHeight);
-        draw_sprite_stretched(sprStaminaBar,0,_x + staminaBarWidth - _fillWidth,_y,_fillWidth,staminaBarHeight);
-        draw_sprite_stretched(sprHealthBar1Outline,0,_x,_y,staminaBarWidth,staminaBarHeight);
-    }
+	var _fillWidth = round(_val * staminaBarWidth);
+	if _flipped {
+		_x -= staminaBarWidth;
+		draw_set_halign(fa_center);
+		draw_sprite_stretched(sprHealthBar1Bg,0,_x,_y,staminaBarWidth,staminaBarHeight);
+		draw_sprite_stretched(sprStaminaBar,0,_x,_y,_fillWidth,staminaBarHeight);
+		draw_sprite_stretched(sprHealthBar1Outline,0,_x,_y,staminaBarWidth,staminaBarHeight);
+	} else {
+		draw_sprite_stretched(sprHealthBar1Bg,0,_x,_y,staminaBarWidth,staminaBarHeight);
+		draw_sprite_stretched(sprStaminaBar,0,_x + staminaBarWidth - _fillWidth,_y,_fillWidth,staminaBarHeight);
+		draw_sprite_stretched(sprHealthBar1Outline,0,_x,_y,staminaBarWidth,staminaBarHeight);
+	}
 	DRAW_RESET;
 }

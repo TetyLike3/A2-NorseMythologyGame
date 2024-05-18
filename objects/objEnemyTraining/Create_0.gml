@@ -1,31 +1,10 @@
 event_inherited();
 
-moveSpeed = 11;
-lightAttackDamage = 8;
-heavyAttackDamage = 14;
-
-neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
-aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
-aiJumpInput = 0;
-aiLightAttackInput = 0; aiHeavyAttackInput = 0;
-aiBlockInput = 0; aiGrabInput = 0;
-
 aiFitness = 0;
 aiLastFitness = 0;
 aiFitnessDelta = 0;
 aiFitnessUpdateTimerMax = 10;
 aiFitnessUpdateTimer = aiFitnessUpdateTimerMax;
-aiBoolConfidence = 0.02;
-aiTimeSinceAttack = 0;
-aiTimeSinceMove = 0;
-aiTimeSinceBlock = 0;
-aiMissCount = 0;
-
-aiStepCooldownMax = 5; // Step every 5 frames
-aiStepCooldown = irandom(aiStepCooldownMax); // Randomise so work is spread across frames
-
-aiAttackCDMax = 30;
-aiAttackCD = aiAttackCDMax;
 
 function Restart() {
 	x = xstart;
@@ -39,7 +18,7 @@ function Restart() {
 	aiTimeSinceBlock = 0;
 	aiMissCount = 0;
 	
-	charHealth = 100;
+	charHealth = charHealthMax;
 	currentState = CharacterStates.IDLE;
 }
 
@@ -50,7 +29,6 @@ function UpdateFitness() {
 	aiFitnessDelta = aiFitness-aiLastFitness;
 	aiLastFitness = aiFitness;
 	
-	//aiFitness -= aiTimeAgainstWall^1.3; // Punish AI for waiting against a wall
 	aiFitness += clamp((.5-(point_distance(x,y,room_width/2,y)/(room_width/2)))*40,-40,4) // Reward AI for staying near centre
 
 	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
@@ -79,6 +57,10 @@ function UpdateFitness() {
 		aiFitness += 12;
 	} else if (currentState == CharacterStates.GRABBING) {
 		aiFitness -= 8;
+	}
+	
+	if (targetChar.currentState == CharacterStates.BLOCK) {
+		aiFitness -= 4;
 	}
 	
 	// Reward for not holding block (to an extent)

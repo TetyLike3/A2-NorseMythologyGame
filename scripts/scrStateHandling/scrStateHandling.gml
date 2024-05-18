@@ -109,7 +109,6 @@ function baseLAttackState() {
 		if (staminaLevel < staminaLAttackCost) { currentState = lastState; return; }
 		staminaLevel -= staminaLAttackCost; staminaRegenTimer = staminaRegenTimerMax;
 		
-		changeSprite(sprPlayerLightSide1);
 		xSpeed = 0;
 		executeGroundCollision(); executeWallCollision();
 		lastState = currentState;
@@ -120,6 +119,17 @@ function baseLAttackState() {
 		attackHitbox.collisionDamage = lightAttackDamage;
 		attackHitbox.collidable = targetChar;
 		attackHitbox.shouldStun = false;
+		
+		if (inputVector[1] > 0.8) {
+			changeSprite(sprPlayerLightUp);
+			attackHitbox.sprite_index = sprPlayerLightUpHitbox;
+		} else if (inputVector[1] < -0.8) {
+			changeSprite(sprPlayerLightDown);
+			attackHitbox.sprite_index = sprPlayerLightDownHitbox;
+		} else {
+			changeSprite(sprPlayerLightSide);
+			attackHitbox.sprite_index = sprPlayerLightSideHitbox;
+		}
 		
 		return;
 	}
@@ -136,19 +146,31 @@ function baseHAttackState() {
 		if (staminaLevel < staminaHAttackCost) { currentState = lastState; return; }
 		staminaLevel -= staminaHAttackCost; staminaRegenTimer = staminaRegenTimerMax;
 		
-		changeSprite(sprPlayerLightSide3);
 		xSpeed = 0;
 		executeGroundCollision(); executeWallCollision();
 		lastState = currentState;
 		
 		attackHitbox = instance_create_layer(x, y, "Instances", objHitbox);
-		attackHitbox.sprite_index = sprPlayerLightSide3Hitbox;
 		attackHitbox.image_xscale = image_xscale;
 		attackHitbox.collisionDamage = heavyAttackDamage;
 		attackHitbox.collidable = targetChar;
 		attackHitbox.shouldStun = true;
 		attackHitbox.stunDir = spriteDir;
 		attackHitbox.stunHeight = 18;
+		
+		
+		if (inputVector[1] > 0.8) {
+			changeSprite(sprPlayerHeavyUp);
+			attackHitbox.sprite_index = sprPlayerHeavyUpHitbox;
+		} else if (inputVector[1] < -0.8) {
+			changeSprite(sprPlayerHeavyDown);
+			attackHitbox.sprite_index = sprPlayerHeavyDownHitbox;
+		} else {
+			changeSprite(sprPlayerHeavySide);
+			attackHitbox.sprite_index = sprPlayerHeavySideHitbox;
+		}
+		
+		return;
 	}
 	attackHitbox.image_index = image_index;
 	
