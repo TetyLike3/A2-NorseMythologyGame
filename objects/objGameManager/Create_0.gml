@@ -27,7 +27,7 @@ timerMax = SecToFrames(60); // Time limit (in frames)
 timerRemaining = timerMax;
 gameGravity = 0.6;
 
-averageDTLogSize = 240;
+averageDTLogSize = 32768;
 averageDTLog = [];
 averageDT = 0;
 averageFPS = 0;

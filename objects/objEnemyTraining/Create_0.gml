@@ -4,8 +4,9 @@ moveSpeed = 11;
 lightAttackDamage = 8;
 heavyAttackDamage = 14;
 
-neuralNetwork = NN_GenerateDefaultNetwork(13, 6);
+neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
 aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
+aiJumpInput = 0;
 aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 aiBlockInput = 0; aiGrabInput = 0;
 
@@ -97,25 +98,24 @@ function StepNeuralNetwork() {
 	// Inputs
 	if !instance_exists(targetChar) or (targetChar.currentState == CharacterStates.DEAD) {
 		aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
+		aiJumpInput = 0;
 		aiLightAttackInput = 0; aiHeavyAttackInput = 0;
 		aiBlockInput = 0; aiGrabInput = 0;
 		UpdateFitness();
 		return;
 	}
 	var inputs = [];
-	inputs[0] = clamp(aiFitness/(objGeneticControl.bestFitness+1),-1,1);
-	inputs[1] = (aiFitnessDelta/10);
-	inputs[2] = x/room_width;
-	inputs[3] = charHealth/100;
-	inputs[4] = charHealth/100;
-	inputs[5] = currentState/7;
-	inputs[6] = spriteDir;
-	inputs[7] = min(aiAttackCD/aiAttackCDMax,1);
-	inputs[8] = stunTimer/stunTimerMax;
-	inputs[9] = min((distance_to_object(targetChar)/room_width)*120,1);
-	inputs[10] = targetChar.charHealth/100;
-	inputs[11] = targetChar.staminaLevel/100;
-	inputs[12] = targetChar.currentState/7;
+	inputs[0] = x/room_width;
+	inputs[1] = charHealth/100;
+	inputs[2] = staminaLevel/100;
+	inputs[3] = currentState/7;
+	inputs[4] = spriteDir;
+	inputs[5] = min(aiAttackCD/aiAttackCDMax,1);
+	inputs[6] = stunTimer/stunTimerMax;
+	inputs[7] = min((distance_to_object(targetChar)/room_width)*120,1);
+	inputs[8] = targetChar.charHealth/100;
+	inputs[9] = targetChar.staminaLevel/100;
+	inputs[10] = targetChar.currentState/7;
 	
 	neuralNetwork.Input(inputs);
 	
@@ -130,10 +130,11 @@ function StepNeuralNetwork() {
 	inputVector[0] = aiInputLeft + aiInputRight;
 	inputVector[1] = aiInputDown + aiInputUp;
 	
-	aiLightAttackInput = outputs[2] > aiBoolConfidence;
-	aiHeavyAttackInput = outputs[3] > aiBoolConfidence;
-	aiBlockInput = outputs[4] > aiBoolConfidence;
-	aiGrabInput = outputs[5] > aiBoolConfidence;
+	aiJumpInput = outputs[2] > aiBoolConfidence;
+	aiLightAttackInput = outputs[3] > aiBoolConfidence;
+	aiHeavyAttackInput = outputs[4] > aiBoolConfidence;
+	aiBlockInput = outputs[5] > aiBoolConfidence;
+	aiGrabInput = outputs[6] > aiBoolConfidence;
 	
 	UpdateFitness();
 }

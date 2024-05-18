@@ -2,7 +2,7 @@
 
 generation = 0;
 time = 0;
-timeLeftMax = (60*60);
+timeLeftMax = (60*120);
 timeLeft = timeLeftMax;
 
 specimenObj = objEnemyTraining;
@@ -10,7 +10,7 @@ bestFitness = 0;
 bestSpecimen = undefined;
 globalBestFitness = 0;
 
-countPerPop = 20;
+countPerPop = 14;
 count = countPerPop*2;
 populationA = array_create(countPerPop);
 populationB = array_create(countPerPop);

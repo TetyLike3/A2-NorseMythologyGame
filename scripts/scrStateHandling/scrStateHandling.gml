@@ -69,7 +69,6 @@ function baseIdleState() {
 	FACE_TARGET;
 	
 	if abs(inputVector[0]) { currentState = CharacterStates.MOVE; return; }
-	if ((inputVector[1] > 0) and canJump) { currentState = CharacterStates.JUMP; return; }
 }
 function baseMoveState() {
 	if (sprite_index != sprPlayerWalk) changeSprite(sprPlayerWalk);
@@ -79,7 +78,6 @@ function baseMoveState() {
 	xSpeed = inputVector[0] * moveSpeed;
 	
 	if !abs(inputVector[0]) { currentState = CharacterStates.IDLE; return; }
-	if ((inputVector[1] > 0) and canJump) { currentState = CharacterStates.JUMP; return; }
 }
 function baseJumpState() {
 	if (lastState != CharacterStates.JUMP) {
@@ -278,6 +276,7 @@ function HandlePlayerState() {
 		case CharacterStates.IDLE: {
 			baseIdleState();
 			
+			if (INPUT_JUMP and canJump) { currentState = CharacterStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
@@ -286,6 +285,7 @@ function HandlePlayerState() {
 		case CharacterStates.MOVE: {
 			baseMoveState();
 
+			if (INPUT_JUMP and canJump) { currentState = CharacterStates.JUMP; return; }
 			if (INPUT_LATTACK) { currentState = CharacterStates.LATTACK; return; }
 			if (INPUT_HATTACK) { currentState = CharacterStates.HATTACK; return; }
 			if (INPUT_BLOCK) { currentState = CharacterStates.BLOCK; return; }
@@ -356,6 +356,7 @@ function HandleAIState() {
 		case CharacterStates.IDLE: {
 			baseIdleState();
 			
+			if (aiJumpInput and canJump) { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
@@ -366,6 +367,7 @@ function HandleAIState() {
 			
 			if (xSpeed != 0) aiTimeSinceMove = 0;
 			
+			if (aiJumpInput and canJump) { currentState = CharacterStates.JUMP; return; }
 			if (aiLightAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.LATTACK; return; }
 			if (aiHeavyAttackInput) and !stateChangeCD and !aiAttackCD { currentState = CharacterStates.HATTACK; return; }
 			if (aiBlockInput) and !stateChangeCD { currentState = CharacterStates.BLOCK; return; }
