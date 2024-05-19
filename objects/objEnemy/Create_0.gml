@@ -4,6 +4,53 @@ moveSpeed =11;
 lightAttackDamage = 8;
 heavyAttackDamage = 14;
 
+spriteIndices = {
+	Idle : sprFenrirIdle,
+	Walk : sprFenrirWalk,
+	Dash : sprFenrirDash,
+	AirIdle : sprFenrirAirIdle,
+	Jump : sprFenrirJump,
+	JumpLand : sprFenrirJumpLand,
+	
+	Block : sprFenrirBlock,
+	Grab : sprFenrirGrab,
+	GrabHolding : sprFenrirGrabHolding,
+	Throwing : {
+		Up : sprFenrirUpThrow,
+		Down : sprFenrirDownThrow,
+		Side : sprFenrirForwardThrow,
+	},
+	InjuryLight : sprFenrirInjuredLight,
+	InjuryHeavy : sprFenrirInjuredHeavy,
+	FloorImpact : sprFenrirFloorImpact,
+	Lying : sprFenrirLying,
+	GetUp : sprFenrirGetUp,
+	
+	AttacksLight : {
+		Ground : {
+			Up : [sprFenrirLightUp, sprFenrirLightUpHitbox],
+			Down : [sprFenrirLightDown, sprFenrirLightDownHitbox],
+			Side : [sprFenrirLightSide,sprFenrirLightSideHitbox],
+		},
+		Air : {
+			Up : [sprFenrirAirUp, sprFenrirAirUpHitbox],
+			Down : [sprFenrirAirDown, sprFenrirAirDownHitbox],
+			Side : [sprFenrirAirSide, sprFenrirAirSideHitbox],
+		},
+	},
+	
+	AttacksHeavy : {
+		Ground : {
+			Up : [sprFenrirHeavyUp, sprFenrirHeavyUpHitbox],
+			Down : [sprFenrirHeavyDown, sprFenrirHeavyNeutralHitbox],
+			Side : [sprFenrirHeavySide,sprFenrirHeavySideHitbox],
+		},
+	},
+	
+	Taunts : [sprFenrirTaunt],
+}
+
+
 neuralNetwork = global.BestNetwork;
 if is_undefined(neuralNetwork) {
 	neuralNetwork = NeuralLoadModel();

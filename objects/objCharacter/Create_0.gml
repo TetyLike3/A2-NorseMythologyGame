@@ -41,6 +41,52 @@ stunBounce = 0;
 // Visual
 spriteDir = 1; // 0: Left, 1: Right
 
+spriteIndices = {
+	Idle : sprPlayerIdle,
+	Walk : sprPlayerWalk,
+	Dash : sprPlayerDash,
+	AirIdle : sprPlayerAirIdle,
+	Jump : sprPlayerJump,
+	JumpLand : sprPlayerJumpLand,
+	
+	Block : sprPlayerBlock,
+	Grab : sprPlayerGrab,
+	GrabHolding : sprPlayerGrabHolding,
+	Throwing : {
+		Up : sprPlayerUpThrow,
+		Down : sprPlayerDownThrow,
+		Side : sprPlayerForwardThrow,
+	},
+	InjuryLight : sprPlayerInjuredLight,
+	InjuryHeavy : sprPlayerInjuredHeavy,
+	FloorImpact : sprPlayerFloorImpact,
+	Lying : sprPlayerLying,
+	GetUp : sprPlayerGetUp,
+	
+	AttacksLight : {
+		Ground : {
+			Up : [sprPlayerLightUp, sprPlayerLightUpHitbox],
+			Down : [sprPlayerLightDown, sprPlayerLightDownHitbox],
+			Side : [sprPlayerLightSide,sprPlayerLightSideHitbox],
+		},
+		Air : {
+			Up : [sprPlayerLightAirUp, sprPlayerLightAirUpHitbox],
+			Down : [sprPlayerLightAirDown, sprPlayerLightAirDownHitbox],
+			Side : [sprPlayerLightAirSide, sprPlayerLightAirSideHitbox],
+		},
+	},
+	
+	AttacksHeavy : {
+		Ground : {
+			Up : [sprPlayerHeavyUp, sprPlayerHeavyUpHitbox],
+			Down : [sprPlayerHeavyDown, sprPlayerHeavyDownHitbox],
+			Side : [sprPlayerHeavySide,sprPlayerHeavySideHitbox],
+		},
+	},
+	
+	Taunts : [sprPlayerTaunt1],
+}
+
 // Other
 attackDir = 0; // 0: Right, 1: Down, 2: Left, 3: Up
 attackHitbox = undefined;
@@ -63,10 +109,27 @@ function TakeDamage(_dmg) {
 function GetStunned(_dir, _height) {
 	if (targetChar.currentState == CharacterStates.STUN) return;
 	currentState = CharacterStates.STUN;
-	spriteDir = _dir;
-	ySpeed = -_height;
-	xSpeed = _height/2;
-	if (_dir == 0) { xSpeed *= -1; }
+	
+	switch _dir {
+		case 1: { // Down
+			spriteDir = targetChar.spriteDir;
+			ySpeed = _height;
+			xSpeed = _height/3;
+			if (spriteDir == 0) { xSpeed *= -1; }
+		} break;
+		case 3: { // Up
+			spriteDir = targetChar.spriteDir;
+			ySpeed = -_height;
+			xSpeed = _height/4;
+			if (spriteDir == 0) { xSpeed *= -1; }
+		} break;
+		default: { // Side
+			spriteDir = _dir;
+			ySpeed = -_height;
+			xSpeed = _height/2;
+			if (_dir == 0) { xSpeed *= -1; }
+		}
+	}
 }
 
 array_push(objGameManager.focusedCharacters,self);

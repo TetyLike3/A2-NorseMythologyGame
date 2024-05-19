@@ -130,6 +130,7 @@ function NeuralTapedNetwork() : NeuralNetwork() constructor {
 		session = 0;
 	}
 	
+	// feather ignore once GM2043
 	static BaseDestroy = Destroy;
 	static Destroy = function() {
 		BaseDestroy();

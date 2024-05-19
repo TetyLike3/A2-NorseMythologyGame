@@ -7,8 +7,9 @@
 #macro INPUT_UP ((gamepad_axis_value(deviceIndex, gp_axislv) > INPUT_DEADZONE) or keyboard_check(ord("W")))
 #macro INPUT_DOWN ((gamepad_axis_value(deviceIndex, gp_axislv) < -INPUT_DEADZONE) or keyboard_check(ord("S")))
 #macro INPUT_JUMP (gamepad_button_check_pressed(deviceIndex,gp_face1) or keyboard_check_pressed(vk_space))
-#macro INPUT_BLOCK (gamepad_button_check(deviceIndex,gp_shoulderlb) or gamepad_button_check(deviceIndex,gp_shoulderrb))
-#macro INPUT_GRAB (gamepad_button_check(deviceIndex,gp_shoulderl) or gamepad_button_check(deviceIndex,gp_shoulderr))
+#macro INPUT_BLOCK (gamepad_button_check(deviceIndex,gp_shoulderlb) or gamepad_button_check(deviceIndex,gp_shoulderrb) or keyboard_check(ord("Q")))
+#macro INPUT_GRAB (gamepad_button_check(deviceIndex,gp_shoulderl) or gamepad_button_check(deviceIndex,gp_shoulderr) or keyboard_check(ord("E")))
+#macro INPUT_TAUNT (keyboard_check_pressed(ord("T")))
 
 #macro END_OF_SPRITE (ceil(image_index) == image_number)
 #macro FACE_TARGET if instance_exists(targetChar) spriteDir = (x < targetChar.x)
