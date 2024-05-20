@@ -36,8 +36,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprEnemy",
-    "path": "sprites/sprEnemy/sprEnemy.yy",
+    "name": "sprFenrirIdle",
+    "path": "sprites/sprFenrirIdle/sprFenrirIdle.yy",
   },
   "spriteMaskId": null,
   "visible": true,
