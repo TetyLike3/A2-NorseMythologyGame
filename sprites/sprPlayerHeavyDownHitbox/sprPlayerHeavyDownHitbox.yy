@@ -2,7 +2,7 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "sprPlayerHeavyDownHitbox",
-  "bbox_bottom": 535,
+  "bbox_bottom": 472,
   "bbox_left": 0,
   "bbox_right": 1023,
   "bbox_top": 0,
@@ -59,7 +59,7 @@
   "height": 1024,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"7629fc22-61f7-4c6c-9683-325ef573fd4e","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"7a7d7996-ddf3-4fde-844d-1c5f5b9fee80","blendMode":0,"displayName":"Layer 1","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 4,
