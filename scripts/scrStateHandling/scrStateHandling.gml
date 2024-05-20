@@ -119,10 +119,10 @@ function baseLAttackState() {
 		attackHitbox.collidable = targetChar;
 		attackHitbox.shouldStun = false;
 		
-		if (inputVector[1] > 0.8) {
+		if (inputVector[1] < -0.8) {
 			changeSprite(spriteIndices.AttacksLight.Ground.Up[0]);
 			attackHitbox.sprite_index = spriteIndices.AttacksLight.Ground.Up[1];
-		} else if (inputVector[1] < -0.8) {
+		} else if (inputVector[1] > 0.8) {
 			changeSprite(spriteIndices.AttacksLight.Ground.Down[0]);
 			attackHitbox.sprite_index = spriteIndices.AttacksLight.Ground.Down[1];
 		} else {
@@ -158,10 +158,11 @@ function baseHAttackState() {
 		attackHitbox.stunHeight = 18;
 		
 		
-		if (inputVector[1] > 0.8) {
+		if (inputVector[1] < -0.8) {
 			changeSprite(spriteIndices.AttacksHeavy.Ground.Up[0]);
 			attackHitbox.sprite_index = spriteIndices.AttacksHeavy.Ground.Up[1];
-		} else if (inputVector[1] < -0.8) {
+			ySpeed -= jumpPower*1.5;
+		} else if (inputVector[1] > 0.8) {
 			changeSprite(spriteIndices.AttacksHeavy.Ground.Down[0]);
 			attackHitbox.sprite_index = spriteIndices.AttacksHeavy.Ground.Down[1];
 		} else {
@@ -184,7 +185,7 @@ function baseStunnedState() {
 		changeSprite(spriteIndices.InjuryHeavy);
 		stunBounce = stunBounceMax;
 		//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
-		ySpeed = -abs(stunBounce*6);
+		ySpeed = -abs(stunBounce*6)*stunHeightMultiplier;
 		executeGroundCollision(); executeWallCollision();
 		lastState = currentState;
 		stunTimer = stunTimerMax;
@@ -197,8 +198,10 @@ function baseStunnedState() {
 	if getGroundCollision() {
 		stunBounce--;
 		if (stunBounce > 0) {
+			stunHeightMultiplier = abs(stunHeightMultiplier);
+			
 			changeSprite(spriteIndices.FloorImpact);
-			xSpeed/=3; ySpeed = -abs(stunBounce*6);
+			xSpeed/=3; ySpeed = -abs(stunBounce*6)*stunHeightMultiplier;
 			executeGroundCollision(); executeWallCollision();
 			return;
 		} else {
@@ -251,18 +254,24 @@ function baseGrabbingState(_grabInput) {
 					if (targetChar.currentState == CharacterStates.GRABBED) { changeSprite(spriteIndices.GrabHolding); }
 				} else {
 					targetChar.TakeDamage(heavyAttackDamage);
-					if (spriteDir) { targetChar.GetStunned(0,18); } else { targetChar.GetStunned(1,18); }
+					if (spriteDir) { targetChar.GetStunned(0,.9); } else { targetChar.GetStunned(2,.9); }
 				}
 			} else if (sprite_index == spriteIndices.Throwing.Side) {
 				targetChar.TakeDamage(heavyAttackDamage*1.1);
-				if (spriteDir) { targetChar.GetStunned(1,22); } else { targetChar.GetStunned(0,22); }
+				if (spriteDir) { targetChar.GetStunned(2,1.1); } else { targetChar.GetStunned(0,1.1); }
+			} else if (sprite_index == spriteIndices.Throwing.Up) {
+				targetChar.TakeDamage(heavyAttackDamage*1.1);
+				targetChar.GetStunned(3,1.4);
+			} else if (sprite_index == spriteIndices.Throwing.Down) {
+				targetChar.TakeDamage(heavyAttackDamage*1.1);
+				targetChar.GetStunned(1,-1.4);
 			}
 		}
 	}
 	if END_OF_SPRITE {
 		if (sprite_index == spriteIndices.GrabHolding) {
-			if (inputVector[1] > 0.8) { changeSprite(spriteIndices.Throwing.Up);
-			} else if (inputVector[1] < -0.8) { changeSprite(spriteIndices.Throwing.Down); 
+			if (inputVector[1] < -0.8) { changeSprite(spriteIndices.Throwing.Up);
+			} else if (inputVector[1] > 0.8) { changeSprite(spriteIndices.Throwing.Down); 
 			} else changeSprite(spriteIndices.Throwing.Side);
 		} else {
 			currentState = CharacterStates.IDLE;

@@ -95,6 +95,7 @@ spriteEventLog = [];
 // Stunning
 stunTimer = 0;
 stunTimerMax = 120;
+stunHeightMultiplier = 1;
 
 function TakeDamage(_dmg) {
 	if (targetChar.currentState == CharacterStates.STUN) return;
@@ -106,27 +107,24 @@ function TakeDamage(_dmg) {
 	indicator.valueShown = _dmg;
 }
 
-function GetStunned(_dir, _height) {
+function GetStunned(_dir, _multiplier) {
 	if (targetChar.currentState == CharacterStates.STUN) return;
 	currentState = CharacterStates.STUN;
-	
+	stunHeightMultiplier = _multiplier;
 	switch _dir {
 		case 1: { // Down
 			spriteDir = targetChar.spriteDir;
-			ySpeed = _height;
-			xSpeed = _height/3;
+			xSpeed = (stunBounce/3)*stunHeightMultiplier;
 			if (spriteDir == 0) { xSpeed *= -1; }
 		} break;
 		case 3: { // Up
 			spriteDir = targetChar.spriteDir;
-			ySpeed = -_height;
-			xSpeed = _height/4;
+			xSpeed = (stunBounce/4)*stunHeightMultiplier;
 			if (spriteDir == 0) { xSpeed *= -1; }
 		} break;
 		default: { // Side
 			spriteDir = _dir;
-			ySpeed = -_height;
-			xSpeed = _height/2;
+			xSpeed = (stunBounce*6)*stunHeightMultiplier;
 			if (_dir == 0) { xSpeed *= -1; }
 		}
 	}

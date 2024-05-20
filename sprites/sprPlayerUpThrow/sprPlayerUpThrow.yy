@@ -72,7 +72,7 @@
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
                 "GrabEnd",
-              ],},},"Disabled":false,"id":"3dfac58f-8767-4117-9806-22d5aa8f53f2","IsCreationKey":false,"Key":13.0,"Length":1.0,"Stretch":false,},
+              ],},},"Disabled":false,"id":"05055bb9-50a9-43d8-9bc8-0b290092804b","IsCreationKey":false,"Key":3.0,"Length":1.0,"Stretch":false,},
       ],},
     "eventStubScript": null,
     "eventToFunction": {},
