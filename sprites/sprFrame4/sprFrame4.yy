@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 7,
   "parent": {
-    "name": "Story stugg",
-    "path": "folders/Sprites/Story stugg.yy",
+    "name": "StoryStuff",
+    "path": "folders/Sprites/StoryStuff.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
