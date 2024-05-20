@@ -57,11 +57,11 @@
     "backdropYOffset": 0.0,
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "LightSide",
-              ],},},"Disabled":false,"id":"024cfb2f-a0d5-424d-ac85-4ebf5c794514","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+                "LightKick",
+              ],},},"Disabled":false,"id":"d36a225d-aff0-4f2f-9ddf-31dbdd3655ed","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
                 "StepLeft",
-              ],},},"Disabled":false,"id":"41823b49-160e-4e74-bdb9-45e3bb1ee027","IsCreationKey":false,"Key":32.0,"Length":1.0,"Stretch":false,},
+              ],},},"Disabled":false,"id":"c8619a25-8cd3-46ac-8393-93a89ba4c1ec","IsCreationKey":false,"Key":32.0,"Length":1.0,"Stretch":false,},
       ],},
     "eventStubScript": null,
     "eventToFunction": {},

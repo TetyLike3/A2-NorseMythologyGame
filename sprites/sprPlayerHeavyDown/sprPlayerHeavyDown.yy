@@ -81,11 +81,11 @@
     "backdropYOffset": 0.0,
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "LightSide",
-              ],},},"Disabled":false,"id":"4fa0679e-58c3-4c35-bf01-d642c74ff279","IsCreationKey":false,"Key":7.0,"Length":1.0,"Stretch":false,},
+                "HeavySide",
+              ],},},"Disabled":false,"id":"c4bd4d97-24f5-4fec-a6d7-88c46e4d1d74","IsCreationKey":false,"Key":8.0,"Length":1.0,"Stretch":false,},
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "LightSide",
-              ],},},"Disabled":false,"id":"e41ef159-5857-4e48-94f2-358c172e3222","IsCreationKey":false,"Key":24.0,"Length":1.0,"Stretch":false,},
+                "HeavySide",
+              ],},},"Disabled":false,"id":"aed34373-b9ea-4b90-8ab0-d9a49069bc52","IsCreationKey":false,"Key":25.0,"Length":1.0,"Stretch":false,},
       ],},
     "eventStubScript": null,
     "eventToFunction": {},
