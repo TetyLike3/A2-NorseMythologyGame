@@ -51,16 +51,18 @@ spriteIndices = {
 }
 
 
-neuralNetwork = global.BestNetwork;
-if is_undefined(neuralNetwork) {
-	neuralNetwork = NeuralLoadModel();
+if (room == rmTraining) {
+	neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
+} else {
+	neuralNetwork = global.BestNetwork;
 	if is_undefined(neuralNetwork) {
-		if (room == rmTraining) {
-			neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
-		} else room_goto(rmTraining);
+		neuralNetwork = NeuralLoadModel();
+		if is_undefined(neuralNetwork) {
+			room_goto(rmTraining);
+		}
+		//global.BestNetwork = neuralNetwork;
 	}
-	//global.BestNetwork = neuralNetwork;
-}
+};
 
 aiInputLeft = 0; aiInputRight = 0; aiInputUp = 0; aiInputDown = 0;
 aiJumpInput = 0;
