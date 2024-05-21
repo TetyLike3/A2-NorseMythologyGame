@@ -17,6 +17,9 @@
 
 // Set initial global values too
 global.BestNetwork = undefined;
+global.ActiveNetwork = undefined;
+global.roundCounter = 0;
+global.roundCount = 2;
 
 #macro SCREEN_WIDTH surface_get_width(application_surface)
 #macro SCREEN_HEIGHT surface_get_height(application_surface)

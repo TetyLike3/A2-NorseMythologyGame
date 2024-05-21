@@ -34,34 +34,12 @@ cameraTargetY = _camY2-(cameraTargetH);
 if (gamepad_button_check_pressed(0,gp_start) or keyboard_check_pressed(vk_escape)) game_end();
 
 // Rounds
-if (timerRemaining <= 0) {
-	if (global.roundCounter == global.roundCounterMax) {
-		if (not gameEnded) {
-			gameEnded = true;
-			playerWon = (objEnemy.currentState == CharacterStates.DEAD);
-			room_goto(rmGameEnd);
-		}
-	} else {
-		global.roundCounter++;
-		timerRemaining = timerMax;
-		with objPlayer {
-			Respawn();
-			inputEnabled = false;
-		}
-		with objEnemy {
-			charHealthMax *= 1.2;
-			Respawn();
-			print("Respawned enemy");
-			print(currentState);
-		}
-		focusedCharacters = [objEnemy];
-	}
-} else timerRemaining--;
-if (objEnemy.currentState != CharacterStates.TAUNT) and (array_length(focusedCharacters) == 1) {
-	array_push(focusedCharacters,objPlayer);
-	audio_play_sound(sndRoundStart,100,false);
-	objPlayer.inputEnabled = true;
-}
+if (timerRemaining <= 0) and (!roundEnded) {
+	roundEnded = true;
+	playerWon = (objEnemy.currentState == CharacterStates.DEAD);
+	alarm_set(0,240);
+} else timerRemaining -= (delta_time)/10000;
+print(timerRemaining);
 
 if (objEnemy.currentState == CharacterStates.DEAD) timerRemaining = 0;
 if (objPlayer.currentState == CharacterStates.DEAD) timerRemaining = 0;

@@ -1,3 +1,15 @@
+if (objGameManager.roundEnded) {
+	if (!objGameManager.playerWon) {
+		if (sprite_index != spriteIndices.Taunts[0]) {
+			changeSprite(spriteIndices.Taunts[0]);
+		}
+	} else {
+		changeSprite(spriteIndices.Lying);
+	}
+	executeGroundCollision();
+	return;
+}
+
 event_inherited();
 HandleAIState();
 

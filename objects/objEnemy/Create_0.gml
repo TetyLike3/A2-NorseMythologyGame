@@ -1,6 +1,7 @@
+charHealthMax += (charHealthMax*((global.roundCounter-1)*0.3));
 event_inherited();
 
-moveSpeed =11;
+moveSpeed = 11;
 lightAttackDamage = 8;
 heavyAttackDamage = 14;
 
@@ -54,7 +55,7 @@ spriteIndices = {
 if (room == rmTraining) {
 	neuralNetwork = NN_GenerateDefaultNetwork(11, 7);
 } else {
-	neuralNetwork = global.BestNetwork;
+	neuralNetwork = global.ActiveNetwork;
 	if is_undefined(neuralNetwork) {
 		neuralNetwork = NeuralLoadModel();
 		if is_undefined(neuralNetwork) {

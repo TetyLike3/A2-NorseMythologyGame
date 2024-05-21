@@ -15,8 +15,8 @@ function getPlayerHorizontalInput() {
 }
 function getPlayerVerticalInput() {
 	var input = gamepad_axis_value(0, gp_axislv);
-	if keyboard_check(ord("S")) input = -1;
-	if keyboard_check(ord("W")) input = 1;
+	if keyboard_check(ord("S")) input = 1;
+	if keyboard_check(ord("W")) input = -1;
 	if (abs(input) < INPUT_DEADZONE) return 0;
 	return input;
 }
