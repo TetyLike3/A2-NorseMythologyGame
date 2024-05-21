@@ -1,4 +1,4 @@
-charHealthMax += (charHealthMax*((global.roundCounter-1)*0.3));
+charHealthMax += (charHealthMax*((global.roundCounter-1)*0.4));
 event_inherited();
 
 moveSpeed = 11;
