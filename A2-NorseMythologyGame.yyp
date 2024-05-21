@@ -89,6 +89,7 @@
     {"id":{"name":"sprPlayerLightDown","path":"sprites/sprPlayerLightDown/sprPlayerLightDown.yy",},},
     {"id":{"name":"sprPlayerHeavyDown","path":"sprites/sprPlayerHeavyDown/sprPlayerHeavyDown.yy",},},
     {"id":{"name":"sprFenrirJumpLand","path":"sprites/sprFenrirJumpLand/sprFenrirJumpLand.yy",},},
+    {"id":{"name":"sprControls","path":"sprites/sprControls/sprControls.yy",},},
     {"id":{"name":"sprPlayerHeavySideHitbox","path":"sprites/sprPlayerHeavySideHitbox/sprPlayerHeavySideHitbox.yy",},},
     {"id":{"name":"sprFenrirFloorImpact","path":"sprites/sprFenrirFloorImpact/sprFenrirFloorImpact.yy",},},
     {"id":{"name":"sprPlayerLightDashAttack","path":"sprites/sprPlayerLightDashAttack/sprPlayerLightDashAttack.yy",},},
