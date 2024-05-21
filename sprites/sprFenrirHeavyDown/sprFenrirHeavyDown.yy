@@ -78,11 +78,8 @@
     "backdropYOffset": 0.0,
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "LightSide",
-              ],},},"Disabled":false,"id":"af81f29d-6dca-4302-9b3c-0929632bce3a","IsCreationKey":false,"Key":7.0,"Length":1.0,"Stretch":false,},
-        {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "StepLeft",
-              ],},},"Disabled":false,"id":"e495b602-440e-45e8-b50d-207aa63c4726","IsCreationKey":false,"Key":32.0,"Length":1.0,"Stretch":false,},
+                "Snarl",
+              ],},},"Disabled":false,"id":"a750c4fd-37d0-4a17-8c89-27d7b3b34c0e","IsCreationKey":false,"Key":10.0,"Length":1.0,"Stretch":false,},
       ],},
     "eventStubScript": null,
     "eventToFunction": {},
