@@ -10,6 +10,12 @@ switch (event_data[?"message"]) {
 	case "LightSide": {
 		audio_play_sound(sndLightSide, 0, false);
 	} break;
+	case "HeavyScratch": {
+		audio_play_sound(sndSlash, 0, false);
+	} break;
+	case "Snarl": {
+		audio_play_sound(sndSnarl, 0, false);
+	} break;
 	
 	default: {
 		//print(string_concat("new message logged for: ",object_get_name(object_index)));

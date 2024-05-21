@@ -57,11 +57,11 @@
     "backdropYOffset": 0.0,
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
-                "LightSide",
-              ],},},"Disabled":false,"id":"af81f29d-6dca-4302-9b3c-0929632bce3a","IsCreationKey":false,"Key":7.0,"Length":1.0,"Stretch":false,},
+                "HeavyScratch",
+              ],},},"Disabled":false,"id":"d336b16d-15e9-4257-a460-48d442442881","IsCreationKey":false,"Key":5.0,"Length":1.0,"Stretch":false,},
         {"resourceType":"Keyframe<MessageEventKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"MessageEventKeyframe","resourceVersion":"1.0","Events":[
                 "StepLeft",
-              ],},},"Disabled":false,"id":"e495b602-440e-45e8-b50d-207aa63c4726","IsCreationKey":false,"Key":32.0,"Length":1.0,"Stretch":false,},
+              ],},},"Disabled":false,"id":"44a70643-8834-43b4-9ed8-042cf2af1ae0","IsCreationKey":false,"Key":32.0,"Length":1.0,"Stretch":false,},
       ],},
     "eventStubScript": null,
     "eventToFunction": {},
