@@ -50,7 +50,11 @@ if roundEnded {
 		draw_text(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,"FENRIR WINS");
 	}
 	
-	if draw_get_alpha() == 1 {
-		if playerWon room_restart() else room_goto(rmMainMenu);
+	if (1-(alarm_get(0)/240)) == 1 {
+		if playerWon {
+			room_restart();
+		} else {
+			room_goto(rmMainMenu);
+		}
 	}
 }
