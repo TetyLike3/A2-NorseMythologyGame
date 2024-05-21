@@ -8,7 +8,8 @@ if room == rmGame {
 		other.DrawHealthBar(SCREEN_WIDTH-32,88,(charHealth/charHealthMax),true);
 		other.DrawStaminaBar(SCREEN_WIDTH-32,256,(staminaLevel/100),true);
 		draw_text(512,16,xSpeed);
-		draw_text(564,16,ySpeed);
+		draw_text(512,32,ySpeed);
+		draw_text(512,48,currentState);
 	}
 	DRAW_CENTRE;
 	draw_set_font(fntViking);

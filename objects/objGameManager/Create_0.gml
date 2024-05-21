@@ -26,8 +26,8 @@ function SecToFrames(_seconds) {
 timerMax = SecToFrames(90); // Time limit (in frames)
 timerRemaining = timerMax;
 gameGravity = 0.6;
-roundCountMax = 2;
-roundCount = 0;
+roundCounterMax = 1;
+roundCounter = 0;
 gameEnded = false;
 playerWon = false;
 

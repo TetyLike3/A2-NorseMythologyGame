@@ -68,6 +68,7 @@
     {"id":{"name":"sprBackInFive","path":"sprites/sprBackInFive/sprBackInFive.yy",},},
     {"id":{"name":"sndStepR","path":"sounds/sndStepR/sndStepR.yy",},},
     {"id":{"name":"sprFenrirHeavyNeutral","path":"sprites/sprFenrirHeavyNeutral/sprFenrirHeavyNeutral.yy",},},
+    {"id":{"name":"sndRoundStart","path":"sounds/sndRoundStart/sndRoundStart.yy",},},
     {"id":{"name":"fntDefault","path":"fonts/fntDefault/fntDefault.yy",},},
     {"id":{"name":"objDamageIndicator","path":"objects/objDamageIndicator/objDamageIndicator.yy",},},
     {"id":{"name":"objPlayer","path":"objects/objPlayer/objPlayer.yy",},},
