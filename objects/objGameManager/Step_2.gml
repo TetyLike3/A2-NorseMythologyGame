@@ -42,7 +42,7 @@ if (timerRemaining <= 0) {
 			room_goto(rmGameEnd);
 		}
 	} else {
-		roundCounter++;
+		global.roundCounter++;
 		timerRemaining = timerMax;
 		with objPlayer {
 			Respawn();
