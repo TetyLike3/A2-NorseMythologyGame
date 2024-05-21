@@ -2,7 +2,7 @@
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
   "name": "rmSplashScreen",
-  "creationCodeFile": "",
+  "creationCodeFile": "rooms/rmSplashScreen/RoomCreationCode.gml",
   "inheritCode": false,
   "inheritCreationOrder": false,
   "inheritLayers": false,

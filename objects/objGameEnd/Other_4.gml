@@ -1,1 +1,1 @@
-sequenceId = layer_sequence_create("Assets",0,0,sqStory);
+sequenceId = layer_sequence_create("Assets",room_width/2,room_height/2,sqStory);

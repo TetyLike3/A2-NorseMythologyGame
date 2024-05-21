@@ -38,6 +38,8 @@ if (timerRemaining <= 0) and (!roundEnded) {
 	roundEnded = true;
 	playerWon = (objEnemy.currentState == CharacterStates.DEAD);
 	alarm_set(0,240);
+	objPlayer.inputEnabled = false;
+	focusedCharacters = [objEnemy];
 } else timerRemaining -= (delta_time)/10000;
 print(timerRemaining);
 

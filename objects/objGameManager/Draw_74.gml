@@ -34,6 +34,10 @@ draw_text(16,80,string_concat("Seed: ",random_get_seed()));
 
 DRAW_RESET;
 if roundEnded {
+	draw_set_color(c_black);
+	draw_set_alpha(1-(alarm_get(0)/240));
+	draw_rectangle(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,false);
+	DRAW_RESET;
 	if playerWon {
 		draw_set_color(c_green);
 		draw_set_font(fntViking);
@@ -45,13 +49,8 @@ if roundEnded {
 		DRAW_CENTRE;
 		draw_text(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,"FENRIR WINS");
 	}
-	DRAW_RESET;
-	draw_set_color(c_black);
-	draw_set_alpha(1-(alarm_get(0)/240));
-	draw_rectangle(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,false);
 	
 	if draw_get_alpha() == 1 {
-		print("restarting room");
-		room_restart();
+		if playerWon room_restart() else room_goto(rmMainMenu);
 	}
 }

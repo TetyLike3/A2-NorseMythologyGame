@@ -123,7 +123,7 @@ function GetStunned(_dir, _multiplier) {
 		} break;
 		default: { // Side
 			spriteDir = _dir;
-			xSpeed = (stunBounce/2)*stunHeightMultiplier;
+			xSpeed = (stunBounce*4)*stunHeightMultiplier;
 		}
 	}
 	if (spriteDir == 0) { xSpeed *= -1; }
