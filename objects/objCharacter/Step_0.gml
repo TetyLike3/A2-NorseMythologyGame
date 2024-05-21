@@ -1,3 +1,4 @@
+if (objGameManager.gameEnded) return;
 damageTimer = max(0,damageTimer-1);
 staminaRegenTimer = max(0,staminaRegenTimer-1);
 stunTimer = max(0,stunTimer-1);

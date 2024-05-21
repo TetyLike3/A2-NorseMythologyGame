@@ -155,7 +155,7 @@ function baseHAttackState() {
 		attackHitbox.collidable = targetChar;
 		attackHitbox.shouldStun = true;
 		attackHitbox.stunDir = spriteDir;
-		attackHitbox.stunHeight = 18;
+		attackHitbox.stunHeight = 1;
 		
 		
 		if (inputVector[1] < -0.8) {
@@ -185,7 +185,7 @@ function baseStunnedState() {
 		changeSprite(spriteIndices.InjuryHeavy);
 		stunBounce = stunBounceMax;
 		//if (instance_exists(targetChar) and targetChar.spriteDir) { xSpeed = stunBounce*3; } else xSpeed = -stunBounce*3;
-		ySpeed = -abs(stunBounce*6)*stunHeightMultiplier;
+		ySpeed = (-abs(stunBounce*6))*stunHeightMultiplier;
 		executeGroundCollision(); executeWallCollision();
 		lastState = currentState;
 		stunTimer = stunTimerMax;
@@ -194,14 +194,13 @@ function baseStunnedState() {
 		return;
 	}
 	
-	// Every bounce, reduce speed until below 2, then freeze
+	// Every bounce, reduce speed until out of bounces, then freeze
 	if getGroundCollision() {
 		stunBounce--;
+		stunHeightMultiplier = abs(stunHeightMultiplier);
 		if (stunBounce > 0) {
-			stunHeightMultiplier = abs(stunHeightMultiplier);
-			
 			changeSprite(spriteIndices.FloorImpact);
-			xSpeed/=3; ySpeed = -abs(stunBounce*6)*stunHeightMultiplier;
+			xSpeed/=3; ySpeed = (-abs(stunBounce*6))*stunHeightMultiplier;
 			executeGroundCollision(); executeWallCollision();
 			return;
 		} else {
@@ -261,7 +260,7 @@ function baseGrabbingState(_grabInput) {
 				if (spriteDir) { targetChar.GetStunned(2,1.1); } else { targetChar.GetStunned(0,1.1); }
 			} else if (sprite_index == spriteIndices.Throwing.Up) {
 				targetChar.TakeDamage(heavyAttackDamage*1.1);
-				targetChar.GetStunned(3,1.4);
+				targetChar.GetStunned(3,1.3);
 			} else if (sprite_index == spriteIndices.Throwing.Down) {
 				targetChar.TakeDamage(heavyAttackDamage*1.1);
 				targetChar.GetStunned(1,-1.4);

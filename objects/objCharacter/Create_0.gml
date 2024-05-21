@@ -111,23 +111,22 @@ function GetStunned(_dir, _multiplier) {
 	if (targetChar.currentState == CharacterStates.STUN) return;
 	currentState = CharacterStates.STUN;
 	stunHeightMultiplier = _multiplier;
+	stunBounce = stunBounceMax;
 	switch _dir {
 		case 1: { // Down
 			spriteDir = targetChar.spriteDir;
 			xSpeed = (stunBounce/3)*stunHeightMultiplier;
-			if (spriteDir == 0) { xSpeed *= -1; }
 		} break;
 		case 3: { // Up
 			spriteDir = targetChar.spriteDir;
 			xSpeed = (stunBounce/4)*stunHeightMultiplier;
-			if (spriteDir == 0) { xSpeed *= -1; }
 		} break;
 		default: { // Side
 			spriteDir = _dir;
-			xSpeed = (stunBounce*6)*stunHeightMultiplier;
-			if (_dir == 0) { xSpeed *= -1; }
+			xSpeed = (stunBounce/2)*stunHeightMultiplier;
 		}
 	}
+	if (spriteDir == 0) { xSpeed *= -1; }
 }
 
 array_push(objGameManager.focusedCharacters,self);

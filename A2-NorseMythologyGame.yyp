@@ -94,6 +94,7 @@
     {"id":{"name":"fntSmallViking","path":"fonts/fntSmallViking/fntSmallViking.yy",},},
     {"id":{"name":"sprBackgroundGame","path":"sprites/sprBackgroundGame/sprBackgroundGame.yy",},},
     {"id":{"name":"fntSplash","path":"fonts/fntSplash/fntSplash.yy",},},
+    {"id":{"name":"rmGameEnd","path":"rooms/rmGameEnd/rmGameEnd.yy",},},
     {"id":{"name":"sprFenrirForwardThrow","path":"sprites/sprFenrirForwardThrow/sprFenrirForwardThrow.yy",},},
     {"id":{"name":"sprButton","path":"sprites/sprButton/sprButton.yy",},},
     {"id":{"name":"sprFenrirUpThrow","path":"sprites/sprFenrirUpThrow/sprFenrirUpThrow.yy",},},
@@ -106,6 +107,7 @@
     {"id":{"name":"sprPlayerForwardThrow","path":"sprites/sprPlayerForwardThrow/sprPlayerForwardThrow.yy",},},
     {"id":{"name":"sprPlayerLightSide2","path":"sprites/sprPlayerLightSide2/sprPlayerLightSide2.yy",},},
     {"id":{"name":"scrNNLayers","path":"scripts/scrNNLayers/scrNNLayers.yy",},},
+    {"id":{"name":"objGameEnd","path":"objects/objGameEnd/objGameEnd.yy",},},
     {"id":{"name":"scrNNCosts","path":"scripts/scrNNCosts/scrNNCosts.yy",},},
     {"id":{"name":"sprPlayerGrabHolding","path":"sprites/sprPlayerGrabHolding/sprPlayerGrabHolding.yy",},},
     {"id":{"name":"scrCollisions","path":"scripts/scrCollisions/scrCollisions.yy",},},
@@ -251,6 +253,7 @@
     {"roomId":{"name":"rmMainMenu","path":"rooms/rmMainMenu/rmMainMenu.yy",},},
     {"roomId":{"name":"rmOptions","path":"rooms/rmOptions/rmOptions.yy",},},
     {"roomId":{"name":"rmTraining","path":"rooms/rmTraining/rmTraining.yy",},},
+    {"roomId":{"name":"rmGameEnd","path":"rooms/rmGameEnd/rmGameEnd.yy",},},
   ],
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},

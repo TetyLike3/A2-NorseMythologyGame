@@ -23,9 +23,13 @@ floorPadding = 64;
 function SecToFrames(_seconds) {
 	return _seconds*game_get_speed(gamespeed_fps);
 }
-timerMax = SecToFrames(60); // Time limit (in frames)
+timerMax = SecToFrames(90); // Time limit (in frames)
 timerRemaining = timerMax;
 gameGravity = 0.6;
+roundCountMax = 2;
+roundCount = 0;
+gameEnded = false;
+playerWon = false;
 
 averageDTLogSize = 32768;
 averageDTLog = [];

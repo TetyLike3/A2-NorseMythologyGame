@@ -33,7 +33,42 @@ cameraTargetY = _camY2-(cameraTargetH);
 // Exit game
 if (gamepad_button_check_pressed(0,gp_start) or keyboard_check_pressed(vk_escape)) game_end();
 
-timerRemaining--;
+// Rounds
+if (timerRemaining <= 0) {
+	if (roundCount == roundCountMax) {
+		if (not gameEnded) {
+			gameEnded = true;
+			playerWon = objEnemy.currentState == CharacterStates.DEAD;
+			room_goto(rmGameEnd);
+		}
+	} else {
+		roundCount++;
+		timerRemaining = timerMax;
+		with objPlayer {
+			currentState = CharacterStates.IDLE;
+			changeSprite(spriteIndices.Idle);
+			charHealth = charHealthMax;
+			staminaLevel = 100;
+		}
+		with objEnemy {
+			currentState = CharacterStates.TAUNT;
+			charHealthMax *= 1.2;
+			charHealth = charHealthMax;
+			staminaLevel = 100;
+			print(currentState);
+		}
+		focusedCharacters = [objEnemy];
+	}
+} else timerRemaining--;
+print(objEnemy.currentState);
+if (objEnemy.currentState != CharacterStates.TAUNT) and (array_length(focusedCharacters) == 1) {
+	array_push(focusedCharacters,objPlayer);
+}
+
+if (objEnemy.currentState == CharacterStates.DEAD) timerRemaining = 0;
+if (objPlayer.currentState == CharacterStates.DEAD) timerRemaining = 0;
+
+
 
 // Average FPS calculation
 var DTLogSize = array_length(averageDTLog);
